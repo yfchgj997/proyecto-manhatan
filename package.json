@@ -1,0 +1,51 @@
+{
+  "name": "cvo",
+  "version": "1.0.0",
+  "main": "./src/main.js",
+  "description": "Mi aplicación en Electron",
+  "author": "Tu Nombre",
+  "license": "ISC",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "package": "electron-packager . MiApp --platform=win32 --arch=x64 --out=dist --overwrite"
+  },
+  "devDependencies": {
+    "electron": "^34.1.1",
+    "electron-builder": "^25.1.8"
+  },
+  "dependencies": {
+    "escpos": "^3.0.0-alpha.6",
+    "escpos-usb": "^3.0.0-alpha.4",
+    "exceljs": "^4.4.0",
+    "pdfkit": "^0.16.0",
+    "xlsx": "^0.18.5"
+  },
+  "build": {
+    "appId": "com.tuempresa.cvo",
+    "productName": "CVO",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "icono.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "icono.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "icono.png"
+    }
+  }
+}

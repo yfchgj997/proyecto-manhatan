@@ -1,0 +1,14 @@
+{
+    "Contador": 2,
+    "Elementos": [
+        {
+            "Nombres": "jhkj",
+            "Apellidos": "jkhkj",
+            "DNI": "888",
+            "SaldoEconomico": 35.93,
+            "SaldoMaterial": -5,
+            "FechaIngreso": "2025-04-17",
+            "ID": 1
+        }
+    ]
+}

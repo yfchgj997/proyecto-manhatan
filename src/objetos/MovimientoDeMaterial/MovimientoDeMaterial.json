@@ -1,0 +1,31 @@
+{
+    "Contador": 2,
+    "Elementos": [
+        {
+            "Tipo": "Retiro",
+            "Fecha": "2025-05-06",
+            "UsuarioID": 1,
+            "UsuarioNombres": "erika",
+            "ClienteID": "1",
+            "ClienteNombres": "jhkj",
+            "Importe": 0,
+            "Observacion": "nn",
+            "Hora": "16:36:24",
+            "ID": 1,
+            "CapturaSaldo": 0
+        },
+        {
+            "Tipo": "Retiro",
+            "Fecha": "2025-05-10",
+            "UsuarioID": 1,
+            "UsuarioNombres": "erika",
+            "ClienteID": "1",
+            "ClienteNombres": "jhkj",
+            "Importe": 5,
+            "Observacion": "asd",
+            "Hora": "17:14:37",
+            "ID": 2,
+            "CapturaSaldo": -5
+        }
+    ]
+}

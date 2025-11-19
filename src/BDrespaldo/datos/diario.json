@@ -1,0 +1,92 @@
+[
+    {
+        "TipoNegocio": "CompraVenta",
+        "Fecha": "2025-03-20",
+        "CapitalEconomicoInicial": 2400,
+        "CapitalEconomicoFinal": 2400,
+        "CapitalMaterialInicial": -12,
+        "CapitalMaterialFinal": -12,
+        "IDMovimiento": 10
+    },
+    {
+        "TipoNegocio": "CompraVenta",
+        "Fecha": "2025-03-20",
+        "CapitalEconomicoInicial": 2400,
+        "CapitalEconomicoFinal": 2400,
+        "CapitalMaterialInicial": -12,
+        "CapitalMaterialFinal": -12,
+        "IDMovimiento": 11
+    },
+    {
+        "TipoNegocio": "CompraVenta",
+        "Fecha": "2025-03-20",
+        "CapitalEconomicoInicial": 2400,
+        "CapitalEconomicoFinal": 2400,
+        "CapitalMaterialInicial": -12,
+        "CapitalMaterialFinal": -12,
+        "IDMovimiento": 12
+    },
+    {
+        "TipoNegocio": "CompraVenta",
+        "Fecha": "2025-03-20",
+        "CapitalEconomicoInicial": 2400,
+        "CapitalEconomicoFinal": 2400,
+        "CapitalMaterialInicial": -12,
+        "CapitalMaterialFinal": -12,
+        "IDMovimiento": 13
+    },
+    {
+        "TipoNegocio": "CompraVenta",
+        "Fecha": "2025-03-20",
+        "CapitalEconomicoInicial": 2400,
+        "CapitalEconomicoFinal": 2400,
+        "CapitalMaterialInicial": -12,
+        "CapitalMaterialFinal": -12,
+        "IDMovimiento": 14
+    },
+    {
+        "TipoNegocio": "CompraVenta",
+        "Fecha": "2025-03-21",
+        "CapitalEconomicoInicial": 2400,
+        "CapitalEconomicoFinal": 2400,
+        "CapitalMaterialInicial": -12,
+        "CapitalMaterialFinal": -12,
+        "IDMovimiento": 15
+    },
+    {
+        "TipoNegocio": "CompraVenta",
+        "Fecha": "2025-03-21",
+        "CapitalEconomicoInicial": 2400,
+        "CapitalEconomicoFinal": 2400,
+        "CapitalMaterialInicial": -12,
+        "CapitalMaterialFinal": -12,
+        "IDMovimiento": 16
+    },
+    {
+        "TipoNegocio": "CompraVenta",
+        "Fecha": "2025-03-21",
+        "CapitalEconomicoInicial": 2400,
+        "CapitalEconomicoFinal": 2400,
+        "CapitalMaterialInicial": -12,
+        "CapitalMaterialFinal": -12,
+        "IDMovimiento": 17
+    },
+    {
+        "TipoNegocio": "CompraVenta",
+        "Fecha": "2025-03-21",
+        "CapitalEconomicoInicial": 2400,
+        "CapitalEconomicoFinal": 3600,
+        "CapitalMaterialInicial": -12,
+        "CapitalMaterialFinal": -16,
+        "IDMovimiento": 18
+    },
+    {
+        "TipoNegocio": "CompraVenta",
+        "Fecha": "2025-03-20",
+        "CapitalEconomicoInicial": 3600,
+        "CapitalEconomicoFinal": 2800,
+        "CapitalMaterialInicial": -16,
+        "CapitalMaterialFinal": 0,
+        "IDMovimiento": 19
+    }
+]

@@ -1,0 +1,29 @@
+{
+    "Contador": 2,
+    "Elementos": [
+        {
+            "Tipo": "venta",
+            "Fecha": "2025-05-06",
+            "EmpleadoNombre": "erika",
+            "EmpleadoID": 1,
+            "Cliente": "hjgjh",
+            "MontoMaterial": 1.99,
+            "MontoEconomico": 1,
+            "PrecioCambio": 1,
+            "Hora": "16:36:11",
+            "ID": 1
+        },
+        {
+            "Tipo": "venta",
+            "Fecha": "2025-05-10",
+            "EmpleadoNombre": "erika",
+            "EmpleadoID": 1,
+            "Cliente": "yo",
+            "MontoMaterial": 33,
+            "MontoEconomico": 44,
+            "PrecioCambio": 55,
+            "Hora": "17:14:11",
+            "ID": 2
+        }
+    ]
+}
