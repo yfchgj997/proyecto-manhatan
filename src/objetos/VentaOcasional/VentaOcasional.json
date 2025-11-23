@@ -1,5 +1,5 @@
 {
-    "Contador": 2,
+    "Contador": 14,
     "Elementos": [
         {
             "Tipo": "venta",
@@ -24,6 +24,66 @@
             "PrecioCambio": 55,
             "Hora": "17:14:11",
             "ID": 2
+        },
+        {
+            "Tipo": "venta",
+            "Fecha": "2025-11-18",
+            "EmpleadoNombre": "jherson",
+            "EmpleadoID": 2,
+            "Cliente": "Berning",
+            "MontoMaterial": 10,
+            "MontoEconomico": 3000,
+            "PrecioCambio": 300,
+            "Hora": "22:01:06",
+            "ID": 3
+        },
+        {
+            "Tipo": "compra",
+            "Fecha": "2025-11-20",
+            "EmpleadoNombre": "erika",
+            "EmpleadoID": 1,
+            "Cliente": "bcjsgdjch",
+            "MontoMaterial": 10,
+            "MontoEconomico": 30,
+            "PrecioCambio": 3,
+            "Hora": "23:04:43",
+            "ID": 4
+        },
+        {
+            "Tipo": "venta",
+            "Fecha": "2025-11-20",
+            "EmpleadoNombre": "erika",
+            "EmpleadoID": 1,
+            "Cliente": "aeee",
+            "MontoMaterial": 35,
+            "MontoEconomico": 2000,
+            "PrecioCambio": 10,
+            "Hora": "23:07:11",
+            "ID": 5
+        },
+        {
+            "Tipo": "venta",
+            "Fecha": "2025-11-20",
+            "EmpleadoNombre": "erika",
+            "EmpleadoID": 1,
+            "Cliente": "aeee",
+            "MontoMaterial": 35,
+            "MontoEconomico": 12.2,
+            "PrecioCambio": 10,
+            "Hora": "23:07:43",
+            "ID": 6
+        },
+        {
+            "Tipo": "compra",
+            "Fecha": "2025-11-22",
+            "EmpleadoNombre": "jherson",
+            "EmpleadoID": 2,
+            "Cliente": "efwef",
+            "MontoMaterial": 10.5,
+            "MontoEconomico": 31.5,
+            "PrecioCambio": 3,
+            "Hora": "23:06:52",
+            "ID": 14
         }
     ]
 }

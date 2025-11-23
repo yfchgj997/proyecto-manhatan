@@ -1,32 +1,12 @@
 [
     {
-        "Fecha": "2025-04-15",
+        "Fecha": "2025-11-22",
         "CapitalEconomicoInicial": 0,
         "CapitalMaterialInicial": 0
     },
     {
-        "Fecha": "2025-04-16",
-        "CapitalEconomicoInicial": 0,
-        "CapitalMaterialInicial": 0
-    },
-    {
-        "Fecha": "2025-05-06",
-        "CapitalEconomicoInicial": 0,
-        "CapitalMaterialInicial": 0
-    },
-    {
-        "Fecha": "2025-05-07",
-        "CapitalEconomicoInicial": 1,
-        "CapitalMaterialInicial": -1.99
-    },
-    {
-        "Fecha": "2025-05-08",
-        "CapitalEconomicoInicial": 0.9299999999999999,
-        "CapitalMaterialInicial": -1.99
-    },
-    {
-        "Fecha": "2025-05-10",
-        "CapitalEconomicoInicial": 0.9299999999999999,
-        "CapitalMaterialInicial": -1.99
+        "Fecha": "2025-11-23",
+        "CapitalEconomicoInicial": "2798.48",
+        "CapitalMaterialInicial": "714.10"
     }
 ]

@@ -2,8 +2,8 @@ const { ipcRenderer } = require("electron");
 
 // Variables
 
-    // codigo
-    let codigo = `
+// codigo
+let codigo = `
         <div class="Formulario">
             <h2 class="EncabezadoFormulario">Nuevo Usuario</h2>
             <div class="Campos">
@@ -39,48 +39,67 @@ const { ipcRenderer } = require("electron");
 
 // Funciones
 
-    // Funcion -> guardar un nuevo cliente
-    function GardarNuevoUsuario (){
+// Funcion -> guardar un nuevo cliente
+function GardarNuevoUsuario() {
 
-        // mensaje de flujo
-        console.log("MENSAJE: guardando un nuevo usuario")
+    // mensaje de flujo
+    console.log("MENSAJE: guardando un nuevo usuario")
 
-        // paso -> crear una variable y capturar los datos
-        let NuevoUsuario = {
-            "Nombres":document.getElementById("CampoNombres").value,
-            "Apellidos":document.getElementById("CampoApellidos").value,
-            "Contrasena":document.getElementById("CampoContrasena").value,
-            "Rol":document.getElementById("CampoRol").value,
-            "Estado":document.getElementById("CampoEstado").value
-        }
+    // Capturar los datos raw para validación
+    let nombres = document.getElementById("CampoNombres").value;
+    let apellidos = document.getElementById("CampoApellidos").value;
+    let contrasena = document.getElementById("CampoContrasena").value;
 
-        // mensaje de flujo
-        console.log("MENSAJE: estos son los datos:")
-        console.log(NuevoUsuario)
-
-        // Paso -> enviar los datos del cliente al main
-        ipcRenderer.send("EGuardarNuevoUsuario",NuevoUsuario)
-        
+    // Validar campos vacíos
+    if (nombres.trim() === "") {
+        ipcRenderer.send("ModificarMensaje", { tipo: "MensajeMalo", texto: "El campo Nombres es obligatorio." });
+        return;
+    }
+    if (apellidos.trim() === "") {
+        ipcRenderer.send("ModificarMensaje", { tipo: "MensajeMalo", texto: "El campo Apellidos es obligatorio." });
+        return;
+    }
+    if (contrasena.trim() === "") {
+        ipcRenderer.send("ModificarMensaje", { tipo: "MensajeMalo", texto: "El campo Contraseña es obligatorio." });
+        return;
     }
 
-    // Funcion -> cargar encabezado
-    function CargarFormularioNuevoUsuario (){
-
-        // mensaje de flujo
-        console.log("MENSAJE: cargando el componente formulario nuevo usuario")
-
-        // Paso -> obtener el espacio donde colocar el encabezado
-        let EspacioFormularioNuevoUsuario = document.getElementById("EspacioFormularioNuevoUsuario")
-        if(EspacioFormularioNuevoUsuario){
-            // Paso -> insertar codigo
-            EspacioFormularioNuevoUsuario.innerHTML = codigo
-            // Paso -> agregar funcionalidad de boton
-            document.getElementById("BotonGuardarNuevoUsuario").addEventListener("click",GardarNuevoUsuario)
-        }else{
-            // mensaje de flujo
-            console.log("ERROR: no se pudo obtener el espacio para colocar formulario nuevo usuario")
-        }
-
+    // paso -> crear una variable y capturar los datos
+    let NuevoUsuario = {
+        "Nombres": nombres,
+        "Apellidos": apellidos,
+        "Contrasena": contrasena,
+        "Rol": document.getElementById("CampoRol").value,
+        "Estado": document.getElementById("CampoEstado").value
     }
+
+    // mensaje de flujo
+    console.log("MENSAJE: estos son los datos:")
+    console.log(NuevoUsuario)
+
+    // Paso -> enviar los datos del cliente al main
+    ipcRenderer.send("EGuardarNuevoUsuario", NuevoUsuario)
+
+}
+
+// Funcion -> cargar encabezado
+function CargarFormularioNuevoUsuario() {
+
+    // mensaje de flujo
+    console.log("MENSAJE: cargando el componente formulario nuevo usuario")
+
+    // Paso -> obtener el espacio donde colocar el encabezado
+    let EspacioFormularioNuevoUsuario = document.getElementById("EspacioFormularioNuevoUsuario")
+    if (EspacioFormularioNuevoUsuario) {
+        // Paso -> insertar codigo
+        EspacioFormularioNuevoUsuario.innerHTML = codigo
+        // Paso -> agregar funcionalidad de boton
+        document.getElementById("BotonGuardarNuevoUsuario").addEventListener("click", GardarNuevoUsuario)
+    } else {
+        // mensaje de flujo
+        console.log("ERROR: no se pudo obtener el espacio para colocar formulario nuevo usuario")
+    }
+
+}
 
 module.exports = { CargarFormularioNuevoUsuario };

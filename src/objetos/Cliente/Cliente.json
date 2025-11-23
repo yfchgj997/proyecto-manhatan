@@ -1,14 +1,23 @@
 {
-    "Contador": 2,
+    "Contador": 3,
     "Elementos": [
         {
             "Nombres": "jhkj",
             "Apellidos": "jkhkj",
             "DNI": "888",
-            "SaldoEconomico": 35.93,
-            "SaldoMaterial": -5,
+            "SaldoEconomico": "-1255.75",
+            "SaldoMaterial": "2134.75",
             "FechaIngreso": "2025-04-17",
             "ID": 1
+        },
+        {
+            "Nombres": "fdqwefqf",
+            "Apellidos": "wfwefw",
+            "DNI": "4544445",
+            "SaldoEconomico": "2426.68",
+            "SaldoMaterial": "25512.00",
+            "FechaIngreso": "2025-11-22",
+            "ID": 3
         }
     ]
 }

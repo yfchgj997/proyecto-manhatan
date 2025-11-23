@@ -1,5 +1,5 @@
 {
-    "Contador": 2,
+    "Contador": 33,
     "Elementos": [
         {
             "Tipo": "Retiro",
@@ -26,6 +26,110 @@
             "Hora": "17:14:37",
             "ID": 2,
             "CapturaSaldo": -5
+        },
+        {
+            "Tipo": "Retiro",
+            "Fecha": "2025-11-22",
+            "UsuarioID": 2,
+            "UsuarioNombres": "jherson",
+            "ClienteID": "1",
+            "ClienteNombres": "jhkj",
+            "Importe": "20.00",
+            "Observacion": "lalallalala",
+            "Hora": "22:21:49",
+            "ID": 3,
+            "CapturaSaldo": 1925
+        },
+        {
+            "Tipo": "Retiro",
+            "Fecha": "2025-11-22",
+            "UsuarioID": 2,
+            "UsuarioNombres": "jherson",
+            "ClienteID": "1",
+            "ClienteNombres": "jhkj",
+            "Importe": "20.00",
+            "Observacion": "lalallalala",
+            "Hora": "22:22:08",
+            "ID": 4,
+            "CapturaSaldo": 1905
+        },
+        {
+            "Tipo": "Ingreso",
+            "Fecha": "2025-11-22",
+            "UsuarioID": 2,
+            "UsuarioNombres": "jherson",
+            "ClienteID": "1",
+            "ClienteNombres": "jhkj",
+            "Importe": "50.03",
+            "Observacion": "lolololo",
+            "Hora": "22:43:28",
+            "ID": 23,
+            "CapturaSaldo": 1955.03
+        },
+        {
+            "Tipo": "Ingreso",
+            "Fecha": "2025-11-22",
+            "UsuarioID": 2,
+            "UsuarioNombres": "jherson",
+            "ClienteID": "3",
+            "ClienteNombres": "fdqwefqf",
+            "Importe": "302.96",
+            "Observacion": "",
+            "Hora": "23:23:09",
+            "ID": 26,
+            "CapturaSaldo": 25712.969999999998
+        },
+        {
+            "Tipo": "Ingreso",
+            "Fecha": "2025-11-22",
+            "UsuarioID": 2,
+            "UsuarioNombres": "jherson",
+            "ClienteID": "1",
+            "ClienteNombres": "jhkj",
+            "Importe": "100.54",
+            "Observacion": "jhgjhv",
+            "Hora": "23:33:11",
+            "ID": 30,
+            "CapturaSaldo": 2055.57
+        },
+        {
+            "Tipo": "Ingreso",
+            "Fecha": "2025-11-22",
+            "UsuarioID": 2,
+            "UsuarioNombres": "jherson",
+            "ClienteID": "1",
+            "ClienteNombres": "jhkj",
+            "Importe": "100.10",
+            "Observacion": "bjvhjgvhj",
+            "Hora": "23:38:51",
+            "ID": 31,
+            "CapturaSaldo": "2155.10"
+        },
+        {
+            "Tipo": "Retiro",
+            "Fecha": "2025-11-23",
+            "UsuarioID": 2,
+            "UsuarioNombres": "jherson",
+            "ClienteID": "3",
+            "ClienteNombres": "fdqwefqf",
+            "Importe": "200.00",
+            "Observacion": "ergw4",
+            "Hora": "00:01:20",
+            "ID": 32,
+            "CapturaSaldo": "25512.00"
+        },
+        {
+            "Tipo": "Retiro",
+            "Fecha": "2025-11-23",
+            "UsuarioID": 2,
+            "UsuarioNombres": "jherson",
+            "ClienteID": "1",
+            "ClienteNombres": "jhkj",
+            "Importe": "20.35",
+            "Observacion": "jkbdjkcb",
+            "Hora": "00:10:59",
+            "ID": 33,
+            "CapturaSaldo": "2134.75"
         }
     ]
 }

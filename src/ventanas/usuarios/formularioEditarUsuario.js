@@ -2,19 +2,19 @@ const { ipcRenderer } = require("electron");
 
 // Variables
 
-    // codigo
-    let codigo = ``
+// codigo
+let codigo = ``
 
 // Funciones
 
-    // Funcion -> modificar codigo
-    function ModificarCodigo (usuario){
+// Funcion -> modificar codigo
+function ModificarCodigo(usuario) {
 
-        // mensaje de flujo
-        console.log("MENSAJE: modificando el codigo de formulario editar usuario, este usuario llego:")
-        console.log(usuario)
+    // mensaje de flujo
+    console.log("MENSAJE: modificando el codigo de formulario editar usuario, este usuario llego:")
+    console.log(usuario)
 
-        codigo = `
+    codigo = `
             <div class="Formulario">
                 <h2 class="EncabezadoFormulario">Editar Usuario</h2>
                 <div class="Campos" id="FormularioEditarPersona" name="${usuario.ID}">
@@ -49,54 +49,73 @@ const { ipcRenderer } = require("electron");
                 <button class="Boton BotonFormulario" id="BotonEditarUsuario">Editar</button>
             </div>
         `
+}
+
+// Funcion -> editar cliente
+function EditarUsuario() {
+
+    // mensaje de flujo
+    console.log("MENSAJE: editando los datos de un usuario")
+
+    // Capturar los datos raw para validación
+    let nombres = document.getElementById("CampoNombres").value;
+    let apellidos = document.getElementById("CampoApellidos").value;
+    let contrasena = document.getElementById("CampoContrasena").value;
+
+    // Validar campos vacíos
+    if (nombres.trim() === "") {
+        ipcRenderer.send("ModificarMensaje", { tipo: "MensajeMalo", texto: "El campo Nombres es obligatorio." });
+        return;
+    }
+    if (apellidos.trim() === "") {
+        ipcRenderer.send("ModificarMensaje", { tipo: "MensajeMalo", texto: "El campo Apellidos es obligatorio." });
+        return;
+    }
+    if (contrasena.trim() === "") {
+        ipcRenderer.send("ModificarMensaje", { tipo: "MensajeMalo", texto: "El campo Contraseña es obligatorio." });
+        return;
     }
 
-    // Funcion -> editar cliente
-    function EditarUsuario (){
-
-        // mensaje de flujo
-        console.log("MENSAJE: editando los datos de un usuario")
-
-        // paso -> crear una variable y capturar los datos
-        let NuevoUsuario = {
-            "ID":document.getElementById("FormularioEditarPersona").getAttribute("name"),
-            "Nombres":document.getElementById("CampoNombres").value,
-            "Apellidos":document.getElementById("CampoApellidos").value,
-            "Contrasena":document.getElementById("CampoContrasena").value,
-            "Rol":document.getElementById("CampoRol").value,
-            "Estado":document.getElementById("CampoEstado").value
-        }
-
-        // mensaje de flujo
-        console.log("MENSAJE: estos son los datos:")
-        console.log(NuevoUsuario)
-
-        // Paso -> enviar los datos del cliente al main
-        ipcRenderer.send("EEditarUsuario",NuevoUsuario)
-        
+    // paso -> crear una variable y capturar los datos
+    let NuevoUsuario = {
+        "ID": document.getElementById("FormularioEditarPersona").getAttribute("name"),
+        "Nombres": nombres,
+        "Apellidos": apellidos,
+        "Contrasena": contrasena,
+        "Rol": document.getElementById("CampoRol").value,
+        "Estado": document.getElementById("CampoEstado").value
     }
 
-    // Funcion -> cargar encabezado
-    function CargarFormularioEditarUsuario (usuario){
+    // mensaje de flujo
+    console.log("MENSAJE: estos son los datos:")
+    console.log(NuevoUsuario)
 
+    // Paso -> enviar los datos del cliente al main
+    ipcRenderer.send("EEditarUsuario", NuevoUsuario)
+
+}
+
+// Funcion -> cargar encabezado
+function CargarFormularioEditarUsuario(usuario) {
+
+    // mensaje de flujo
+    console.log("MENSAJE: cargando el componente formulario editar usuario")
+    console.log(usuario)
+
+    // Paso -> obtener el espacio donde colocar el encabezado
+    let EspacioFormularioEditarUsuario = document.getElementById("EspacioFormularioNuevoUsuario")
+    if (EspacioFormularioEditarUsuario) {
+        // Paso -> modificar codigo
+        ModificarCodigo(usuario)
+        // Paso -> insertar codigo
+        EspacioFormularioEditarUsuario.innerHTML = codigo
+        // Paso -> agregar funcionalidad de boton
+        document.getElementById("BotonEditarUsuario").addEventListener("click", EditarUsuario)
+    } else {
         // mensaje de flujo
-        console.log("MENSAJE: cargando el componente formulario editar usuario")
-        console.log(usuario)
-
-        // Paso -> obtener el espacio donde colocar el encabezado
-        let EspacioFormularioEditarUsuario = document.getElementById("EspacioFormularioNuevoUsuario")
-        if(EspacioFormularioEditarUsuario){
-            // Paso -> modificar codigo
-            ModificarCodigo(usuario)
-            // Paso -> insertar codigo
-            EspacioFormularioEditarUsuario.innerHTML = codigo
-            // Paso -> agregar funcionalidad de boton
-            document.getElementById("BotonEditarUsuario").addEventListener("click",EditarUsuario)
-        }else{
-            // mensaje de flujo
-            console.log("ERROR: no se pudo obtener el espacio para colocar formulario editar usuario")
-        }
-
+        console.log("ERROR: no se pudo obtener el espacio para colocar formulario editar usuario")
     }
+
+}
 
 module.exports = { CargarFormularioEditarUsuario };

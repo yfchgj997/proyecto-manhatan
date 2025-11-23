@@ -5,9 +5,9 @@ const path = require("path");
 
 // VARIABLES
 
-const RutaMovimientoDeMaterial = path.join(__dirname,"./MovimientoDeMaterial.json");
-const Cliente = require(path.join(__dirname,"../Cliente/Cliente.js"));
-const CapturaDeCuenta = require(path.join(__dirname,"../CapturaDeCuenta/CapturaDeCuenta.js"));
+const RutaMovimientoDeMaterial = path.join(__dirname, "./MovimientoDeMaterial.json");
+const Cliente = require(path.join(__dirname, "../Cliente/Cliente.js"));
+const CapturaDeCuenta = require(path.join(__dirname, "../CapturaDeCuenta/CapturaDeCuenta.js"));
 let ListaMovimientos = [];
 let Contador = 0;
 let Contenido;
@@ -17,59 +17,59 @@ let Respuesta;
 // FUNCIONES
 
 // Funcion -> inicializar objeto
-function IniciarObjetoMovimientoDeMaterial (){
+function IniciarObjetoMovimientoDeMaterial() {
 
     ErrorGeneral = false;
 
     // Paso -> verificar que el archivo existe
-    if(!fs.existsSync(RutaMovimientoDeMaterial)){
+    if (!fs.existsSync(RutaMovimientoDeMaterial)) {
         console.log("/nMovimientoDeMaterial: el archivo MovimientoDeMaterial.json fue eliminado");
         ErrorGeneral = true;
-        return({"error":ErrorGeneral});
+        return ({ "error": ErrorGeneral });
     }
     // Paso -> leer el archivo json
-    else{
-        try{
+    else {
+        try {
             // Paso -> abrir el archivo json
-            Contenido = JSON.parse(fs.readFileSync(RutaMovimientoDeMaterial,"utf8"));
-            if(!Contenido){
+            Contenido = JSON.parse(fs.readFileSync(RutaMovimientoDeMaterial, "utf8"));
+            if (!Contenido) {
                 console.log("/nMovimientoDeMaterial: el archivo MovimientoDeMaterial.json se encuentra completamente vacio");
-            }else{
+            } else {
                 // Paso -> asignar variables
                 ListaMovimientos = Contenido.Elementos;
                 Contador = Contenido.Contador;
-                return({"error":ErrorGeneral});
+                return ({ "error": ErrorGeneral });
             }
-        }catch(error){
+        } catch (error) {
             console.log("/nMovimientoDeMaterial: el archivo MovimientoDeMaterial.json no se pudo leer");
             ErrorGeneral = true;
-            return ({"error":ErrorGeneral});
+            return ({ "error": ErrorGeneral });
         }
     }
 }
 
 // Funcion -> eliminar objeto
-function CerrarObjetoMovimientoDeMaterial (){
+function CerrarObjetoMovimientoDeMaterial() {
 
     ErrorGeneral = false;
 
-     // Paso -> guardar los datos actualizados en el archivo JSON
-     try{
+    // Paso -> guardar los datos actualizados en el archivo JSON
+    try {
         // Paso -> actualizar los datos
         Contenido.Elementos = ListaMovimientos;
         Contenido.Contador = Contador;
         // Paso -> guardar el archivo
         fs.writeFileSync(RutaMovimientoDeMaterial, JSON.stringify(Contenido, null, 4), 'utf8');
-        return({"error":ErrorGeneral});
-     }catch(error){
+        return ({ "error": ErrorGeneral });
+    } catch (error) {
         console.error("\nMovimientoDeMaterial: no se pudo escribir en el archivo MovimientoDeMaterial.json");
         ErrorGeneral = true;
-        return({"error":ErrorGeneral});
-     } 
+        return ({ "error": ErrorGeneral });
+    }
 }
 
 // Funcion -> guardar un movimiento de material en una cuenta
-function GuardarMovimientoMaterial (DetalleDeMovimiento){
+function GuardarMovimientoMaterial(DetalleDeMovimiento) {
 
     ErrorGeneral = false;
     let flujo = true;
@@ -80,30 +80,30 @@ function GuardarMovimientoMaterial (DetalleDeMovimiento){
 
     console.log("MD: iniciando objeto");
     Respuesta = IniciarObjetoMovimientoDeMaterial();
-    if(Respuesta.error == true){
+    if (Respuesta.error == true) {
         ErrorGeneral = true;
-        return({"error":ErrorGeneral});
-    }else{
+        return ({ "error": ErrorGeneral });
+    } else {
         console.log("MD: se inició el objeto");
-        switch(DetalleDeMovimiento.Tipo){
+        switch (DetalleDeMovimiento.Tipo) {
             case "Retiro":
-                res = CapturaDeCuenta.ModificarCuentaEmpresarial("material","disminuir",DetalleDeMovimiento.Importe,DetalleDeMovimiento.Fecha);
-                if(res.error == true){
+                res = CapturaDeCuenta.ModificarCuentaEmpresarial("material", "disminuir", DetalleDeMovimiento.Importe, DetalleDeMovimiento.Fecha);
+                if (res.error == true) {
                     flujo = false;
-                }else{
-                    res = Cliente.ModificarSaldoMaterial("Disminuir",DetalleDeMovimiento.Importe,DetalleDeMovimiento.ClienteID);
-                    if(res.error == true){
+                } else {
+                    res = Cliente.ModificarSaldoMaterial("Disminuir", DetalleDeMovimiento.Importe, DetalleDeMovimiento.ClienteID);
+                    if (res.error == true) {
                         flujo = false;
                     }
                 }
                 break;
             case "Ingreso":
-                res = CapturaDeCuenta.ModificarCuentaEmpresarial("material","aumentar",DetalleDeMovimiento.Importe,DetalleDeMovimiento.Fecha);
-                if(res.error == true){
+                res = CapturaDeCuenta.ModificarCuentaEmpresarial("material", "aumentar", DetalleDeMovimiento.Importe, DetalleDeMovimiento.Fecha);
+                if (res.error == true) {
                     flujo = false;
-                }else{
-                    res = Cliente.ModificarSaldoMaterial("Aumentar",DetalleDeMovimiento.Importe,DetalleDeMovimiento.ClienteID);
-                    if(res.error == true){
+                } else {
+                    res = Cliente.ModificarSaldoMaterial("Aumentar", DetalleDeMovimiento.Importe, DetalleDeMovimiento.ClienteID);
+                    if (res.error == true) {
                         flujo = false;
                     }
                 }
@@ -112,135 +112,146 @@ function GuardarMovimientoMaterial (DetalleDeMovimiento){
                 flujo = false;
         }
 
-        if(flujo == true){
+        if (flujo == true) {
+            // Paso -> asignar ID
             Contador = Contador + 1;
             DetalleDeMovimiento.ID = Contador;
 
             // Paso -> hacer captura del saldo del cliente
-            let Respuesta = Cliente.ObtenerSaldo(DetalleDeMovimiento.ClienteID,"material")
-            if(Respuesta.error == false){
-                DetalleDeMovimiento.CapturaSaldo = Respuesta.SaldoMaterial
-            }else{
-                DetalleDeMovimiento.CapturaSaldo = 0
+            let RespuestaSaldo = Cliente.ObtenerSaldo(DetalleDeMovimiento.ClienteID, "material");
+            if (RespuestaSaldo.error == false) {
+                DetalleDeMovimiento.CapturaSaldo = RespuestaSaldo.SaldoMaterial;
+            } else {
+                DetalleDeMovimiento.CapturaSaldo = 0;
             }
 
+            // Paso -> guardar en la lista
+            console.log("MD: toda ha ido bien, ahora este es el detalle que se subira: ");
+            console.log(DetalleDeMovimiento);
+
+            // Asegurar 2 decimales
+            DetalleDeMovimiento.Importe = parseFloat(DetalleDeMovimiento.Importe).toFixed(2);
+
             ListaMovimientos.push(DetalleDeMovimiento);
+
+            // Paso -> cerrar el componente para guardar cambios
             Respuesta = CerrarObjetoMovimientoDeMaterial();
-            if(Respuesta.error == true){
+            if (Respuesta.error == true) {
                 ErrorGeneral = true;
-                return ({"error":ErrorGeneral});
+                return ({ "error": ErrorGeneral });
             }
-        }else{
+
+        } else {
             ErrorGeneral = true;
-            return ({"error":ErrorGeneral});
+            return ({ "error": ErrorGeneral });
         }
-        return ({"error":ErrorGeneral});
+        return ({ "error": ErrorGeneral });
     }
 }
 
 // Funcion -> obtener todos los movimientos de material
-function ObtenerMovimientosMaterial (FechaInicial,FechaFinal){
+function ObtenerMovimientosMaterial(FechaInicial, FechaFinal) {
 
     ErrorGeneral = false;
     Respuesta = IniciarObjetoMovimientoDeMaterial();
-    if(Respuesta.error == true){
+    if (Respuesta.error == true) {
         ErrorGeneral = true;
-        return({"error":ErrorGeneral});
+        return ({ "error": ErrorGeneral });
     }
 
-    let ListaFiltrada = ListaMovimientos.filter(Movimiento=>{
+    let ListaFiltrada = ListaMovimientos.filter(Movimiento => {
         let FechaMovimiento = new Date(Movimiento.Fecha);
         let FechaInicialValida = new Date(FechaInicial);
         let FechaFinalValida = new Date(FechaFinal);
         return FechaMovimiento >= FechaInicialValida && FechaMovimiento <= FechaFinalValida;
     });
 
-    return ({"error":ErrorGeneral,"ListaMovimientosMateriales":ListaFiltrada});
+    return ({ "error": ErrorGeneral, "ListaMovimientosMateriales": ListaFiltrada });
 }
 
-    // Funcion -> eliminar un movimiento de material
-    function EliminarMovimientoMaterial (IDMovimiento){
+// Funcion -> eliminar un movimiento de material
+function EliminarMovimientoMaterial(IDMovimiento) {
 
-        ErrorGeneral = false
-        let flujo = true
-        let res
+    ErrorGeneral = false
+    let flujo = true
+    let res
 
-        // mensaje de flujo
-        console.log("\nMovimientoDeMaterial: se eliminara este movimiento: ")
-        console.log(IDMovimiento)
+    // mensaje de flujo
+    console.log("\nMovimientoDeMaterial: se eliminara este movimiento: ")
+    console.log(IDMovimiento)
 
-        // Paso -> iniciar el objeto
-        console.log("MM: inciando objeto")
-        Respuesta = IniciarObjetoMovimientoDeMaterial()
-        if(Respuesta.error == true){
-            ErrorGeneral = true
-            return({"error":ErrorGeneral})
-        }else{
+    // Paso -> iniciar el objeto
+    console.log("MM: inciando objeto")
+    Respuesta = IniciarObjetoMovimientoDeMaterial()
+    if (Respuesta.error == true) {
+        ErrorGeneral = true
+        return ({ "error": ErrorGeneral })
+    } else {
 
-            // Paso -> encontrar los detalles del movimiento
-            let DetalleDeMovimiento = ListaMovimientos.filter(Movimiento => Movimiento.ID == IDMovimiento)[0]
-            console.log("MM: este es el detalle")
-            console.log(DetalleDeMovimiento)
-            // Paso -> modificar la cuenta empresarial y la cuenta personal
-            switch(DetalleDeMovimiento.Tipo){
-                case "Retiro":
-                    console.log("MM: este es retiro")
-                    res = CapturaDeCuenta.ModificarCuentaEmpresarial("material","aumentar",DetalleDeMovimiento.Importe,DetalleDeMovimiento.Fecha)
-                    if(res.error == true){
-                        console.log("MM: no se pudo modificar cuenta empresarial")
-                        flujo = false
-                    }else{
-                        console.log("MM: si se pudo modificar cuenta empresarial")
-                        res = Cliente.ModificarSaldoMaterial("Aumentar",DetalleDeMovimiento.Importe,DetalleDeMovimiento.ClienteID)
-                        if(res.error == true){
-                            console.log("MM: no se pudo modificar cuenta personal")
-                            flujo = false
-                        }
-                    }
-                    break
-                case "Ingreso":
-                    console.log("MM: este es ingreso")
-                    res = CapturaDeCuenta.ModificarCuentaEmpresarial("material","disminuir",DetalleDeMovimiento.Importe,DetalleDeMovimiento.Fecha)
-                    if(res.error == true){
-                        flujo = false
-                    }else{
-                        res = Cliente.ModificarSaldoMaterial("Disminuir",DetalleDeMovimiento.Importe,DetalleDeMovimiento.ClienteID)
-                        if(res.error == true){
-                            flujo = false
-                        }
-                    }
-                    break
-                default:
-                    console.log("\nMovimientoDeMaterial: no existe esta operacion: ",DetalleDeMovimiento.Tipo)
+        // Paso -> encontrar los detalles del movimiento
+        let DetalleDeMovimiento = ListaMovimientos.filter(Movimiento => Movimiento.ID == IDMovimiento)[0]
+        console.log("MM: este es el detalle")
+        console.log(DetalleDeMovimiento)
+        // Paso -> modificar la cuenta empresarial y la cuenta personal
+        switch (DetalleDeMovimiento.Tipo) {
+            case "Retiro":
+                console.log("MM: este es retiro")
+                res = CapturaDeCuenta.ModificarCuentaEmpresarial("material", "aumentar", DetalleDeMovimiento.Importe, DetalleDeMovimiento.Fecha)
+                if (res.error == true) {
+                    console.log("MM: no se pudo modificar cuenta empresarial")
                     flujo = false
-            }
-
-            // Ver si no ha sucedido ningun problema
-            console.log("MM: este es el flujo: ",flujo)
-            if(flujo == true){
-
-                // Paso -> encontrar el indice
-                let ListaFiltrada = ListaMovimientos.filter(Movimiento => Movimiento.ID !== IDMovimiento)
-
-                // Paso -> eliminar de la lista
-                console.log("MM: toda ha ido bien, ahora este es el detalle que se eliminara: ")
-                console.log(DetalleDeMovimiento)
-
-                ListaMovimientos = ListaFiltrada
-
-                // Paso -> cerrar el componente para guardar cambios
-                Respuesta = CerrarObjetoMovimientoDeMaterial()
-                if(Respuesta.error == true){
-                    ErrorGeneral = true
-                    return ({"error":ErrorGeneral})
+                } else {
+                    console.log("MM: si se pudo modificar cuenta empresarial")
+                    res = Cliente.ModificarSaldoMaterial("Aumentar", DetalleDeMovimiento.Importe, DetalleDeMovimiento.ClienteID)
+                    if (res.error == true) {
+                        console.log("MM: no se pudo modificar cuenta personal")
+                        flujo = false
+                    }
                 }
-
-            }else{
-                ErrorGeneral = true
-                return ({"error":ErrorGeneral})
-            }
-            return ({"error":ErrorGeneral})
+                break
+            case "Ingreso":
+                console.log("MM: este es ingreso")
+                res = CapturaDeCuenta.ModificarCuentaEmpresarial("material", "disminuir", DetalleDeMovimiento.Importe, DetalleDeMovimiento.Fecha)
+                if (res.error == true) {
+                    flujo = false
+                } else {
+                    res = Cliente.ModificarSaldoMaterial("Disminuir", DetalleDeMovimiento.Importe, DetalleDeMovimiento.ClienteID)
+                    if (res.error == true) {
+                        flujo = false
+                    }
+                }
+                break
+            default:
+                console.log("\nMovimientoDeMaterial: no existe esta operacion: ", DetalleDeMovimiento.Tipo)
+                flujo = false
         }
+
+        // Ver si no ha sucedido ningun problema
+        console.log("MM: este es el flujo: ", flujo)
+        if (flujo == true) {
+
+            // Paso -> encontrar el indice
+            let ListaFiltrada = ListaMovimientos.filter(Movimiento => Movimiento.ID !== IDMovimiento)
+
+            // Paso -> eliminar de la lista
+            console.log("MM: toda ha ido bien, ahora este es el detalle que se eliminara: ")
+            console.log(DetalleDeMovimiento)
+
+            ListaMovimientos = ListaFiltrada
+
+            // Paso -> cerrar el componente para guardar cambios
+            Respuesta = CerrarObjetoMovimientoDeMaterial()
+            if (Respuesta.error == true) {
+                ErrorGeneral = true
+                return ({ "error": ErrorGeneral })
+            }
+
+        } else {
+            ErrorGeneral = true
+            return ({ "error": ErrorGeneral })
+        }
+        return ({ "error": ErrorGeneral })
+    }
 }
 
 module.exports = {

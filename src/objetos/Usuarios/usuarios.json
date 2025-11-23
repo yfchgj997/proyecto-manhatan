@@ -1,0 +1,53 @@
+{
+    "Contador": 21,
+    "Elementos": [
+        {
+            "Nombres": "erika",
+            "Apellidos": "vargas",
+            "Contrasena": "1234",
+            "Rol": "Administrador",
+            "Estado": "Inactivo",
+            "ID": 1
+        },
+        {
+            "Nombres": "jherson",
+            "Apellidos": "ampuero",
+            "Contrasena": "12",
+            "Rol": "Administrador",
+            "Estado": "Activo",
+            "ID": 2
+        },
+        {
+            "Nombres": "Berning",
+            "Apellidos": "Pari",
+            "Contrasena": "7374",
+            "Rol": "Administrador",
+            "Estado": "Activo",
+            "ID": 3
+        },
+        {
+            "Nombres": "cambio echo por una IA",
+            "Apellidos": "no se",
+            "Contrasena": "321",
+            "Rol": "Administrador",
+            "Estado": "Activo",
+            "ID": 4
+        },
+        {
+            "Nombres": "wef",
+            "Apellidos": "wefw",
+            "Contrasena": "1234",
+            "Rol": "Administrador",
+            "Estado": "Inactivo",
+            "ID": 19
+        },
+        {
+            "Nombres": "hjhffhggug",
+            "Apellidos": "gyvugv",
+            "Contrasena": "4521",
+            "Rol": "Administrador",
+            "Estado": "Activo",
+            "ID": 21
+        }
+    ]
+}
