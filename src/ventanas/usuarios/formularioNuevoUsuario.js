@@ -30,7 +30,6 @@ let codigo = `
                     <p>Estado:</p>
                     <select id="CampoEstado" name="estado">
                         <option>Activo</option>
-                        <option>Inactivo</option>
                     </select>
                 </div>
             </div>
