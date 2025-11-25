@@ -1,5 +1,5 @@
 {
-    "Contador": 21,
+    "Contador": 23,
     "Elementos": [
         {
             "Nombres": "erika",
@@ -48,6 +48,22 @@
             "Rol": "Administrador",
             "Estado": "Activo",
             "ID": 21
+        },
+        {
+            "Nombres": "BERNARDO ",
+            "Apellidos": "",
+            "Contrasena": "123456",
+            "Rol": "Administrador",
+            "Estado": "Activo",
+            "ID": 22
+        },
+        {
+            "Nombres": "KH",
+            "Apellidos": "WEJKFHWEF",
+            "Contrasena": "WJKEFHIWE",
+            "Rol": "Administrador",
+            "Estado": "Activo",
+            "ID": 23
         }
     ]
 }

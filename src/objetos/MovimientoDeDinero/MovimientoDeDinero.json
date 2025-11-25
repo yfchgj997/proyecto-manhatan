@@ -1,5 +1,5 @@
 {
-    "Contador": 27,
+    "Contador": 29,
     "Elementos": [
         {
             "Tipo": "Retiro",
@@ -91,6 +91,32 @@
             "Hora": "00:12:02",
             "ID": 27,
             "CapturaSaldo": "2426.68"
+        },
+        {
+            "Tipo": "Ingreso",
+            "Fecha": "2025-11-24",
+            "UsuarioID": 2,
+            "UsuarioNombres": "jherson",
+            "ClienteID": "4",
+            "ClienteNombres": "CLIENTE IMPORTANTE",
+            "Importe": "23.45",
+            "Observacion": "",
+            "Hora": "21:14:06",
+            "ID": 28,
+            "CapturaSaldo": "23.45"
+        },
+        {
+            "Tipo": "Retiro",
+            "Fecha": "2025-11-24",
+            "UsuarioID": 2,
+            "UsuarioNombres": "jherson",
+            "ClienteID": "3",
+            "ClienteNombres": "fdqwefqf",
+            "Importe": "34.67",
+            "Observacion": "",
+            "Hora": "21:24:20",
+            "ID": 29,
+            "CapturaSaldo": "2392.01"
         }
     ]
 }

@@ -68,10 +68,6 @@ function EditarUsuario() {
         ipcRenderer.send("ModificarMensaje", { tipo: "MensajeMalo", texto: "El campo Nombres es obligatorio." });
         return;
     }
-    if (apellidos.trim() === "") {
-        ipcRenderer.send("ModificarMensaje", { tipo: "MensajeMalo", texto: "El campo Apellidos es obligatorio." });
-        return;
-    }
     if (contrasena.trim() === "") {
         ipcRenderer.send("ModificarMensaje", { tipo: "MensajeMalo", texto: "El campo Contraseña es obligatorio." });
         return;

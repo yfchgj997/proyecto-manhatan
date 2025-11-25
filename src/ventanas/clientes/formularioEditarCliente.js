@@ -58,14 +58,6 @@ function EditarCliente(cliente) {
         ipcRenderer.send("ModificarMensaje", { tipo: "MensajeMalo", texto: "El campo Nombres es obligatorio." });
         return;
     }
-    if (apellidos.trim() === "") {
-        ipcRenderer.send("ModificarMensaje", { tipo: "MensajeMalo", texto: "El campo Apellidos es obligatorio." });
-        return;
-    }
-    if (dni.trim() === "") {
-        ipcRenderer.send("ModificarMensaje", { tipo: "MensajeMalo", texto: "El campo DNI es obligatorio." });
-        return;
-    }
     if (fecha.trim() === "") {
         ipcRenderer.send("ModificarMensaje", { tipo: "MensajeMalo", texto: "El campo Fecha es obligatorio." });
         return;

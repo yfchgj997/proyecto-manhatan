@@ -32,9 +32,7 @@ function ModificarCodigo(clientes, usuario) {
                     </div>
                     <div class="Campo">
                         <p>Usuario:</p>
-                        <select id="CampoUsuarioMovimiento" name="usuario">
-                            <option>${usuario.Nombres}</option>
-                        </select>
+                        <input id="CampoUsuarioMovimiento" name="usuario" type="text" value="${usuario.Nombres}" readonly>
                     </div>
                     <div class="Campo">
                         <p>Cliente Externo:</p>
@@ -82,10 +80,6 @@ function GuardarNuevoMovimiento(usuario) {
     }
     if (importe.trim() === "") {
         ipcRenderer.send("ModificarMensaje", { tipo: "MensajeMalo", texto: "El campo Importe es obligatorio." });
-        return;
-    }
-    if (observacion.trim() === "") {
-        ipcRenderer.send("ModificarMensaje", { tipo: "MensajeMalo", texto: "El campo Observacion es obligatorio." });
         return;
     }
 

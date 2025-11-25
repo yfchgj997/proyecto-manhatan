@@ -1,5 +1,5 @@
 {
-    "Contador": 4,
+    "Contador": 7,
     "Elementos": [
         {
             "Nombres": "jhkj",
@@ -14,7 +14,7 @@
             "Nombres": "fdqwefqf",
             "Apellidos": "wfwefw",
             "DNI": "4544445",
-            "SaldoEconomico": "2426.68",
+            "SaldoEconomico": "2392.01",
             "SaldoMaterial": "25512.00",
             "FechaIngreso": "2025-11-22",
             "ID": 3
@@ -23,10 +23,37 @@
             "Nombres": "CLIENTE IMPORTANTE",
             "Apellidos": "NADA",
             "DNI": "84839434",
+            "SaldoEconomico": "23.45",
+            "SaldoMaterial": "62.71",
+            "FechaIngreso": "2025-11-24",
+            "ID": 4
+        },
+        {
+            "Nombres": "EFWEFWFW",
+            "Apellidos": "",
+            "DNI": "",
             "SaldoEconomico": 0,
             "SaldoMaterial": 0,
             "FechaIngreso": "2025-11-24",
-            "ID": 4
+            "ID": 5
+        },
+        {
+            "Nombres": "BERNING",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2025-11-24",
+            "ID": 6
+        },
+        {
+            "Nombres": "BWJWD",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2025-11-24",
+            "ID": 7
         }
     ]
 }
