@@ -1,4 +1,5 @@
 const { ipcRenderer } = require("electron");
+const { aplicarMayusculasMultiple, habilitarNavegacionEnter } = require("../../componentes/textUtils");
 
 // Variables
 
@@ -109,6 +110,10 @@ function CargarFormularioEditarUsuario(usuario) {
         ModificarCodigo(usuario)
         // Paso -> insertar codigo
         EspacioFormularioEditarUsuario.innerHTML = codigo
+        // Paso -> aplicar mayúsculas a los inputs de texto
+        aplicarMayusculasMultiple(["CampoNombres", "CampoApellidos", "CampoContrasena"])
+        // Paso -> habilitar navegación con Enter
+        habilitarNavegacionEnter(EspacioFormularioEditarUsuario);
         // Paso -> agregar funcionalidad de boton
         document.getElementById("BotonEditarUsuario").addEventListener("click", EditarUsuario)
     } else {

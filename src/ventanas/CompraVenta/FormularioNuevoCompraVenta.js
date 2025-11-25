@@ -1,4 +1,5 @@
 const { ipcRenderer } = require("electron");
+const { aplicarMayusculas, restringirFechasFuturas, habilitarNavegacionEnter } = require("../../componentes/textUtils");
 
 // Variables
 
@@ -175,6 +176,16 @@ function CargarFormularioNuevoCompraVenta(usuarioAutenticado, fecha) {
         FormatearDecimales(document.getElementById("CampoMontoMaterial"));
         FormatearDecimales(document.getElementById("CampoMontoEconomico"));
         FormatearDecimales(document.getElementById("CampoPrecioCambio"));
+
+        // Paso -> restringir fechas futuras
+        const campoFecha = document.getElementById("CampoFechaMovimiento");
+        restringirFechasFuturas(campoFecha);
+
+        // Paso -> aplicar mayúsculas al campo de cliente
+        aplicarMayusculas(document.getElementById("CampoCliente"));
+
+        // Paso -> habilitar navegación con Enter
+        habilitarNavegacionEnter(EspacioFormularioNuevoCompraVenta);
 
         // Asegurarse de que el botón existe antes de agregar el evento
         let botonGuardar = document.getElementById("BotonGuardarNuevoCompraVenta");

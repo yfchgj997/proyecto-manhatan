@@ -1,5 +1,5 @@
 {
-    "Contador": 14,
+    "Contador": 16,
     "Elementos": [
         {
             "Tipo": "venta",
@@ -84,6 +84,30 @@
             "PrecioCambio": 3,
             "Hora": "23:06:52",
             "ID": 14
+        },
+        {
+            "Tipo": "venta",
+            "Fecha": "2025-11-24",
+            "EmpleadoNombre": "jherson",
+            "EmpleadoID": 2,
+            "Cliente": "ERGER",
+            "MontoMaterial": 234,
+            "MontoEconomico": 342,
+            "PrecioCambio": 234,
+            "Hora": "09:09:34",
+            "ID": 15
+        },
+        {
+            "Tipo": "compra",
+            "Fecha": "2025-11-24",
+            "EmpleadoNombre": "jherson",
+            "EmpleadoID": 2,
+            "Cliente": "ERGER",
+            "MontoMaterial": 234,
+            "MontoEconomico": 342,
+            "PrecioCambio": 234,
+            "Hora": "09:09:50",
+            "ID": 16
         }
     ]
 }

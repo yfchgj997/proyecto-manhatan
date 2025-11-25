@@ -1,4 +1,5 @@
 const { ipcRenderer } = require("electron");
+const { aplicarMayusculas, restringirFechasFuturas, habilitarNavegacionEnter } = require("../../componentes/textUtils");
 
 // Variables
 
@@ -131,6 +132,16 @@ function MostrarFormularioNuevoMovimientoMaterial(clientes, usuario, Fecha) {
 
         // Agregar validacion de decimales
         FormatearDecimales(document.getElementById("CampoImporteMovimiento"));
+
+        // Paso -> restringir fechas futuras
+        const campoFecha = document.getElementById("CampoFechaMovimiento");
+        restringirFechasFuturas(campoFecha);
+
+        // Paso -> aplicar mayúsculas al campo de observación
+        aplicarMayusculas(document.getElementById("CampoObservacionMovimiento"));
+
+        // Paso -> habilitar navegación con Enter
+        habilitarNavegacionEnter(EspacioFormularioNuevoMovimiento);
 
         // Paso -> agregar funcionalidad de boton
         document.getElementById("BotonSelectCliente").addEventListener("click", EnviarEvento)

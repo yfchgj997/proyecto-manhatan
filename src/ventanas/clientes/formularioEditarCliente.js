@@ -1,4 +1,5 @@
 const { ipcRenderer } = require("electron");
+const { aplicarMayusculasMultiple, restringirFechasFuturas, habilitarNavegacionEnter } = require("../../componentes/textUtils");
 
 // Variables
 
@@ -104,6 +105,17 @@ function CargarFormularioEditarCliente(cliente) {
         ModificarCodigo(cliente)
         // Paso -> insertar codigo
         EspacioFormularioEditarCliente.innerHTML = codigo
+
+        // Paso -> restringir fechas futuras
+        const campoFecha = document.getElementById("CampoFecha");
+        restringirFechasFuturas(campoFecha);
+
+        // Paso -> aplicar mayúsculas a los inputs de texto
+        aplicarMayusculasMultiple(["CampoNombres", "CampoApellidos", "CampoDNI"])
+
+        // Paso -> habilitar navegación con Enter
+        habilitarNavegacionEnter(EspacioFormularioEditarCliente);
+
         // Paso -> agregar funcionalidad de boton
         document.getElementById("BotonEditarCliente").addEventListener("click", () => { EditarCliente(cliente) })
     } else {
