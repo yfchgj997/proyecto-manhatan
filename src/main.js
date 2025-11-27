@@ -8,6 +8,10 @@ const ExcelJS = require("exceljs");
 const { exec } = require('child_process');
 const PDFDocument = require('pdfkit');
 
+// Importar sistema de privilegios y gestor de sesión
+const SistemaPrivilegios = require('./componentes/SistemaPrivilegios.js');
+const GestorSesion = require('./componentes/GestorSesion.js');
+
 function generarPDF(data) {
     console.log("Generando PDF...");
 
@@ -67,6 +71,47 @@ let loginWindow
 let respuesta
 let SelectUserWindow
 
+// ====================================================================================================
+// FUNCIÓN AUXILIAR PARA VALIDAR PRIVILEGIOS
+// ====================================================================================================
+
+/**
+ * Valida si el usuario actual tiene privilegio para realizar una acción
+ * @param {string} modulo - Nombre del módulo (ej: "clientes", "usuarios")
+ * @param {string} accion - Acción a validar (ej: "crear", "editar", "eliminar")
+ * @param {object} event - Evento IPC para enviar mensaje de error si no tiene privilegio
+ * @returns {boolean} - true si tiene privilegio, false en caso contrario
+ */
+function validarPrivilegio(modulo, accion, event) {
+    const rol = GestorSesion.obtenerRolActual();
+
+    if (!rol) {
+        console.error(`Main: No hay usuario autenticado`);
+        if (event) {
+            event.sender.send("ModificarMensaje", {
+                tipo: "MensajeMalo",
+                texto: "No hay sesión activa. Por favor, inicie sesión nuevamente."
+            });
+        }
+        return false;
+    }
+
+    const tienePrivilegio = SistemaPrivilegios.verificarPrivilegio(rol, modulo, accion);
+
+    if (!tienePrivilegio) {
+        console.warn(`Main: Usuario con rol "${rol}" no tiene privilegio para ${modulo}.${accion}`);
+        if (event) {
+            event.sender.send("ModificarMensaje", {
+                tipo: "MensajeMalo",
+                texto: "No tienes permisos para realizar esta acción"
+            });
+        }
+        return false;
+    }
+
+    return true;
+}
+
 // --------------------------------------- DIARIO ---------------------------------------
 
 // 
@@ -112,11 +157,19 @@ ipcMain.on("EAutenticarUsuario", (event, datos) => {
     );
 
     if (usuarioEncontrado) {
+        // Paso -> Establecer usuario en el GestorSesion
+        GestorSesion.establecerUsuario(usuarioEncontrado);
+
+        // Paso -> Obtener privilegios del rol del usuario
+        const privilegios = SistemaPrivilegios.obtenerPrivilegiosRol(usuarioEncontrado.Rol);
+
+        console.log(`Autenticación exitosa: ${usuarioEncontrado.Nombres} (${usuarioEncontrado.Rol})`);
+        console.log("Privilegios del usuario:", privilegios);
+
         // Paso -> cerrar la ventana de login
         loginWindow.close()
 
-        // Paso -> abrir la otra ventana
-        console.log("Autenticación exitosa:", usuarioEncontrado);
+        // Paso -> abrir la ventana principal
         mainWindow = new BrowserWindow({
             show: false, // Para que no parpadee la ventana al maximizarse
             webPreferences: {
@@ -127,10 +180,14 @@ ipcMain.on("EAutenticarUsuario", (event, datos) => {
         mainWindow.maximize(); // Maximiza la ventana
         mainWindow.show(); // Ahora sí la mostramos
         mainWindow.loadFile("./src/index.html"); // cargar el codigo html de la primera ventana
+
+        // Paso -> Preparar datos con usuario y privilegios
         let datos = {
             "usuarioIngresado": usuarioEncontrado,
+            "privilegios": privilegios,
             "pantalla": "CuentaEmpresarial"
         }
+
         mainWindow.webContents.send("mostrarMenu", datos)
         mainWindow.webContents.send("actualizar-contenido", datos) // cargar por default 
     } else {
@@ -151,6 +208,10 @@ ipcMain.on("ECerrarSesion", (event) => {
     const respuesta = dialog.showMessageBoxSync(null, opciones);
     if (respuesta === 1) {
         console.log("MENSAJE: cerrando sesion")
+
+        // Paso -> Cerrar sesión en el GestorSesion
+        GestorSesion.cerrarSesion();
+
         mainWindow.close()
     } else {
         console.log("MENSAJE: se cancelo el cierre de sesion")
@@ -188,6 +249,11 @@ ipcMain.on("EQuiereGestionarCompraVenta", (event, usuarioAutenticado) => {
 
 // evento -> guardar nueva compra venta
 ipcMain.on("EQuiereGuardarNuevoCompraVenta", (event, datosCompraVenta) => {
+
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("compraVenta", "crear", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
 
     // mensaje de flujo
     console.log("MENSAJE: guardando nuevo compra venta, estos son los datos:")
@@ -251,6 +317,11 @@ ipcMain.on("EFiltrarListaCV", (event, datos) => {
 
 // Evento -> eliminar compra venta
 ipcMain.on("EEliminarCV", (event, datosCompraVenta) => {
+
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("compraVenta", "eliminar", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
 
     // mensaje de flujo
     console.log("MENSAJE: eliminando compra venta, estos son los datos:")
@@ -406,8 +477,13 @@ ipcMain.on("EQuiereGestionarClientes", (event) => {
 // Evento -> guardar un nuevo cliente
 ipcMain.on("EGuardarNuevoCliente", (event, Cliente) => {
 
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("clientes", "crear", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
+
     // mensaje de flujo
-    console.log("Main: guardando un nuevo cliente, estos son los datos:")
+    console.log("Main: guardando un nuevo cliente, estos son los datos:");
     console.log(Cliente)
 
     // Paso -> guardar en la base de datos el nuevo cliente
@@ -443,6 +519,11 @@ ipcMain.on("EGuardarNuevoCliente", (event, Cliente) => {
 
 // Evento -> eliminar un cliente
 ipcMain.on("EEliminarCliente", (event, Cliente) => {
+
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("clientes", "eliminar", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
 
     // Mensaje de flujo
     console.log("Main: Se eliminara el siguiente cliente:");
@@ -498,6 +579,11 @@ ipcMain.on("EEliminarCliente", (event, Cliente) => {
 });
 
 ipcMain.on("EEditarCliente", (event, cliente) => {
+
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("clientes", "editar", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
 
     // mensaje de flujo
     console.log("Main: editando los datos de este cliente: ")
@@ -648,6 +734,11 @@ ipcMain.on("EQuiereGestionarMovimientos", (event, datos) => {
 // Evento -> guardar un nuevo movimiento
 ipcMain.on("EGuardarNuevoMovimiento", (event, Movimiento) => {
 
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("movimientosEconomicos", "crear", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
+
     // mensaje de flujo
     console.log("Main: guardando un nuevo movimiento, estos son los datos:")
     console.log(Movimiento)
@@ -692,6 +783,11 @@ ipcMain.on("EGuardarNuevoMovimiento", (event, Movimiento) => {
 })
 
 ipcMain.on("EEliminarMovimiento", (event, Movimiento) => {
+
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("movimientosEconomicos", "eliminar", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
 
     // mensaje de flujo
     console.log("Main: eliminando un movimiento, este es el movimiento:")
@@ -739,6 +835,11 @@ ipcMain.on("EEliminarMovimiento", (event, Movimiento) => {
 // Evento -> imprimir commpra venta
 ipcMain.on("EQuiereImprimirCV", (event, Movimiento) => {
 
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("compraVenta", "imprimir", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
+
     // mensaje de flujo
     console.log("Main: se imprimira compra venta: ")
     console.log(Movimiento)
@@ -767,6 +868,11 @@ ipcMain.on("EQuiereImprimirCV", (event, Movimiento) => {
 })
 
 ipcMain.on("EImprimirMovimiento", (event, Movimiento) => {
+
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("movimientosEconomicos", "imprimir", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
 
     // mensaje de flujo
     console.log("MENSAJE: imprimiendo un movimiento")
@@ -798,6 +904,11 @@ ipcMain.on("EImprimirMovimiento", (event, Movimiento) => {
 })
 
 ipcMain.on("EImprimirMovimientoMaterial", (event, Movimiento) => {
+
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("movimientosMateriales", "imprimir", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
 
     // mensaje de flujo
     console.log("MENSAJE: imprimiendo un movimiento")
@@ -864,6 +975,11 @@ ipcMain.on("EFiltrarMovimientos", (event, datos) => {
 })
 
 ipcMain.on("EDescargarTablaMovimientos", (event, movimientos) => {
+
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("reportes", "descargar", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
 
     console.log("MENSAJE: estos son los datos que se descargarán de la tabla:");
     console.log(movimientos);
@@ -1067,6 +1183,11 @@ ipcMain.on("EQuiereGestionarUsuarios", (event) => {
 // Evento -> guardar un nuevo usuario
 ipcMain.on("EGuardarNuevoUsuario", (event, Usuario) => {
 
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("usuarios", "crear", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
+
     // mensaje de flujo
     console.log("MENSAJE: guardando un nuevo usuario, estos son los datos:")
     console.log(Usuario)
@@ -1105,6 +1226,11 @@ ipcMain.on("EGuardarNuevoUsuario", (event, Usuario) => {
 })
 
 ipcMain.on("EEliminarUsuario", (event, Usuario) => {
+
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("usuarios", "eliminar", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
 
     // Mensaje de flujo
     console.log("MENSAJE: Se eliminara un usuario, los datos son:");
@@ -1156,6 +1282,11 @@ ipcMain.on("EQuiereFormularioEditarUsuario", (event, usuario) => {
 })
 
 ipcMain.on("EEditarUsuario", (event, usuario) => {
+
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("usuarios", "editar", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
 
     // mensaje de flujo
     console.log("MENSAJE: editando los datos de este usuario: ")
@@ -1274,6 +1405,11 @@ ipcMain.on("EQuiereGestionarMovimientosMateriales", (event, UsuarioAutenticado) 
 // Evento -> guardar un nuevo movimiento material
 ipcMain.on("EGuardarNuevoMovimientoMaterial", (event, Movimiento) => {
 
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("movimientosMateriales", "crear", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
+
     // mensaje de flujo
     console.log("Main: guardando un nuevo movimiento material, estos son los datos:")
     console.log(Movimiento)
@@ -1347,6 +1483,11 @@ ipcMain.on("EFiltrarMovimientosMateriales", (event, datos) => {
 })
 
 ipcMain.on("EEliminarMovimientoMaterial", (event, Movimiento) => {
+
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("movimientosMateriales", "eliminar", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
 
     // mensaje de flujo
     console.log("Main: eliminando un movimiento material, este es el movimiento:")
