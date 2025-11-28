@@ -82,6 +82,7 @@ function GuardarNuevoMovimiento(usuario) {
         "UsuarioNombres": usuario.Nombres,
         "ClienteID": clienteID,
         "ClienteNombres": document.getElementById("BotonSelectCliente").getAttribute("nombres"),
+        "ClienteApellidos": document.getElementById("BotonSelectCliente").getAttribute("apellidos"),
         "Importe": Number(importe),
         "Observacion": observacion,
     };
@@ -164,8 +165,9 @@ ipcRenderer.on("EActualizarSoloCliente", (event, cliente) => {
 
     let boton = document.getElementById("BotonSelectCliente");
     if (boton) {
-        boton.textContent = cliente.Nombres; // Actualiza el texto del botón con el nombre del cliente
+        boton.textContent = `${cliente.Nombres} ${cliente.Apellidos}`; // Actualiza el texto del botón con el nombre completo
         boton.setAttribute("nombres", cliente.Nombres); // Agrega un atributo personalizado 'nombres'
+        boton.setAttribute("apellidos", cliente.Apellidos); // Agrega un atributo personalizado 'apellidos'
         boton.setAttribute("IDExterno", cliente.ID)
     } else {
         console.error("No se encontró el botón con ID 'BotonSelectCliente'");
