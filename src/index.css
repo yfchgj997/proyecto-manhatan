@@ -376,6 +376,9 @@
             .opciones>.OpcionEliminar{
                 background: #dc3545;
             }
+            .opciones>.OpcionMostrar{
+                background: #17a2b8;
+            }
 
 /* botones */
 .Boton{
@@ -412,3 +415,112 @@
     align-items: center;
     border-radius: 5px;
 }
+
+/* ---------------------------------------- BORRAR ---------------------------------------------- */
+
+/* =============================
+   CONTENEDOR PRINCIPAL
+============================= */
+#EstadoCuentaContenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 25px;
+    width: 95%;
+    margin: auto;
+    font-family: Arial, sans-serif;
+}
+
+/* =============================
+   BOTONES
+============================= */
+#ContenedorBotones {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+}
+
+.BotonCode {
+    padding: 10px 20px;
+    background-color: #4aa3ff;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.BotonCode:hover {
+    background-color: #1b82e9;
+}
+
+/* =============================
+   TARJETA CLIENTE
+============================= */
+#TarjetaCliente {
+    background: #f7f7f7;
+    color: rgb(0, 0, 0);
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#TarjetaCliente p {
+    margin: 6px 0;
+}
+
+/* =============================
+   TÍTULOS
+============================= */
+#TituloEstado,
+#TituloMovimientos {
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+/* =============================
+   CONTENEDOR MOVIMIENTOS
+============================= */
+#ContenedorMovimientos {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* =============================
+   TABLA DE MOVIMIENTOS
+============================= */
+#TablaMovimientos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#TablaMovimientos th {
+    background: #52a5ff;
+    color: white;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 2px solid #dddddd;
+}
+
+#TablaMovimientos td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.fila-movimiento:hover {
+    background-color: #f4f9ff;
+}
+
+/* =============================
+   MENSAJE 'NO HAY MOVIMIENTOS'
+============================= */
+.texto-vacio {
+    color: #777;
+    font-size: 16px;
+    margin-top: 10px;
+    text-align: center;
+}
+

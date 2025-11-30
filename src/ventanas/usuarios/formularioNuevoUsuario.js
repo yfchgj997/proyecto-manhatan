@@ -17,9 +17,10 @@ let codigo = `
                     <input id="CampoApellidos" name="apellidos" type="text" placeholder="...">
                 </div>
                 <div class="Campo">
-                    <p>Contrasena:</p>
+                    <p>Contrasen =
+                    a:</p>
                     <input id="CampoContrasena" name="contrasena" type="text" placeholder="...">
-                </div>
+                </div>s
                 <div class="Campo">
                     <p>Rol:</p>
                     <select id="CampoRol" name="rol">

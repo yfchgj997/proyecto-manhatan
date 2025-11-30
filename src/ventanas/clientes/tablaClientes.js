@@ -48,6 +48,7 @@ function CargarTablaClientes(clientes) {
                     <td class="opciones">
                         <button class="BotonOpcion OpcionEditar">e</button>
                         <button class="BotonOpcion OpcionEliminar">-</button>
+                        <button class="BotonOpcion OpcionMostrar">m</button>
                     </td>
                 </tr>
             `;
@@ -118,6 +119,34 @@ function CargarTablaClientes(clientes) {
                     }
                 });
             });
+
+            // Evento -> botón opción mostrar estado de cuenta
+            document.querySelectorAll(".OpcionMostrar").forEach(btn => {
+                btn.addEventListener("click", function () {
+
+                    // obtener la fila (tr) más cercana
+                    let fila = this.closest("tr");
+
+                    // el atributo data-info contiene los datos del elemento
+                    let datos = fila.getAttribute("data-info");
+
+                    try {
+                        // convertir el string JSON a objeto
+                        let objeto = JSON.parse(datos);
+
+                        // enviar el evento al proceso principal
+                        if (typeof ipcRenderer !== "undefined") {
+                            ipcRenderer.send("EQuiereMostrarEstadoDeCuenta", objeto);
+                        } else {
+                            console.error("ERROR: ipcRenderer no está disponible.");
+                        }
+
+                    } catch (error) {
+                        console.error("ERROR: no se pudo convertir data-info en objeto:", error);
+                    }
+                });
+            });
+
 
             console.log("Eventos de botones asignados correctamente.");
         }, 100);

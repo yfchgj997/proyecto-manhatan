@@ -1,5 +1,5 @@
 {
-    "Contador": 35,
+    "Contador": 36,
     "Elementos": [
         {
             "Tipo": "Retiro",
@@ -156,6 +156,19 @@
             "Hora": "21:23:58",
             "ID": 35,
             "CapturaSaldo": "62.71"
+        },
+        {
+            "Tipo": "Retiro",
+            "Fecha": "2025-11-28",
+            "UsuarioID": 2,
+            "UsuarioNombres": "jherson",
+            "ClienteID": "4",
+            "ClienteNombres": "CLIENTE IMPORTANTE",
+            "Importe": "100.00",
+            "Observacion": "W",
+            "Hora": "20:22:50",
+            "ID": 36,
+            "CapturaSaldo": "-37.29"
         }
     ]
 }
