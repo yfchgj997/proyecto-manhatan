@@ -5,7 +5,7 @@
 }
 
 /* configurar la pantalla en general */
-#VentanaPrincipal{
+#VentanaPrincipal {
     width: 100%;
     height: 100vh;
     display: flex;
@@ -13,223 +13,259 @@
 
 /* configurar los elementos en el espacio general */
 
-    /* menu */
-    #EspacioMenu{
-        background: #1E2550;
-        width: 300px;
-        height: auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 20px 0px;
-    }
-        #EspacioMenu>.Empresa{
-            width: 100%;
-        }
-            #EspacioMenu>.Empresa>h1{
-                color: white;
-                text-align: center;
-                font-size: 48px;
-            }
-            #EspacioMenu>.Empresa>p{
-                color:rgb(180, 180, 180);
-                text-align: center;
-            }
-        /* opciones */
-        #EspacioMenu>.Opciones{
-            width: 100%;
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-        }
-            /* opcion */
-            .menu-item {
-                width: 100%;
-                background: none;
-                color: white;
-                padding: 10px;
-                border: none;
-                text-align: left;
-                cursor: pointer;
-                border-bottom: white 1px solid;
-            }
-            .menu-item:hover{
-                background: orange;
-            }
-            .menu-item.active {
-                background: orange;
-            }
-        /* botones */
-        #EspacioMenu>.Botones{
-            width: 100%;
-            height: auto;
-        }
-            /* boton de salir */
-            #EspacioMenu>.Botones>.exit-button {
-                width: 100%;
-                background: red;
-                color: white;
-                margin-top: auto;
-                padding: 10px;
-                border: none;
-                cursor: pointer;
-            }
+/* menu */
+#EspacioMenu {
+    background: linear-gradient(180deg, #0A1828 0%, #2C3E50 100%);
+    width: 300px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 0px;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+}
 
-    /* contenido */
-    #EspacioContenido{
-        width:100%;
-        height: 100%;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-    }
-        /* encabezado */
-        #EspacioContenido>#EspacioEncabezado{
-            width: 100%;
-            height: 10%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0px 36px;
-            border-bottom: solid 3px orange;
-        }
-            /* nombre ventana */
-            #EspacioContenido>#EspacioEncabezado>.NombreVentana{
-                color: black;
-                font-size: 36px;
-                font-weight: bold;
-            }
-            /* nombre ventana */
-            #EspacioContenido>#EspacioEncabezado>#BotonEncabezado{
-                width: 144px;
-                height: 48px;
-            }
+#EspacioMenu>.Empresa {
+    width: 100%;
+}
 
-        .Cuerpo{
-            height: 90%;
-            display: flex;
-        }
+#EspacioMenu>.Empresa>h1 {
+    color: #40E0D0;
+    text-align: center;
+    font-size: 48px;
+    text-shadow: 0 2px 8px rgba(64, 224, 208, 0.3);
+}
 
-            .ContenidoDerecho{
-                flex-grow: 1;
-                height: 100%;
-                padding: 10px;
-                display: flex;
-                flex-direction: column;
-            }
+#EspacioMenu>.Empresa>p {
+    color: #7FFFD4;
+    text-align: center;
+}
 
-                /* buscador */
-                #EspacioBuscador{
-                    width: 100%;
-                    height: 60px;
-                    padding-bottom: 10px;
-                }
-                    
-                /* tabla */
-                #EspacioTabla{
-                    background: rgb(230, 230, 230);
-                    width: 100%;
-                    flex-grow: 1;
-                    padding: 10px;
-                    height: 100%;
-                    overflow: auto;
-                }
-        /* contenido izquierdo */
-        .ContenidoIzquierdo{
-            width: 300px;
-            height: 100%;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-        }
+/* opciones */
+#EspacioMenu>.Opciones {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
 
-            /* mensajes */
-            #EspacioMensaje{
-                padding-top: 10px;
-                width: 100%;
-                height: 70px;
-            }
+/* opcion */
+.menu-item {
+    width: 100%;
+    background: none;
+    color: #F8F9FA;
+    padding: 12px 10px;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    border-bottom: rgba(64, 224, 208, 0.2) 1px solid;
+    transition: all 0.3s ease;
+}
+
+.menu-item:hover {
+    background: linear-gradient(90deg, #178582 0%, rgba(64, 224, 208, 0.3) 100%);
+    border-left: 4px solid #40E0D0;
+    padding-left: 14px;
+}
+
+.menu-item.active {
+    background: linear-gradient(90deg, #178582 0%, rgba(64, 224, 208, 0.4) 100%);
+    border-left: 4px solid #7FFFD4;
+    padding-left: 14px;
+}
+
+/* botones */
+#EspacioMenu>.Botones {
+    width: 100%;
+    height: auto;
+}
+
+/* boton de salir */
+#EspacioMenu>.Botones>.exit-button {
+    width: 100%;
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    margin-top: auto;
+    padding: 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+#EspacioMenu>.Botones>.exit-button:hover {
+    background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4);
+}
+
+/* contenido */
+#EspacioContenido {
+    width: 100%;
+    height: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* encabezado */
+#EspacioContenido>#EspacioEncabezado {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 36px;
+    border-bottom: solid 3px #178582;
+    background: linear-gradient(90deg, rgba(23, 133, 130, 0.05) 0%, transparent 100%);
+}
+
+/* nombre ventana */
+#EspacioContenido>#EspacioEncabezado>.NombreVentana {
+    color: black;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+/* nombre ventana */
+#EspacioContenido>#EspacioEncabezado>#BotonEncabezado {
+    width: 144px;
+    height: 48px;
+}
+
+.Cuerpo {
+    height: 90%;
+    display: flex;
+}
+
+.ContenidoDerecho {
+    flex-grow: 1;
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* buscador */
+#EspacioBuscador {
+    width: 100%;
+    height: 60px;
+    padding-bottom: 10px;
+}
+
+/* tabla */
+#EspacioTabla {
+    background: rgb(230, 230, 230);
+    width: 100%;
+    flex-grow: 1;
+    padding: 10px;
+    height: 100%;
+    overflow: auto;
+}
+
+/* contenido izquierdo */
+.ContenidoIzquierdo {
+    width: 300px;
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* mensajes */
+#EspacioMensaje {
+    padding-top: 10px;
+    width: 100%;
+    height: 70px;
+}
 
 
-            /* formulario de usuarios */
-            #EspacioFormularioUsuarios{
-                width: 100%;
-                flex-grow: 1;
-            }
+/* formulario de usuarios */
+#EspacioFormularioUsuarios {
+    width: 100%;
+    flex-grow: 1;
+}
 
 /* --------------------- VENTANA CLIENTES -------------------- */
-#VentanaClientes{
+#VentanaClientes {
     width: 100%;
     height: 100%;
 }
 
-    /* encabezado */
-    #VentanaClientes>.AreaEncabezado{
-        width: 100%;
-        height: 10%;
-    }
+/* encabezado */
+#VentanaClientes>.AreaEncabezado {
+    width: 100%;
+    height: 10%;
+}
 
-    /* cuerpo */
-    #VentanaClientes>.AreaCuerpo{
-        width: 100%;
-        height: 90%;
-        padding: 10px;
-        display: flex;
-    }
-        /* lado izquierdo del cuerpo */
-        .CuerpoIzquierdo{
-            flex-grow: 1;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-            .CuerpoIzquierdo>.EspacioBuscador{
-                width: 100%;
-                height: 60px;
-                margin-bottom: 10px;
-            }
-            .CuerpoIzquierdo>.EspacioTabla{
-                width: 100%;
-                flex-grow: 1;
-                overflow: auto;
-            }
+/* cuerpo */
+#VentanaClientes>.AreaCuerpo {
+    width: 100%;
+    height: 90%;
+    padding: 10px;
+    display: flex;
+}
 
-        /* lado derecho del cuerpo */
-        .CuerpoDerecho{
-            width: 300px;
-            height: 100%;
-            padding-left: 10px;
-            display: flex;
-            flex-direction: column;
-        }
-            .CuerpoDerecho>.EspacioFormulario{
-                width:100%;
-                flex-grow: 1;
-                max-height: 90%;
-            }
-            .CuerpoDerecho>.EspacioMensaje{
-                width: 100;
-                height: 60px;
-                margin-top: 10px;
-            }
+/* lado izquierdo del cuerpo */
+.CuerpoIzquierdo {
+    flex-grow: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.CuerpoIzquierdo>.EspacioBuscador {
+    width: 100%;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+.CuerpoIzquierdo>.EspacioTabla {
+    width: 100%;
+    flex-grow: 1;
+    overflow: auto;
+}
+
+/* lado derecho del cuerpo */
+.CuerpoDerecho {
+    width: 300px;
+    height: 100%;
+    padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.CuerpoDerecho>.EspacioFormulario {
+    width: 100%;
+    flex-grow: 1;
+    max-height: 90%;
+}
+
+.CuerpoDerecho>.EspacioMensaje {
+    width: 100;
+    height: 60px;
+    margin-top: 10px;
+}
 
 /* --------------------- COMPONENTES GENERALES ----------------------- */
-.Encabezado{
+.Encabezado {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0px 36px;
-    border-bottom: solid 3px orange;
+    border-bottom: solid 3px #178582;
 }
-    .Encabezado>.BotonEncabezado{
-        width: 144px;
-        height: 48px;
-    }
 
-.Mensaje{
+.Encabezado>.BotonEncabezado {
+    width: 144px;
+    height: 48px;
+}
+
+.Mensaje {
     width: 100%;
     height: 100%;
     display: flex;
@@ -238,14 +274,23 @@
     border-radius: 10px;
     color: white;
 }
-    /* tipos de mensajes */
-    .MensajeBueno{background: rgb(128, 177, 55);}
-    .MensajeMalo{background: red;}
-    .MensajeNeutro{background: grey;}
+
+/* tipos de mensajes */
+.MensajeBueno {
+    background: rgb(128, 177, 55);
+}
+
+.MensajeMalo {
+    background: red;
+}
+
+.MensajeNeutro {
+    background: grey;
+}
 
 /* formulario */
-.Formulario{
-    background: #1E2550;
+.Formulario {
+    background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
     width: 100%;
     height: 100%;
     display: flex;
@@ -256,86 +301,100 @@
     margin-bottom: 100px;
     overflow: auto;
 }
-    /* encabezado de formulario */
-    .Formulario>.EncabezadoFormulario{
-        color: white;
-        font-size: 36px;
-        text-align: center;
-        padding: 10px 0px;
-    }
-    /* campos del formulario */
-    .Formulario>.Campos{
-        padding: 8px 0px;
-        width: 100%;
-    }
-        .Formulario>.Campos>.Campo{
-            margin-bottom: 8px;
-            width: 100%;
-        }
-            .Formulario>.Campos>.Campo>p{
-                color: #B2B2B2;
-                font-size: 16px;
-            }
-            .Formulario>.Campos>.Campo>input,select,#BotonSelectCliente{
-                width: 100%;
-                background: white;
-                border: none;
-                border-radius: 5px;
-                color: gray;
-                padding: 8px;
-            }
-            #BotonSelectCliente{
-                text-align: left;
-            }
 
-    /* boton del formulario */
-    .Formulario>.BotonFormulario{
-        width: 100%;
-        height: 36px;
-        margin: 10px 0px;
-    }
+/* encabezado de formulario */
+.Formulario>.EncabezadoFormulario {
+    color: white;
+    font-size: 36px;
+    text-align: center;
+    padding: 10px 0px;
+}
 
-.Buscador{
+/* campos del formulario */
+.Formulario>.Campos {
+    padding: 8px 0px;
+    width: 100%;
+}
+
+.Formulario>.Campos>.Campo {
+    margin-bottom: 8px;
+    width: 100%;
+}
+
+.Formulario>.Campos>.Campo>p {
+    color: #B2B2B2;
+    font-size: 16px;
+}
+
+.Formulario>.Campos>.Campo>input,
+select,
+#BotonSelectCliente {
+    width: 100%;
+    background: white;
+    border: none;
+    border-radius: 5px;
+    color: gray;
+    padding: 8px;
+}
+
+#BotonSelectCliente {
+    text-align: left;
+}
+
+/* boton del formulario */
+.Formulario>.BotonFormulario {
+    width: 100%;
+    height: 36px;
+    margin: 10px 0px;
+}
+
+.Buscador {
     width: 100%;
     height: 100%;
     display: flex;
 }
-        .Buscadores{
-            flex-grow: 1;
-            height: 100%;
-            padding-right: 10px; 
-            display: flex;
-        }
-            .Buscadores>.BuscadorUnico{
-                flex-grow: 1;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-            }
-                .Buscadores>.BuscadorUnico>p{
-                    font-size: 12px;
-                    color: #B2B2B2;
-                    padding-bottom: 3px;
-                }
-                .Buscadores>.BuscadorUnico>input{
-                    background: #F5F5F5;
-                    width: 100%;
-                    flex-grow: 1;
-                    border: solid black 1px;
-                    border-radius: 10px;
-                    padding: 0px 20px;
-                }
-        .Botones{
-            width: auto;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: end;
-        }
-            .Botones>.Boton{
-                width: 100px;
-                height: 48px;
-            }
+
+.Buscadores {
+    flex-grow: 1;
+    height: 100%;
+    padding-right: 10px;
+    display: flex;
+}
+
+.Buscadores>.BuscadorUnico {
+    flex-grow: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.Buscadores>.BuscadorUnico>p {
+    font-size: 12px;
+    color: #B2B2B2;
+    padding-bottom: 3px;
+}
+
+.Buscadores>.BuscadorUnico>input {
+    background: #F5F5F5;
+    width: 100%;
+    flex-grow: 1;
+    border: solid black 1px;
+    border-radius: 10px;
+    padding: 0px 20px;
+}
+
+.Botones {
+    width: auto;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+}
+
+.Botones>.Boton {
+    width: 100px;
+    height: 48px;
+}
 
 .Tabla {
     width: 100%;
@@ -343,65 +402,76 @@
     overflow: auto;
 }
 
-.Yabla{
+.Yabla {
     height: auto;
 }
-    .Tabla th {
-        color: #B2B2B2;
-        font-size: 16px;
-        text-align: center;
-    }
-    .Tabla td {
-        text-align: center;
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-    }
 
-    .opciones {
-        margin-right: 8px;
-    }
-        .BotonOpcion{
-            color: white;
-            border: none;
-            cursor: pointer;
-            padding: 3px;
-            border-radius: 1px;
-        } 
-            .opciones>.OpcionVer{
-                background: #007bff;
-            }
-            .opciones>.OpcionEditar{
-                background: #ffc107;
-            }
-            .opciones>.OpcionEliminar{
-                background: #dc3545;
-            }
+.Tabla th {
+    color: #B2B2B2;
+    font-size: 16px;
+    text-align: center;
+}
+
+.Tabla td {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.opciones {
+    margin-right: 8px;
+}
+
+.BotonOpcion {
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 3px;
+    border-radius: 1px;
+}
+
+.opciones>.OpcionVer {
+    background: #007bff;
+}
+
+.opciones>.OpcionEditar {
+    background: #ffc107;
+}
+
+.opciones>.OpcionEliminar {
+    background: #dc3545;
+}
 
 /* botones */
-.Boton{
-    transition: 0.3s;
-    background: #FF9500;
+.Boton {
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #178582 0%, #40E0D0 100%);
     border: none;
     border-radius: 10px;
     color: white;
     font-size: 16px;
+    box-shadow: 0 4px 12px rgba(64, 224, 208, 0.3);
 }
-    .Boton:hover{
-        transition: 0.3s;
-        background: orange;
-        cursor: pointer;
-    }
 
-#BotonDescargarTabla{
+.Boton:hover {
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #40E0D0 0%, #7FFFD4 100%);
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(64, 224, 208, 0.5);
+}
+
+#BotonDescargarTabla {
     width: 100px;
     height: 48px;
 }
 
-.EspacioCuentaEmpresarial{
+.EspacioCuentaEmpresarial {
     width: 100%;
     display: flex;
 }
-.Capital{
+
+.Capital {
     background: #449eff;
     margin: 10px;
     flex-grow: 1;
