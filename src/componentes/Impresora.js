@@ -346,7 +346,7 @@ function ImprimirMovimientoMaterial(Movimiento) {
 
         // Cabezera de boleta 
         .fontSize(10)
-        .text('INVERSIONES REDSUR', { align: 'center', bold: true })
+        .text('INVERSIONES DUBAI', { align: 'center', bold: true })
         .text('(HUEPETUHE)', { align: 'center' })
 
         .moveDown()// espacio o linea blanca
@@ -359,7 +359,7 @@ function ImprimirMovimientoMaterial(Movimiento) {
         .moveDown()// espacio o linea blanca
 
         .fontSize(10)
-        .text(`======= BOLETA DE ${TipoValido} =======`, { align: 'center' })
+        .text(`======== BOLETA DE ${TipoValido} ========`, { align: 'center' })
 
         .moveDown()// espacio o linea blanca
 
