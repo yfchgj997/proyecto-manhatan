@@ -1,19 +1,19 @@
 {
-    "Contador": 23,
+    "Contador": 24,
     "Elementos": [
         {
-            "Nombres": "erika",
-            "Apellidos": "vargas",
-            "Contrasena": "1234",
+            "Nombres": "Admin",
+            "Apellidos": "Principal",
+            "Contrasena": "admin123",
             "Rol": "Administrador",
-            "Estado": "Inactivo",
+            "Estado": "Activo",
             "ID": 1
         },
         {
-            "Nombres": "jherson",
-            "Apellidos": "ampuero",
-            "Contrasena": "12",
-            "Rol": "Administrador",
+            "Nombres": "Usuario Cajero",
+            "Apellidos": "Normal",
+            "Contrasena": "user123",
+            "Rol": "Cajero",
             "Estado": "Activo",
             "ID": 2
         },
@@ -29,7 +29,7 @@
             "Nombres": "cambio echo por una IA",
             "Apellidos": "no se",
             "Contrasena": "321",
-            "Rol": "Administrador",
+            "Rol": "Cajero",
             "Estado": "Activo",
             "ID": 4
         },
@@ -58,12 +58,12 @@
             "ID": 22
         },
         {
-            "Nombres": "KH",
-            "Apellidos": "WEJKFHWEF",
-            "Contrasena": "WJKEFHIWE",
-            "Rol": "Administrador",
+            "Nombres": "PROBANDO FUNCIONALIDAD NUEVA",
+            "Apellidos": "HOLA",
+            "Contrasena": "1234",
+            "Rol": "Cajero",
             "Estado": "Activo",
-            "ID": 23
+            "ID": 24
         }
     ]
 }

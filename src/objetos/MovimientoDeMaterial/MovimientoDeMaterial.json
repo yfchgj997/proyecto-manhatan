@@ -1,5 +1,5 @@
 {
-    "Contador": 37,
+    "Contador": 36,
     "Elementos": [
         {
             "Tipo": "Retiro",
@@ -132,57 +132,17 @@
             "CapturaSaldo": "2134.75"
         },
         {
-            "Tipo": "Ingreso",
-            "Fecha": "2025-11-24",
-            "UsuarioID": 2,
-            "UsuarioNombres": "jherson",
-            "ClienteID": "4",
-            "ClienteNombres": "CLIENTE IMPORTANTE",
-            "Importe": "23.45",
-            "Observacion": "RFERW",
-            "Hora": "21:13:52",
-            "ID": 34,
-            "CapturaSaldo": "23.45"
-        },
-        {
-            "Tipo": "Ingreso",
-            "Fecha": "2025-11-24",
-            "UsuarioID": 2,
-            "UsuarioNombres": "jherson",
-            "ClienteID": "4",
-            "ClienteNombres": "CLIENTE IMPORTANTE",
-            "Importe": "39.26",
-            "Observacion": "CSKCB",
-            "Hora": "21:23:58",
-            "ID": 35,
-            "CapturaSaldo": "62.71"
-        },
-        {
             "Tipo": "Retiro",
-            "Fecha": "2025-11-27",
+            "Fecha": "2025-11-29",
             "UsuarioID": 1,
-            "UsuarioNombres": "erika",
+            "UsuarioNombres": "Admin",
             "ClienteID": "3",
             "ClienteNombres": "fdqwefqf",
-            "Importe": "2000.00",
-            "Observacion": "NADA",
-            "Hora": "23:45:31",
+            "Importe": "20.75",
+            "Observacion": "",
+            "Hora": "21:49:40",
             "ID": 36,
-            "CapturaSaldo": "23512.00"
-        },
-        {
-            "Tipo": "Retiro",
-            "Fecha": "2025-11-27",
-            "UsuarioID": 1,
-            "UsuarioNombres": "erika",
-            "ClienteID": "8",
-            "ClienteNombres": "YORDAN",
-            "ClienteApellidos": "CAHUAYA",
-            "Importe": "4000.00",
-            "Observacion": "AS",
-            "Hora": "23:50:13",
-            "ID": 37,
-            "CapturaSaldo": "-4000.00"
+            "CapturaSaldo": "25491.25"
         }
     ]
 }

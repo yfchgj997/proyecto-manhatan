@@ -24,6 +24,7 @@ let codigo = `
                     <p>Rol:</p>
                     <select id="CampoRol" name="rol">
                         <option>Administrador</option>
+                        <option>Cajero</option>
                     </select>
                 </div>
                 <div class="Campo">

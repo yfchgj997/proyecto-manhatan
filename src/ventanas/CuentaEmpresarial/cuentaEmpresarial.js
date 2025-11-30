@@ -2,14 +2,14 @@ const { ipcRenderer } = require("electron")
 
 // Variables
 
-    // componentes
-        const {CargarEncabezado} = require("./EncabezadoCE.js")
-        const {CargarTablaDiarios} = require("./TablaDiarios.js")
-        const {MostrarDetalleCuentaEmpresarial} = require("./DetalleCuentaEmpresarial.js")
+// componentes
+const { CargarEncabezado } = require("./EncabezadoCE.js")
+const { CargarTablaDiarios } = require("./TablaDiarios.js")
+const { MostrarDetalleCuentaEmpresarial } = require("./DetalleCuentaEmpresarial.js")
 
-    // codigo -> falta cambiar el ID no puede ser VentanaClientes, hace confundir
-            //<div id="VentanaClientes">
-        let codigo = `
+// codigo -> falta cambiar el ID no puede ser VentanaClientes, hace confundir
+//<div id="VentanaClientes">
+let codigo = `
             <div id="VentanaClientes">
                 <div class="AreaEncabezado" id="EspacioEncabezadoCuentaEmpresarial"></div>
                 <div class="AreaCuerpo">
@@ -24,31 +24,31 @@ const { ipcRenderer } = require("electron")
 
 // FUNCIONES
 
-    // Funcion -> cargar estructura inicial
-    function CargarEstructuraInicial (){
-        // Paso -> obtener el espacio
-        let EspacioGestionarCuentaEmpresarial = document.getElementById("EspacioContenido")
-        // Paso -> insertar codigo
-        if(EspacioGestionarCuentaEmpresarial){// no hay error
-            EspacioGestionarCuentaEmpresarial.innerHTML = codigo
-            console.log("MENSAJE -> se pudo obtener el espacio de gestion cuenta empresarial")
-        }else{// si har error
-            console.log("ERROR -> no se pudo obtener el espacio de gestion cuenta empresarial")
-        }
+// Funcion -> cargar estructura inicial
+function CargarEstructuraInicial() {
+    // Paso -> obtener el espacio
+    let EspacioGestionarCuentaEmpresarial = document.getElementById("EspacioContenido")
+    // Paso -> insertar codigo
+    if (EspacioGestionarCuentaEmpresarial) {// no hay error
+        EspacioGestionarCuentaEmpresarial.innerHTML = codigo
+        console.log("MENSAJE -> se pudo obtener el espacio de gestion cuenta empresarial")
+    } else {// si har error
+        console.log("ERROR -> no se pudo obtener el espacio de gestion cuenta empresarial")
     }
+}
 
 // EVENTOS
 
-    // Evento -> inicializar ventana cuenta empresarial
-    ipcRenderer.on("EInicializarVentanaCuentaEmpresarial",(event,datos)=>{
-        // mensaje de flujo
-        console.log("MENSAJE: quiere gestionar cuenta empresarial")
-        // Paso -> cargar el codigo o estructura incial
-        CargarEstructuraInicial()
-        // Paso -> cargar encabezado
-        CargarEncabezado()
-        // Paso -> cargar tabla diarios
-        CargarTablaDiarios(datos.diarios,datos.fecha,datos.CapitalEconomico,datos.CapitalMaterial)
-        // Paso -> cargar el detalle de la cuenta
-        MostrarDetalleCuentaEmpresarial(datos.CapitalEconomico,datos.CapitalMaterial)
-    })
+// Evento -> inicializar ventana cuenta empresarial
+ipcRenderer.on("EInicializarVentanaCuentaEmpresarial", (event, datos) => {
+    // mensaje de flujo
+    console.log("MENSAJE: quiere gestionar cuenta empresarial")
+    // Paso -> cargar el codigo o estructura incial
+    CargarEstructuraInicial()
+    // Paso -> cargar encabezado
+    CargarEncabezado()
+    // Paso -> cargar tabla diarios
+    CargarTablaDiarios(datos.diarios, datos.fecha, datos.CapitalEconomico, datos.CapitalMaterial)
+    // Paso -> cargar el detalle de la cuenta
+    MostrarDetalleCuentaEmpresarial(datos.CapitalEconomico, datos.CapitalMaterial, datos.rolUsuario)
+})
