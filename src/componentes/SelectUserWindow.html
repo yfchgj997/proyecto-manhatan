@@ -1,12 +1,158 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>Seleccion de Usuario</title>
-        <link rel="stylesheet" href="../index.css">
-        <script defer src="./SelectUserWindow.js"></script>
-    </head>
-    <body>
-        <div id="SelecUserWindow">
-            <div id="TablaClientes" class="TablaClientes"></div>
-        </div>
-    </body>
+
+<head>
+    <title>Seleccionar Cliente</title>
+    <link rel="stylesheet" href="../index.css">
+    <script defer src="./SelectUserWindow.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #SelecUserWindow {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-container {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #1E2550 0%, #2a3166 100%);
+            box-sizing: border-box;
+        }
+
+        #BuscarInput {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #BuscarInput:focus {
+            box-shadow: 0 4px 12px rgba(255, 149, 0, 0.3);
+        }
+
+        #BuscarInput::placeholder {
+            color: #aab8c2;
+        }
+
+        #TablaContainer {
+            flex: 1;
+            overflow: auto;
+            background: white;
+        }
+
+        .Tabla {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .Tabla thead {
+            position: sticky;
+            top: 0;
+            background: #f8f9fa;
+            z-index: 10;
+            border-bottom: 2px solid #e8eaed;
+        }
+
+        .Tabla th {
+            color: #1E2550;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: left;
+            padding: 14px 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .Tabla th:first-child {
+            text-align: center;
+            width: 80px;
+        }
+
+        .Tabla tbody tr {
+            transition: all 0.15s ease;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .Tabla tbody tr:nth-child(odd) {
+            background-color: #fafafa;
+        }
+
+        .Tabla tbody tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+
+        .Tabla tbody tr:hover {
+            background-color: #fff3e0 !important;
+            transform: translateX(4px);
+        }
+
+        .Tabla td {
+            padding: 14px 20px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .Tabla td:first-child {
+            text-align: center;
+            font-weight: 600;
+            color: #FF9500;
+        }
+
+        .Tabla tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        /* Scrollbar personalizado */
+        #TablaContainer::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        #TablaContainer::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        #TablaContainer::-webkit-scrollbar-thumb {
+            background: #FF9500;
+            border-radius: 5px;
+        }
+
+        #TablaContainer::-webkit-scrollbar-thumb:hover {
+            background: #FF7A00;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #aab8c2;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="SelecUserWindow">
+        <div id="TablaClientes" class="TablaClientes"></div>
+    </div>
+</body>
+
 </html>

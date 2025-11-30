@@ -70,6 +70,7 @@ let mainWindow;
 let loginWindow
 let respuesta
 let SelectUserWindow
+let InputMontoWindow
 
 // ====================================================================================================
 // FUNCIÓN AUXILIAR PARA VALIDAR PRIVILEGIOS
@@ -192,6 +193,7 @@ ipcMain.on("EAutenticarUsuario", (event, datos) => {
         mainWindow.webContents.send("actualizar-contenido", datos) // cargar por default 
     } else {
         console.log("Error: Usuario o contraseña incorrectos");
+        event.sender.send("LoginFallido", "Credenciales inválidas");
     }
 });
 
@@ -416,8 +418,7 @@ function ObtenerHora() {
     return hora;
 }
 
-
-// Evento -> gestionar clientes
+// Evento -> gestionar cuenta empresarial
 ipcMain.on("EQuiereGestionarCuentaEmpresarial", (event) => {
 
     // mensaje de flujo
@@ -446,16 +447,278 @@ ipcMain.on("EQuiereGestionarCuentaEmpresarial", (event) => {
         ListaCapturas = Respuesta.ListaCapturas
     }
 
+    // Paso -> obtener usuario actual
+    let usuarioActual = GestorSesion.obtenerUsuarioActual()
+
     // Paso -> agrupar datos
     let datos = {
         "diarios": ListaCapturas,
         "CapitalEconomico": CapitalEconomico,
         "CapitalMaterial": CapitalMaterial,
-        "fecha": ObtenerFecha()
+        "fecha": ObtenerFecha(),
+        "rolUsuario": usuarioActual ? usuarioActual.Rol : "Cajero"
     }
 
     // Paso -> enviar los clientes obtenidos para ser mostrados en la tabla
     event.sender.send("EInicializarVentanaCuentaEmpresarial", datos)
+})
+
+// Evento -> aumentar capital economico
+ipcMain.on("EAumentarCapitalEconomico", (event, monto) => {
+
+    // mensaje de flujo
+    console.log("Main: aumentando capital economico con monto: ", monto)
+
+    // Paso -> aumentar capital
+    let Respuesta = BDrespaldo.AumentarCapitalEconomico(monto)
+
+    if (Respuesta.error == false) {
+        // Paso -> obtener el capital actualizado
+        let RespuestaCapital = BDrespaldo.ObtenerCapitalEconomicoEmpresarial()
+        if (RespuestaCapital.error == false) {
+            // Paso -> obtener usuario actual
+            let usuarioActual = GestorSesion.obtenerUsuarioActual()
+            // Paso -> enviar mensaje de exito
+            event.sender.send("ModificarMensaje", {
+                tipo: "MensajeBueno",
+                texto: "El capital económico se aumentó correctamente"
+            })
+            // Paso -> actualizar la vista
+            event.sender.send("EActualizarCapitales", {
+                CapitalEconomico: RespuestaCapital.CapitalEconomico,
+                CapitalMaterial: BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial,
+                rolUsuario: usuarioActual ? usuarioActual.Rol : "Cajero"
+            })
+        }
+    } else {
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "No se pudo aumentar el capital económico"
+        })
+    }
+})
+
+// Evento -> disminuir capital economico
+ipcMain.on("EDisminuirCapitalEconomico", (event, monto) => {
+
+    // mensaje de flujo
+    console.log("Main: disminuyendo capital economico con monto: ", monto)
+
+    // Paso -> disminuir capital
+    let Respuesta = BDrespaldo.DisminuirCapitalEconomico(monto)
+
+    if (Respuesta.error == false) {
+        // Paso -> obtener el capital actualizado
+        let RespuestaCapital = BDrespaldo.ObtenerCapitalEconomicoEmpresarial()
+        if (RespuestaCapital.error == false) {
+            // Paso -> obtener usuario actual
+            let usuarioActual = GestorSesion.obtenerUsuarioActual()
+            // Paso -> enviar mensaje de exito
+            event.sender.send("ModificarMensaje", {
+                tipo: "MensajeBueno",
+                texto: "El capital económico se disminuyó correctamente"
+            })
+            // Paso -> actualizar la vista
+            event.sender.send("EActualizarCapitales", {
+                CapitalEconomico: RespuestaCapital.CapitalEconomico,
+                CapitalMaterial: BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial,
+                rolUsuario: usuarioActual ? usuarioActual.Rol : "Cajero"
+            })
+        }
+    } else {
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "No se pudo disminuir el capital económico"
+        })
+    }
+})
+
+// Evento -> aumentar capital material
+ipcMain.on("EAumentarCapitalMaterial", (event, monto) => {
+
+    // mensaje de flujo
+    console.log("Main: aumentando capital material con monto: ", monto)
+
+    // Paso -> aumentar capital
+    let Respuesta = BDrespaldo.AumentarCapitalMaterial(monto)
+
+    if (Respuesta.error == false) {
+        // Paso -> obtener el capital actualizado
+        let RespuestaCapital = BDrespaldo.ObtenerCapitalMaterialEmpresarial()
+        if (RespuestaCapital.error == false) {
+            // Paso -> obtener usuario actual
+            let usuarioActual = GestorSesion.obtenerUsuarioActual()
+            // Paso -> enviar mensaje de exito
+            event.sender.send("ModificarMensaje", {
+                tipo: "MensajeBueno",
+                texto: "El capital material se aumentó correctamente"
+            })
+            // Paso -> actualizar la vista
+            event.sender.send("EActualizarCapitales", {
+                CapitalEconomico: BDrespaldo.ObtenerCapitalEconomicoEmpresarial().CapitalEconomico,
+                CapitalMaterial: RespuestaCapital.CapitalMaterial,
+                rolUsuario: usuarioActual ? usuarioActual.Rol : "Cajero"
+            })
+        }
+    } else {
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "No se pudo aumentar el capital material"
+        })
+    }
+})
+
+// Evento -> disminuir capital material
+ipcMain.on("EDisminuirCapitalMaterial", (event, monto) => {
+
+    // mensaje de flujo
+    console.log("Main: disminuyendo capital material con monto: ", monto)
+
+    // Paso -> disminuir capital
+    let Respuesta = BDrespaldo.DisminuirCapitalMaterial(monto)
+
+    if (Respuesta.error == false) {
+        // Paso -> obtener el capital actualizado
+        let RespuestaCapital = BDrespaldo.ObtenerCapitalMaterialEmpresarial()
+        if (RespuestaCapital.error == false) {
+            // Paso -> obtener usuario actual
+            let usuarioActual = GestorSesion.obtenerUsuarioActual()
+            // Paso -> enviar mensaje de exito
+            event.sender.send("ModificarMensaje", {
+                tipo: "MensajeBueno",
+                texto: "El capital material se disminuyó correctamente"
+            })
+            // Paso -> actualizar la vista
+            event.sender.send("EActualizarCapitales", {
+                CapitalEconomico: BDrespaldo.ObtenerCapitalEconomicoEmpresarial().CapitalEconomico,
+                CapitalMaterial: RespuestaCapital.CapitalMaterial,
+                rolUsuario: usuarioActual ? usuarioActual.Rol : "Cajero"
+            })
+        }
+    } else {
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "No se pudo disminuir el capital material"
+        })
+    }
+})
+
+// Evento -> abrir popup para ingresar monto
+ipcMain.on("EQuiereIngresarMonto", (event, datos) => {
+
+    // mensaje de flujo
+    console.log("Main: abriendo popup para ingresar monto")
+    console.log("Main: tipo de operación:", datos.tipo)
+
+    // Paso -> crear ventana popup
+    InputMontoWindow = new BrowserWindow({
+        width: 400,
+        height: 250,
+        resizable: false,
+        modal: true,
+        parent: mainWindow,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    InputMontoWindow.loadFile("./src/componentes/InputMontoWindow.html")
+    InputMontoWindow.removeMenu();
+
+    // Paso -> enviar tipo de operación al popup
+    InputMontoWindow.webContents.on('did-finish-load', () => {
+        InputMontoWindow.webContents.send("EInicializarInputMontoWindow", datos)
+    })
+})
+
+// Evento -> recibir monto ingresado desde popup
+ipcMain.on("EMontoIngresado", (event, datos) => {
+
+    // mensaje de flujo
+    console.log("Main: monto ingresado desde popup")
+    console.log("Main: monto:", datos.monto)
+    console.log("Main: tipo:", datos.tipo)
+
+    // Paso -> cerrar popup
+    if (InputMontoWindow) {
+        InputMontoWindow.close()
+        InputMontoWindow = null
+    }
+
+    // Paso -> ejecutar la operación correspondiente
+    switch (datos.tipo) {
+        case "aumentarEconomico":
+            mainWindow.webContents.send("EAumentarCapitalEconomico", datos.monto)
+            // Ejecutar directamente la operación
+            let respAumEco = BDrespaldo.AumentarCapitalEconomico(datos.monto)
+            if (respAumEco.error == false) {
+                let usuarioActual = GestorSesion.obtenerUsuarioActual()
+                mainWindow.webContents.send("ModificarMensaje", {
+                    tipo: "MensajeBueno",
+                    texto: "El capital económico se aumentó correctamente"
+                })
+                mainWindow.webContents.send("EActualizarCapitales", {
+                    CapitalEconomico: BDrespaldo.ObtenerCapitalEconomicoEmpresarial().CapitalEconomico,
+                    CapitalMaterial: BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial,
+                    rolUsuario: usuarioActual ? usuarioActual.Rol : "Cajero"
+                })
+            }
+            break;
+        case "disminuirEconomico":
+            let respDisEco = BDrespaldo.DisminuirCapitalEconomico(datos.monto)
+            if (respDisEco.error == false) {
+                let usuarioActual = GestorSesion.obtenerUsuarioActual()
+                mainWindow.webContents.send("ModificarMensaje", {
+                    tipo: "MensajeBueno",
+                    texto: "El capital económico se disminuyó correctamente"
+                })
+                mainWindow.webContents.send("EActualizarCapitales", {
+                    CapitalEconomico: BDrespaldo.ObtenerCapitalEconomicoEmpresarial().CapitalEconomico,
+                    CapitalMaterial: BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial,
+                    rolUsuario: usuarioActual ? usuarioActual.Rol : "Cajero"
+                })
+            }
+            break;
+        case "aumentarMaterial":
+            let respAumMat = BDrespaldo.AumentarCapitalMaterial(datos.monto)
+            if (respAumMat.error == false) {
+                let usuarioActual = GestorSesion.obtenerUsuarioActual()
+                mainWindow.webContents.send("ModificarMensaje", {
+                    tipo: "MensajeBueno",
+                    texto: "El capital material se aumentó correctamente"
+                })
+                mainWindow.webContents.send("EActualizarCapitales", {
+                    CapitalEconomico: BDrespaldo.ObtenerCapitalEconomicoEmpresarial().CapitalEconomico,
+                    CapitalMaterial: BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial,
+                    rolUsuario: usuarioActual ? usuarioActual.Rol : "Cajero"
+                })
+            }
+            break;
+        case "disminuirMaterial":
+            let respDisMat = BDrespaldo.DisminuirCapitalMaterial(datos.monto)
+            if (respDisMat.error == false) {
+                let usuarioActual = GestorSesion.obtenerUsuarioActual()
+                mainWindow.webContents.send("ModificarMensaje", {
+                    tipo: "MensajeBueno",
+                    texto: "El capital material se disminuyó correctamente"
+                })
+                mainWindow.webContents.send("EActualizarCapitales", {
+                    CapitalEconomico: BDrespaldo.ObtenerCapitalEconomicoEmpresarial().CapitalEconomico,
+                    CapitalMaterial: BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial,
+                    rolUsuario: usuarioActual ? usuarioActual.Rol : "Cajero"
+                })
+            }
+            break;
+    }
+})
+
+// Evento -> cancelar ingreso de monto
+ipcMain.on("ECancelarIngresoMonto", (event) => {
+    console.log("Main: cancelando ingreso de monto")
+    if (InputMontoWindow) {
+        InputMontoWindow.close()
+        InputMontoWindow = null
+    }
 })
 
 // ------------------------------------ GESTIONAR CLIENTES --------------------------------------
@@ -1022,7 +1285,7 @@ ipcMain.on("EDescargarTablaMovimientos", (event, movimientos) => {
         */
 
         /* V2
-
+ 
         // Transformar los datos en el formato correcto
         const datosProcesados = movimientos.map(mov => ({
             Fecha: mov.Fecha,
@@ -1034,11 +1297,11 @@ ipcMain.on("EDescargarTablaMovimientos", (event, movimientos) => {
             EGRESO: mov.Tipo === "Retiro" ? mov.Importe : 0,
             SALDO: mov.CapturaSaldo
         }));
-
+ 
         // Crear hoja de cálculo
         const wb = xlsx.utils.book_new();
         const ws = xlsx.utils.json_to_sheet(datosProcesados);
-
+ 
         // Aplicar estilos a los encabezados (fila 1)
         const range = xlsx.utils.decode_range(ws["!ref"]); // Obtener rango de la hoja
         for (let col = range.s.c; col <= range.e.c; col++) {
@@ -1051,7 +1314,7 @@ ipcMain.on("EDescargarTablaMovimientos", (event, movimientos) => {
                 };
             }
         }
-
+ 
         // Aplicar colores a INGRESO, EGRESO y SALDO
         for (let row = 1; row <= range.e.r; row++) {
             ["F", "G", "H"].forEach((col, index) => {
@@ -1064,16 +1327,16 @@ ipcMain.on("EDescargarTablaMovimientos", (event, movimientos) => {
                 }
             });
         }
-
+ 
         // Agregar hoja al libro y guardar
         xlsx.utils.book_append_sheet(wb, ws, "Movimientos");
         xlsx.writeFile(wb, rutaArchivo);
-
+ 
         console.log(`MENSAJE: Archivo guardado en ${rutaArchivo}`);
-
+ 
         // Abrir el archivo automáticamente después de guardarlo
         shell.openPath(rutaArchivo);
-
+ 
         // Enviar mensaje de éxito al frontend
         event.sender.send("ModificarMensaje", {
             tipo: "MensajeBueno",
@@ -1416,13 +1679,7 @@ ipcMain.on("EGuardarNuevoMovimientoMaterial", (event, Movimiento) => {
 
     // Paso -> asignar la hora
     Movimiento.Hora = ObtenerHora()
-    if (Movimiento.Observacion.trim() === "") {
-        event.sender.send("ModificarMensaje", {
-            tipo: "MensajeMalo",
-            texto: "El campo Observacion es obligatorio."
-        });
-        return;
-    }
+
 
 
     // Paso -> guarda en la base de datos el movimiento

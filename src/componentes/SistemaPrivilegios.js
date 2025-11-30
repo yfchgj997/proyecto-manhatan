@@ -52,7 +52,7 @@ const ROLES = {
             imprimir: true
         }
     },
-    "Usuario": {
+    "Cajero": {
         clientes: {
             crear: true,
             editar: true,
@@ -102,7 +102,7 @@ const ROLES = {
 
 /**
  * Verifica si un rol tiene un privilegio específico
- * @param {string} rol - Nombre del rol (ej: "Administrador", "Usuario")
+ * @param {string} rol - Nombre del rol (ej: "Administrador", "Cajero")
  * @param {string} modulo - Nombre del módulo (ej: "clientes", "usuarios")
  * @param {string} accion - Acción a verificar (ej: "crear", "editar", "eliminar")
  * @returns {boolean} - true si tiene el privilegio, false en caso contrario

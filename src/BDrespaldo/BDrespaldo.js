@@ -403,6 +403,78 @@ function ObtenerListaCapturas() {
 
 }
 
+// Funcion -> aumentar capital economico
+function AumentarCapitalEconomico(monto) {
+
+    // mensaje de flujo
+    console.log("BD: aumentando capital economico con monto: ", monto)
+
+    // Paso -> modificar capital
+    let Respuesta = CuentaEmpresarial.ModificarCapitalEconomico("aumentar", monto)
+    if (Respuesta.error == true) {
+        console.log("BD: no se pudo aumentar el capital economico")
+        return ({ "error": true })
+    } else {
+        console.log("BD: si se pudo aumentar el capital economico")
+        return ({ "error": false })
+    }
+
+}
+
+// Funcion -> disminuir capital economico
+function DisminuirCapitalEconomico(monto) {
+
+    // mensaje de flujo
+    console.log("BD: disminuyendo capital economico con monto: ", monto)
+
+    // Paso -> modificar capital
+    let Respuesta = CuentaEmpresarial.ModificarCapitalEconomico("disminuir", monto)
+    if (Respuesta.error == true) {
+        console.log("BD: no se pudo disminuir el capital economico")
+        return ({ "error": true })
+    } else {
+        console.log("BD: si se pudo disminuir el capital economico")
+        return ({ "error": false })
+    }
+
+}
+
+// Funcion -> aumentar capital material
+function AumentarCapitalMaterial(monto) {
+
+    // mensaje de flujo
+    console.log("BD: aumentando capital material con monto: ", monto)
+
+    // Paso -> modificar capital
+    let Respuesta = CuentaEmpresarial.ModificarCapitalMaterial("aumentar", monto)
+    if (Respuesta.error == true) {
+        console.log("BD: no se pudo aumentar el capital material")
+        return ({ "error": true })
+    } else {
+        console.log("BD: si se pudo aumentar el capital material")
+        return ({ "error": false })
+    }
+
+}
+
+// Funcion -> disminuir capital material
+function DisminuirCapitalMaterial(monto) {
+
+    // mensaje de flujo
+    console.log("BD: disminuyendo capital material con monto: ", monto)
+
+    // Paso -> modificar capital
+    let Respuesta = CuentaEmpresarial.ModificarCapitalMaterial("disminuir", monto)
+    if (Respuesta.error == true) {
+        console.log("BD: no se pudo disminuir el capital material")
+        return ({ "error": true })
+    } else {
+        console.log("BD: si se pudo disminuir el capital material")
+        return ({ "error": false })
+    }
+
+}
+
 module.exports = {
     GuardarUsuarioRespaldo,
     ObtenerTablaUsuarios,
@@ -425,5 +497,9 @@ module.exports = {
     EliminarMovimientoMaterial,
     ObtenerCapitalEconomicoEmpresarial,
     ObtenerCapitalMaterialEmpresarial,
-    ObtenerListaCapturas
+    ObtenerListaCapturas,
+    AumentarCapitalEconomico,
+    DisminuirCapitalEconomico,
+    AumentarCapitalMaterial,
+    DisminuirCapitalMaterial
 };

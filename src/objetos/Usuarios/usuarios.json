@@ -1,5 +1,5 @@
 {
-    "Contador": 23,
+    "Contador": 24,
     "Elementos": [
         {
             "Nombres": "Admin",
@@ -10,10 +10,10 @@
             "ID": 1
         },
         {
-            "Nombres": "Usuario",
+            "Nombres": "Usuario Cajero",
             "Apellidos": "Normal",
             "Contrasena": "user123",
-            "Rol": "Usuario",
+            "Rol": "Cajero",
             "Estado": "Activo",
             "ID": 2
         },
@@ -29,7 +29,7 @@
             "Nombres": "cambio echo por una IA",
             "Apellidos": "no se",
             "Contrasena": "321",
-            "Rol": "Administrador",
+            "Rol": "Cajero",
             "Estado": "Activo",
             "ID": 4
         },
@@ -56,6 +56,14 @@
             "Rol": "Administrador",
             "Estado": "Activo",
             "ID": 22
+        },
+        {
+            "Nombres": "PROBANDO FUNCIONALIDAD NUEVA",
+            "Apellidos": "HOLA",
+            "Contrasena": "1234",
+            "Rol": "Cajero",
+            "Estado": "Activo",
+            "ID": 24
         }
     ]
 }
