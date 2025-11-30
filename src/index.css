@@ -86,7 +86,7 @@
     width: 100%;
     background: linear-gradient(135deg, #7B2CBF 0%, #9D4EDD 100%);
     color: white;
-    margin-top: auto;
+    margin: 6px;
     padding: 12px;
     border: none;
     cursor: pointer;

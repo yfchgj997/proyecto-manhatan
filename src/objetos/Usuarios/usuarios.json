@@ -1,5 +1,5 @@
 {
-    "Contador": 24,
+    "Contador": 25,
     "Elementos": [
         {
             "Nombres": "Admin",
@@ -56,6 +56,14 @@
             "Rol": "Cajero",
             "Estado": "Activo",
             "ID": 24
+        },
+        {
+            "Nombres": "BER",
+            "Apellidos": "BER",
+            "Contrasena": "BER",
+            "Rol": "Cajero",
+            "Estado": "Activo",
+            "ID": 25
         }
     ]
 }
