@@ -1,4 +1,4 @@
-* {
+﻿* {
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
@@ -414,8 +414,19 @@ select,
     color: white;
     border: none;
     cursor: pointer;
-    padding: 3px;
-    border-radius: 1px;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    margin: 0 2px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.BotonOpcion:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .opciones>.OpcionVer {
@@ -454,8 +465,19 @@ select,
     color: white;
     border: none;
     cursor: pointer;
-    padding: 3px;
-    border-radius: 1px;
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.BotonOpcion:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .opciones>.OpcionVer {
