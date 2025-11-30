@@ -57,7 +57,7 @@ function MostrarMenu(datos) {
                 <div class="Empresa">
                     <h1>Inv.DUBAI</h1>
                     <p>Bienvenido: ${datos.usuarioIngresado.Nombres}</p>
-                    <p style="font-size: 0.9em; color: #888;">Rol: ${rol}</p>
+                    <p style="font-size: 1.1em; color: #f4ececff;">Rol: ${rol}</p>
                 </div>
                 <div class="Opciones">
                     ${puedeVerCuentaEmpresarial ? '<button Opcion="CuentaEmpresarial" class="menu-item active">Cuenta Empresarial</button>' : ''}

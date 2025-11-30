@@ -15,7 +15,7 @@
 
 /* menu */
 #EspacioMenu {
-    background: linear-gradient(180deg, #0A1828 0%, #2C3E50 100%);
+    background: rgba(60, 9, 108);
     width: 300px;
     height: auto;
     display: flex;
@@ -30,14 +30,14 @@
 }
 
 #EspacioMenu>.Empresa>h1 {
-    color: #40E0D0;
+    color: #f4f0f5;
     text-align: center;
     font-size: 48px;
-    text-shadow: 0 2px 8px rgba(64, 224, 208, 0.3);
+    text-shadow: 0 2px 8px rgba(225, 190, 231, 0.3);
 }
 
 #EspacioMenu>.Empresa>p {
-    color: #7FFFD4;
+    color: #f7f1f8;
     text-align: center;
 }
 
@@ -59,19 +59,19 @@
     border: none;
     text-align: left;
     cursor: pointer;
-    border-bottom: rgba(64, 224, 208, 0.2) 1px solid;
+    border-bottom: rgba(186, 104, 200, 0.2) 1px solid;
     transition: all 0.3s ease;
 }
 
 .menu-item:hover {
-    background: linear-gradient(90deg, #178582 0%, rgba(64, 224, 208, 0.3) 100%);
-    border-left: 4px solid #40E0D0;
+    background: linear-gradient(90deg, #7B1FA2 0%, rgba(156, 39, 176, 0.3) 100%);
+    border-left: 4px solid #BA68C8;
     padding-left: 14px;
 }
 
 .menu-item.active {
-    background: linear-gradient(90deg, #178582 0%, rgba(64, 224, 208, 0.4) 100%);
-    border-left: 4px solid #7FFFD4;
+    background: linear-gradient(90deg, #7B1FA2 0%, rgba(156, 39, 176, 0.4) 100%);
+    border-left: 4px solid #E1BEE7;
     padding-left: 14px;
 }
 
@@ -84,7 +84,7 @@
 /* boton de salir */
 #EspacioMenu>.Botones>.exit-button {
     width: 100%;
-    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    background: linear-gradient(135deg, #7B2CBF 0%, #9D4EDD 100%);
     color: white;
     margin-top: auto;
     padding: 12px;
@@ -92,13 +92,13 @@
     cursor: pointer;
     border-radius: 8px;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+    box-shadow: 0 4px 12px rgba(188, 50, 238, 0.3);
 }
 
 #EspacioMenu>.Botones>.exit-button:hover {
-    background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+    background: linear-gradient(135deg, #9D4EDD 0%, #C77dFF 100%);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4);
+    box-shadow: 0 6px 16px rgba(181, 77, 241, 0.4);
 }
 
 /* contenido */
@@ -118,8 +118,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 0px 36px;
-    border-bottom: solid 3px #178582;
-    background: linear-gradient(90deg, rgba(23, 133, 130, 0.05) 0%, transparent 100%);
+    border-bottom: solid 3px #7B1FA2;
+    background: linear-gradient(90deg, rgba(123, 31, 162, 0.05) 0%, transparent 100%);
 }
 
 /* nombre ventana */
@@ -257,7 +257,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0px 36px;
-    border-bottom: solid 3px #178582;
+    border-bottom: solid 3px #7B1FA2;
 }
 
 .Encabezado>.BotonEncabezado {
@@ -290,7 +290,7 @@
 
 /* formulario */
 .Formulario {
-    background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
+    background: rgba(60, 9, 108);
     width: 100%;
     height: 100%;
     display: flex;
@@ -322,7 +322,7 @@
 }
 
 .Formulario>.Campos>.Campo>p {
-    color: #B2B2B2;
+    color: #fffdfd;
     font-size: 16px;
 }
 
@@ -473,20 +473,20 @@ select,
 /* botones */
 .Boton {
     transition: all 0.3s ease;
-    background: linear-gradient(135deg, #178582 0%, #40E0D0 100%);
+    background: linear-gradient(135deg, #7B2CBF 0%, #9D4EDD 100%);
     border: none;
     border-radius: 10px;
     color: white;
     font-size: 16px;
-    box-shadow: 0 4px 12px rgba(64, 224, 208, 0.3);
+    box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
 }
 
 .Boton:hover {
     transition: all 0.3s ease;
-    background: linear-gradient(135deg, #40E0D0 0%, #7FFFD4 100%);
+    background: linear-gradient(135deg, #9D4EDD 0%, #C77dFF 100%);
     cursor: pointer;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(64, 224, 208, 0.5);
+    box-shadow: 0 6px 16px rgba(156, 39, 176, 0.5);
 }
 
 #BotonDescargarTabla {
@@ -500,7 +500,7 @@ select,
 }
 
 .Capital {
-    background: #449eff;
+    background: #9C27B0;
     margin: 10px;
     flex-grow: 1;
     padding: 20px;
@@ -537,7 +537,7 @@ select,
 
 .BotonCode {
     padding: 10px 20px;
-    background-color: #4aa3ff;
+    background-color: #9C27B0;
     border: none;
     border-radius: 6px;
     color: white;
@@ -547,7 +547,7 @@ select,
 }
 
 .BotonCode:hover {
-    background-color: #1b82e9;
+    background-color: #7B1FA2;
 }
 
 /* =============================
@@ -593,7 +593,7 @@ select,
 }
 
 #TablaMovimientos th {
-    background: #52a5ff;
+    background: #9C27B0;
     color: white;
     padding: 10px;
     text-align: left;
