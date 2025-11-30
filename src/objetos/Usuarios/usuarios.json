@@ -18,14 +18,6 @@
             "ID": 2
         },
         {
-            "Nombres": "Berning",
-            "Apellidos": "Pari",
-            "Contrasena": "7374",
-            "Rol": "Administrador",
-            "Estado": "Activo",
-            "ID": 3
-        },
-        {
             "Nombres": "cambio echo por una IA",
             "Apellidos": "no se",
             "Contrasena": "321",

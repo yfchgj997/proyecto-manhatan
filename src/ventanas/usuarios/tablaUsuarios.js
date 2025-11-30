@@ -32,7 +32,7 @@ function CargarTablaUsuarios(usuarios) {
         usuarios.forEach((usuario, index) => {
             let numeroFila = String(index + 1).padStart(2, '0');
             let datosUsuario = JSON.stringify(usuario); // Se pasa el objeto cliente directamente
-        
+
             // mensaje de flujo
             console.log("Este es el usuario que se pondra en la tabla: ")
             console.log(datosUsuario)
@@ -44,8 +44,8 @@ function CargarTablaUsuarios(usuarios) {
                     <td class="cargo-usuario">${usuario.Rol}</td>
                     <td class="saldo-usuario">${usuario.Estado}</td>
                     <td class="opciones">
-                        <button class="BotonOpcion OpcionEditar">e</button>
-                        <button class="BotonOpcion OpcionEliminar">-</button>
+                        <button class="BotonOpcion OpcionEditar">✎</button>
+                        <button class="BotonOpcion OpcionEliminar">✖</button>
                     </td>
                 </tr>
             `;
@@ -80,10 +80,10 @@ function CargarTablaUsuarios(usuarios) {
                 btn.addEventListener("click", function () {
                     let fila = this.closest("tr");
                     let datosUsuario = fila.getAttribute("data-info");
-                    
+
                     try {
                         let usuarioObjeto = JSON.parse(datosUsuario);
-                        
+
                         if (typeof ipcRenderer !== "undefined") {
                             // mensaje de flujo
                             console.log("MENSAJE: enviando un evento de mostrar formulario con el siguiente usuario:")
@@ -105,7 +105,7 @@ function CargarTablaUsuarios(usuarios) {
 
                     try {
                         let usuarioObjeto = JSON.parse(datosUsuario);
-                        
+
                         if (typeof ipcRenderer !== "undefined") {
                             ipcRenderer.send("EEliminarUsuario", usuarioObjeto);
                         } else {
