@@ -737,6 +737,25 @@ ipcMain.on("EQuiereGestionarClientes", (event) => {
 
 })
 
+// Evento -> mostrar estado de cuenta
+ipcMain.on("EQuiereMostrarEstadoDeCuenta", (event, datos) => {
+
+    console.log("Main: se llamó al evento EQuiereMostrarEstadoDeCuenta");
+
+    // Aquí tienes los datos del cliente/usuario/elemento
+    console.log("Datos recibidos:", datos);
+
+    listaMovimientosTodos = BDrespaldo.ObtenerMovimientoMaterialEconomico(datos.FechaIngreso, ObtenerFecha(), datos.ID)
+    let pasarDatos = {
+        Cliente: datos,
+        Movimientos: listaMovimientosTodos.ListaCombinadaResultante
+    }
+
+    // Paso -> enviar los clientes obtenidos para ser mostrados en la tabla
+    event.sender.send("CargarEstadoDeCuenta", pasarDatos)
+});
+
+
 // Evento -> guardar un nuevo cliente
 ipcMain.on("EGuardarNuevoCliente", (event, Cliente) => {
 
@@ -1247,13 +1266,11 @@ ipcMain.on("EDescargarTablaMovimientos", (event, movimientos) => {
     console.log("MENSAJE: estos son los datos que se descargarán de la tabla:");
     console.log(movimientos);
 
-    // Obtener la carpeta de descargas del usuario
     const carpetaDescargas = app.getPath("downloads");
     let nombreArchivo = "movimientos.xlsx";
     let rutaArchivo = path.join(carpetaDescargas, nombreArchivo);
     let contador = 1;
 
-    // Si el archivo ya existe, buscar un nombre disponible
     while (fs.existsSync(rutaArchivo)) {
         nombreArchivo = `movimientos (${contador}).xlsx`;
         rutaArchivo = path.join(carpetaDescargas, nombreArchivo);
@@ -1261,152 +1278,107 @@ ipcMain.on("EDescargarTablaMovimientos", (event, movimientos) => {
     }
 
     try {
-        /*
-        // Crear una hoja de cálculo
-        const wb = xlsx.utils.book_new();
-        const ws = xlsx.utils.json_to_sheet(movimientos);
- 
-        // Agregar la hoja al libro
-        xlsx.utils.book_append_sheet(wb, ws, "Movimientos");
- 
-        // Escribir el archivo Excel en la ruta disponible
-        xlsx.writeFile(wb, rutaArchivo);
- 
-        console.log(`MENSAJE: Archivo guardado en ${rutaArchivo}`);
- 
-        // Abrir el archivo automáticamente después de guardarlo
-        shell.openPath(rutaArchivo);
- 
-        // Enviar mensaje de éxito al frontend
-        event.sender.send("ModificarMensaje", { 
-            tipo: "MensajeBueno", 
-            texto: `El Excel se descargó con éxito: ${nombreArchivo}` 
-        });
-        */
-
-        /* V2
- 
-        // Transformar los datos en el formato correcto
-        const datosProcesados = movimientos.map(mov => ({
-            Fecha: mov.Fecha,
-            Hora: mov.Hora,
-            ClienteNombres: mov.ClienteNombres,
-            UsuarioNombres: mov.UsuarioNombres,
-            Observacion: mov.Observacion,
-            INGRESO: mov.Tipo === "Ingreso" ? mov.Importe : 0,
-            EGRESO: mov.Tipo === "Retiro" ? mov.Importe : 0,
-            SALDO: mov.CapturaSaldo
-        }));
- 
-        // Crear hoja de cálculo
-        const wb = xlsx.utils.book_new();
-        const ws = xlsx.utils.json_to_sheet(datosProcesados);
- 
-        // Aplicar estilos a los encabezados (fila 1)
-        const range = xlsx.utils.decode_range(ws["!ref"]); // Obtener rango de la hoja
-        for (let col = range.s.c; col <= range.e.c; col++) {
-            const cellRef = xlsx.utils.encode_cell({ r: 0, c: col });
-            if (ws[cellRef]) {
-                ws[cellRef].s = {
-                    font: { bold: true },
-                    fill: { fgColor: { rgb: "FFFF00" } }, // Fondo amarillo
-                    alignment: { horizontal: "center" }
-                };
-            }
-        }
- 
-        // Aplicar colores a INGRESO, EGRESO y SALDO
-        for (let row = 1; row <= range.e.r; row++) {
-            ["F", "G", "H"].forEach((col, index) => {
-                const cellRef = xlsx.utils.encode_cell({ r: row, c: range.s.c + 5 + index });
-                if (ws[cellRef] && typeof ws[cellRef].v === "number") {
-                    ws[cellRef].s = {
-                        font: { color: { rgb: ws[cellRef].v > 0 ? "0000FF" : "FF0000" } }, // Azul si es positivo, rojo si es negativo
-                        alignment: { horizontal: "right" }
-                    };
-                }
-            });
-        }
- 
-        // Agregar hoja al libro y guardar
-        xlsx.utils.book_append_sheet(wb, ws, "Movimientos");
-        xlsx.writeFile(wb, rutaArchivo);
- 
-        console.log(`MENSAJE: Archivo guardado en ${rutaArchivo}`);
- 
-        // Abrir el archivo automáticamente después de guardarlo
-        shell.openPath(rutaArchivo);
- 
-        // Enviar mensaje de éxito al frontend
-        event.sender.send("ModificarMensaje", {
-            tipo: "MensajeBueno",
-            texto: `El Excel se descargó con éxito: ${rutaArchivo}`
-        });
-        */
-        // Crear un nuevo libro de trabajo y una hoja
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet("Movimientos");
 
-        // Definir las columnas en el orden correcto
+        // ================================
+        // NUEVAS COLUMNAS PEDIDAS
+        // ================================
         worksheet.columns = [
             { header: "Fecha", key: "Fecha", width: 15 },
             { header: "Hora", key: "Hora", width: 10 },
             { header: "Cliente", key: "ClienteNombres", width: 20 },
             { header: "Usuario", key: "UsuarioNombres", width: 20 },
             { header: "Observación", key: "Observacion", width: 30 },
-            { header: "INGRESO", key: "INGRESO", width: 15 },
-            { header: "EGRESO", key: "EGRESO", width: 15 },
-            { header: "SALDO", key: "SALDO", width: 15 }
+
+            // DINERO
+            { header: "I.DINERO", key: "I_DINERO", width: 15 },
+            { header: "E.DINERO", key: "E_DINERO", width: 15 },
+            { header: "S.DINERO", key: "S_DINERO", width: 15 },
+
+            // MATERIAL
+            { header: "I.MATERIAL", key: "I_MATERIAL", width: 15 },
+            { header: "E.MATERIAL", key: "E_MATERIAL", width: 15 },
+            { header: "S.MATERIAL", key: "S_MATERIAL", width: 15 }
         ];
 
-        // Agregar datos transformados
+        // =====================================
+        // TRANSFORMAR MOVIMIENTOS SEGÚN REGISTRO
+        // =====================================
         movimientos.forEach(mov => {
-            worksheet.addRow({
+
+            let row = {
                 Fecha: mov.Fecha,
                 Hora: mov.Hora,
                 ClienteNombres: mov.ClienteNombres,
                 UsuarioNombres: mov.UsuarioNombres,
                 Observacion: mov.Observacion,
-                INGRESO: mov.Tipo === "Ingreso" ? mov.Importe : 0,
-                EGRESO: mov.Tipo === "Retiro" ? mov.Importe : 0,
-                SALDO: mov.CapturaSaldo
-            });
+
+                // Todas las columnas en 0 por defecto
+                I_DINERO: 0,
+                E_DINERO: 0,
+                S_DINERO: 0,
+
+                I_MATERIAL: 0,
+                E_MATERIAL: 0,
+                S_MATERIAL: 0
+            };
+
+            const importe = parseFloat(mov.Importe);
+            const saldo = parseFloat(mov.CapturaSaldo);
+
+            const esMaterial = mov.Registro === "Material";
+            const esEconomico = mov.Registro === "Economico";
+
+            // =============================
+            // ELEGIR COLUMNA SEGÚN REGISTRO
+            // =============================
+            if (esEconomico) {
+
+                if (mov.Tipo === "Ingreso") row.I_DINERO = importe;
+                if (mov.Tipo === "Retiro") row.E_DINERO = importe;
+
+                row.S_DINERO = saldo;
+
+            } else if (esMaterial) {
+
+                if (mov.Tipo === "Ingreso") row.I_MATERIAL = importe;
+                if (mov.Tipo === "Retiro") row.E_MATERIAL = importe;
+
+                row.S_MATERIAL = saldo;
+            }
+
+            worksheet.addRow(row);
         });
 
-        // Aplicar estilo al encabezado (amarillo con negrita)
+        // Encabezados (amarillo)
         worksheet.getRow(1).eachCell(cell => {
             cell.font = { bold: true };
             cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFFF00" } };
             cell.alignment = { horizontal: "center" };
         });
 
-        // Aplicar colores a INGRESO, EGRESO y SALDO
+        // Colorear números positivos/negativos
         worksheet.eachRow((row, rowNumber) => {
-            if (rowNumber > 1) { // Omitimos la primera fila (encabezado)
-                const ingresoCell = row.getCell(6);
-                const egresoCell = row.getCell(7);
-                const saldoCell = row.getCell(8);
+            if (rowNumber > 1) {
 
-                [ingresoCell, egresoCell, saldoCell].forEach(cell => {
-                    if (cell.value > 0) {
-                        cell.font = { color: { argb: "0000FF" } }; // Azul para valores positivos
-                    } else if (cell.value < 0) {
-                        cell.font = { color: { argb: "FF0000" } }; // Rojo para valores negativos
-                    }
-                    cell.alignment = { horizontal: "right" }; // Alineación derecha
-                });
+                // columnas numéricas (todas)
+                for (let col = 6; col <= 11; col++) {
+                    const cell = row.getCell(col);
+                    const val = Number(cell.value);
+
+                    if (val > 0) cell.font = { color: { argb: "0000FF" } };
+                    else if (val < 0) cell.font = { color: { argb: "FF0000" } };
+
+                    cell.alignment = { horizontal: "right" };
+                }
             }
         });
 
-        // Guardar el archivo Excel usando .then() en lugar de await
         workbook.xlsx.writeFile(rutaArchivo)
             .then(() => {
-                console.log(`MENSAJE: Archivo guardado en ${rutaArchivo}`);
-
-                // Abrir el archivo automáticamente después de guardarlo
                 shell.openPath(rutaArchivo);
 
-                // Enviar mensaje de éxito al frontend
                 event.sender.send("ModificarMensaje", {
                     tipo: "MensajeBueno",
                     texto: `El Excel se descargó con éxito: ${rutaArchivo}`
@@ -1428,6 +1400,7 @@ ipcMain.on("EDescargarTablaMovimientos", (event, movimientos) => {
         });
     }
 });
+
 
 // Evento -> gestionar usuarios
 ipcMain.on("EQuiereGestionarUsuarios", (event) => {

@@ -132,17 +132,43 @@
             "CapturaSaldo": "2134.75"
         },
         {
+            "Tipo": "Ingreso",
+            "Fecha": "2025-11-24",
+            "UsuarioID": 2,
+            "UsuarioNombres": "jherson",
+            "ClienteID": "4",
+            "ClienteNombres": "CLIENTE IMPORTANTE",
+            "Importe": "23.45",
+            "Observacion": "RFERW",
+            "Hora": "21:13:52",
+            "ID": 34,
+            "CapturaSaldo": "23.45"
+        },
+        {
+            "Tipo": "Ingreso",
+            "Fecha": "2025-11-24",
+            "UsuarioID": 2,
+            "UsuarioNombres": "jherson",
+            "ClienteID": "4",
+            "ClienteNombres": "CLIENTE IMPORTANTE",
+            "Importe": "39.26",
+            "Observacion": "CSKCB",
+            "Hora": "21:23:58",
+            "ID": 35,
+            "CapturaSaldo": "62.71"
+        },
+        {
             "Tipo": "Retiro",
-            "Fecha": "2025-11-29",
-            "UsuarioID": 1,
-            "UsuarioNombres": "Admin",
-            "ClienteID": "3",
-            "ClienteNombres": "fdqwefqf",
-            "Importe": "20.75",
-            "Observacion": "",
-            "Hora": "21:49:40",
+            "Fecha": "2025-11-28",
+            "UsuarioID": 2,
+            "UsuarioNombres": "jherson",
+            "ClienteID": "4",
+            "ClienteNombres": "CLIENTE IMPORTANTE",
+            "Importe": "100.00",
+            "Observacion": "W",
+            "Hora": "20:22:50",
             "ID": 36,
-            "CapturaSaldo": "25491.25"
+            "CapturaSaldo": "-37.29"
         }
     ]
 }

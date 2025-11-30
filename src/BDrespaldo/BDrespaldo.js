@@ -403,76 +403,110 @@ function ObtenerListaCapturas() {
 
 }
 
-// Funcion -> aumentar capital economico
-function AumentarCapitalEconomico(monto) {
+function ObtenerMovimientoMaterialEconomico(FechaInicial, FechaFinal, IdCliente) {
 
-    // mensaje de flujo
-    console.log("BD: aumentando capital economico con monto: ", monto)
+    console.log("BD: Obteniendo movimientos económicos, materiales y CV");
+    console.log("Rango:", FechaInicial, "->", FechaFinal, " | IdCliente:", IdCliente);
 
-    // Paso -> modificar capital
-    let Respuesta = CuentaEmpresarial.ModificarCapitalEconomico("aumentar", monto)
-    if (Respuesta.error == true) {
-        console.log("BD: no se pudo aumentar el capital economico")
-        return ({ "error": true })
-    } else {
-        console.log("BD: si se pudo aumentar el capital economico")
-        return ({ "error": false })
+    // ==============================
+    // 1. MOVIMIENTOS ECONÓMICOS
+    // ==============================
+    let MovimientosEconomicos = ObtenerTablaMovimientos(FechaInicial, FechaFinal);
+    if (MovimientosEconomicos.error === true) {
+        return { error: true };
     }
 
-}
-
-// Funcion -> disminuir capital economico
-function DisminuirCapitalEconomico(monto) {
-
-    // mensaje de flujo
-    console.log("BD: disminuyendo capital economico con monto: ", monto)
-
-    // Paso -> modificar capital
-    let Respuesta = CuentaEmpresarial.ModificarCapitalEconomico("disminuir", monto)
-    if (Respuesta.error == true) {
-        console.log("BD: no se pudo disminuir el capital economico")
-        return ({ "error": true })
-    } else {
-        console.log("BD: si se pudo disminuir el capital economico")
-        return ({ "error": false })
+    // ==============================
+    // 2. MOVIMIENTOS MATERIALES
+    // ==============================
+    let MovimientosMateriales = ObtenerTablaMovimientosMateriales(FechaInicial, FechaFinal);
+    if (MovimientosMateriales.error === true) {
+        return { error: true };
     }
 
-}
-
-// Funcion -> aumentar capital material
-function AumentarCapitalMaterial(monto) {
-
-    // mensaje de flujo
-    console.log("BD: aumentando capital material con monto: ", monto)
-
-    // Paso -> modificar capital
-    let Respuesta = CuentaEmpresarial.ModificarCapitalMaterial("aumentar", monto)
-    if (Respuesta.error == true) {
-        console.log("BD: no se pudo aumentar el capital material")
-        return ({ "error": true })
-    } else {
-        console.log("BD: si se pudo aumentar el capital material")
-        return ({ "error": false })
+    // ==============================
+    // 3. TABLA CV (VENTA OCASIONAL)
+    // ==============================
+    let MovimientosCV = TablaCV(FechaInicial, FechaFinal);
+    if (MovimientosCV.error === true) {
+        return { error: true };
     }
 
-}
+    // ==============================
+    // Listas originales
+    // ==============================
+    let ListaEconomicos = MovimientosEconomicos.ListaMovimentosEconomicos || [];
+    let ListaMateriales = MovimientosMateriales.ListaMovimientosMateriales || [];
+    let ListaCV = MovimientosCV.listaCV || [];
 
-// Funcion -> disminuir capital material
-function DisminuirCapitalMaterial(monto) {
+    // ==============================
+    // FILTRAR SOLO SI IdCliente NO ES NULL
+    // ==============================
+    if (IdCliente != null) {
+        console.log("FILTRANDO por ClienteID =", IdCliente);
 
-    // mensaje de flujo
-    console.log("BD: disminuyendo capital material con monto: ", monto)
-
-    // Paso -> modificar capital
-    let Respuesta = CuentaEmpresarial.ModificarCapitalMaterial("disminuir", monto)
-    if (Respuesta.error == true) {
-        console.log("BD: no se pudo disminuir el capital material")
-        return ({ "error": true })
+        ListaEconomicos = ListaEconomicos.filter(m => m.ClienteID == IdCliente);
+        ListaMateriales = ListaMateriales.filter(m => m.ClienteID == IdCliente);
+        ListaCV = ListaCV.filter(m => m.ClienteID == IdCliente);
     } else {
-        console.log("BD: si se pudo disminuir el capital material")
-        return ({ "error": false })
+        console.log("IdCliente ES NULL → No se aplica filtro.");
     }
 
+    // ==============================
+    // 4. AGREGAR TIPO DE REGISTRO A CADA OBJETO
+    // ==============================
+
+    ListaEconomicos = ListaEconomicos.map(m => {
+        return { ...m, Registro: "Economico" };
+    });
+
+    ListaMateriales = ListaMateriales.map(m => {
+        return { ...m, Registro: "Material" };
+    });
+
+    ListaCV = ListaCV.map(m => {
+        return { ...m, Registro: "VentaOcasional" };
+    });
+
+    // ==============================
+    // 5. COMBINAR LISTAS
+    // ==============================
+    let ListaCombinada = [
+        ...ListaEconomicos,
+        ...ListaMateriales,
+        ...ListaCV
+    ];
+
+    // ==============================
+    // 6. ORDENAR POR FECHA Y HORA
+    // ==============================
+    let ListaCombinadaResultante = ListaCombinada.sort((a, b) => {
+
+        let fechaA = new Date(a.Fecha);
+        let fechaB = new Date(b.Fecha);
+
+        if (fechaA < fechaB) return -1;
+        if (fechaA > fechaB) return 1;
+
+        // si la fecha es igual, comparar horas
+        if (a.Hora < b.Hora) return -1;
+        if (a.Hora > b.Hora) return 1;
+
+        return 0;
+    });
+
+    // ==============================
+    // Mostrar solo la lista final combinada
+    // ==============================
+    console.log("======= Lista Combinada Final =======");
+    console.log(ListaCombinadaResultante);
+    console.log("====================================");
+
+    return {
+        error: false,
+        IdCliente,
+        ListaCombinadaResultante
+    };
 }
 
 module.exports = {
@@ -498,6 +532,7 @@ module.exports = {
     ObtenerCapitalEconomicoEmpresarial,
     ObtenerCapitalMaterialEmpresarial,
     ObtenerListaCapturas,
+    ObtenerMovimientoMaterialEconomico,
     AumentarCapitalEconomico,
     DisminuirCapitalEconomico,
     AumentarCapitalMaterial,

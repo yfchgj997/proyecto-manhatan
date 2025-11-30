@@ -7,6 +7,7 @@ const { CargarFormularioEditarCliente } = require('./formularioEditarCliente.js'
 const { CargarBuscadorCliente } = require('./buscadorCliente.js')
 const { CargarTablaClientes } = require('./tablaClientes.js')
 const { CargarMensajeCliente } = require('./mensajeClientes.js')
+const { CargarEstadoDeCuentaCliente } = require('./estadoDeCuenta.js')
 
 let codigo = `
 
@@ -107,4 +108,12 @@ let codigo = `
         
     })
 
+    // Evento -> cargar el estado de cuenta del cliente
+    ipcRenderer.on("CargarEstadoDeCuenta", (event, cliente) => {
 
+        console.log("**MENSAJE: ejecutando FCargarEstadoDeCuenta")
+        console.log(cliente)
+
+        // Paso -> cargar el componente de estado de cuenta
+        CargarEstadoDeCuentaCliente(cliente)
+    })
