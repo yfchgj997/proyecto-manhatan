@@ -532,5 +532,9 @@ module.exports = {
     ObtenerCapitalEconomicoEmpresarial,
     ObtenerCapitalMaterialEmpresarial,
     ObtenerListaCapturas,
-    ObtenerMovimientoMaterialEconomico
+    ObtenerMovimientoMaterialEconomico,
+    AumentarCapitalEconomico,
+    DisminuirCapitalEconomico,
+    AumentarCapitalMaterial,
+    DisminuirCapitalMaterial
 };
