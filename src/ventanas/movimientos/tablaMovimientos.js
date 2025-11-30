@@ -52,8 +52,8 @@ function CargarTablaMovimientos(movimientos) {
                     <td class="cliente-movimiento">${movimiento.ClienteNombres}</td>
                     <td class="importe-movimiento">${movimiento.Importe}</td>
                     <td class="opciones">
-                        <button class="BotonOpcion OpcionEliminar">-</button>
-                        <button class="BotonOpcion OpcionVer">e</button>
+                        <button class="BotonOpcion OpcionEliminar">✖</button>
+                        <button class="BotonOpcion OpcionVer">👁</button>
                     </td>
                 </tr>
             `;
@@ -96,10 +96,10 @@ function CargarTablaMovimientos(movimientos) {
                 btn.addEventListener("click", function () {
                     let fila = this.closest("tr");
                     let datosMovimiento = fila.getAttribute("data-info");
-                    
+
                     try {
                         let movimientoObjeto = JSON.parse(datosMovimiento);
-                        
+
                         if (typeof ipcRenderer !== "undefined") {
                             console.log("MENSAJE: Enviando un evento de mostrar formulario con el siguiente movimiento:");
                             console.log(movimientoObjeto);
@@ -113,7 +113,7 @@ function CargarTablaMovimientos(movimientos) {
                 });
             });
 
-            document.getElementById("BotonDescargarTabla").addEventListener("click",()=>{
+            document.getElementById("BotonDescargarTabla").addEventListener("click", () => {
                 ipcRenderer.send("EDescargarTablaMovimientos", movimientos);
             })
 
@@ -124,7 +124,7 @@ function CargarTablaMovimientos(movimientos) {
 
                     try {
                         let movimientoObjeto = JSON.parse(datosMovimiento);
-                        
+
                         if (typeof ipcRenderer !== "undefined") {
                             ipcRenderer.send("EEliminarMovimiento", movimientoObjeto);
                         } else {
@@ -143,7 +143,7 @@ function CargarTablaMovimientos(movimientos) {
 
                     try {
                         let movimientoObjeto = JSON.parse(datosMovimiento);
-                        
+
                         if (typeof ipcRenderer !== "undefined") {
                             ipcRenderer.send("EImprimirMovimiento", movimientoObjeto);
                         } else {

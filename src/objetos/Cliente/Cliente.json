@@ -1,4 +1,14 @@
 {
-    "Contador": 0,
-    "Elementos": []
+    "Contador": 1,
+    "Elementos": [
+        {
+            "Nombres": "ASD",
+            "Apellidos": "ASDF",
+            "DNI": "32",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": "100.00",
+            "FechaIngreso": "2025-11-30",
+            "ID": 1
+        }
+    ]
 }
