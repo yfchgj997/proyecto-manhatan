@@ -595,7 +595,10 @@ function VerificarCodigo(Codigo) {
         return { "CodigoCorrecto": false }
     } else {
         console.log("BD: resultado de verificacion: ", Respuesta.resultado)
-        return { "CodigoCorrecto": true }
+        if (Respuesta.resultado == true) {
+            return { "CodigoCorrecto": true }
+        }
+        return { "CodigoCorrecto": false }
     }
 
 }

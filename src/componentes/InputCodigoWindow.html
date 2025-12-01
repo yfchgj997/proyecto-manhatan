@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Verificar Código</title>
+    <link rel="stylesheet" href="../index.css">
+    <script defer src="./InputCodigoWindow.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f7fa;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        #InputCodigoWindow {
+            padding: 40px;
+            height: 100vh;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #TituloVentana {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1E2550;
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .input-container {
+            margin-bottom: 20px;
+        }
+
+        .input-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #1E2550;
+            font-size: 14px;
+        }
+
+        #CampoCodigo {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 18px;
+            box-sizing: border-box;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        #CampoCodigo:focus {
+            border-color: #FF9500;
+            box-shadow: 0 0 0 3px rgba(255, 149, 0, 0.1);
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-popup {
+            padding: 12px 36px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #BtnConfirmar {
+            background: linear-gradient(135deg, #FF9500 0%, #FF7A00 100%);
+            color: white;
+        }
+
+        #BtnConfirmar:hover {
+            background: linear-gradient(135deg, #FF7A00 0%, #FF6600 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 149, 0, 0.3);
+        }
+
+        #BtnCancelar {
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+            color: white;
+        }
+
+        #BtnCancelar:hover {
+            background: linear-gradient(135deg, #5a6268 0%, #4e555b 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+        }
+
+        .btn-popup:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="InputCodigoWindow">
+        <h2 id="TituloVentana">Por favor ingresa el código de seguridad</h2>
+        <div class="input-container">
+            <label for="CampoCodigo">Código:</label>
+            <input id="CampoCodigo" type="text" placeholder="Ingrese el código" autofocus>
+        </div>
+        <div class="buttons-container">
+            <button id="BtnConfirmar" class="btn-popup">Confirmar</button>
+            <button id="BtnCancelar" class="btn-popup">Cancelar</button>
+        </div>
+    </div>
+</body>
+
+</html>
