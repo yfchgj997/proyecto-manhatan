@@ -65,6 +65,7 @@ function generarPDF(data) {
 // BD de respaldo
 const BDrespaldo = require('./BDrespaldo/BDrespaldo.js')
 const Impresora = require('./componentes/Impresora.js')
+const MovimientoEmpresarial = require('./objetos/MovimientoEmpresarial/MovimientoEmpresarial.js')
 
 let mainWindow;
 let loginWindow
@@ -463,6 +464,20 @@ ipcMain.on("EQuiereGestionarCuentaEmpresarial", (event) => {
     event.sender.send("EInicializarVentanaCuentaEmpresarial", datos)
 })
 
+// Evento -> ver detalles de movimientos empresariales
+ipcMain.on("EQuiereVerDetallesMovimientosEmpresariales", (event) => {
+    console.log("Main: solicitando ver detalles de movimientos empresariales")
+
+    let respuesta = MovimientoEmpresarial.ObtenerMovimientos()
+    let movimientos = []
+
+    if (respuesta.error == false) {
+        movimientos = respuesta.Elementos
+    }
+
+    event.sender.send("ECargarTablaMovimientosEmpresariales", movimientos)
+})
+
 // Evento -> aumentar capital economico
 ipcMain.on("EAumentarCapitalEconomico", (event, monto) => {
 
@@ -612,8 +627,8 @@ ipcMain.on("EQuiereIngresarMonto", (event, datos) => {
 
     // Paso -> crear ventana popup
     InputMontoWindow = new BrowserWindow({
-        width: 400,
-        height: 250,
+        width: 450,
+        height: 450,
         resizable: false,
         modal: true,
         parent: mainWindow,
@@ -637,6 +652,7 @@ ipcMain.on("EMontoIngresado", (event, datos) => {
     // mensaje de flujo
     console.log("Main: monto ingresado desde popup")
     console.log("Main: monto:", datos.monto)
+    console.log("Main: detalle:", datos.detalle)
     console.log("Main: tipo:", datos.tipo)
 
     // Paso -> cerrar popup
@@ -645,70 +661,89 @@ ipcMain.on("EMontoIngresado", (event, datos) => {
         InputMontoWindow = null
     }
 
+    let usuarioActual = GestorSesion.obtenerUsuarioActual()
+    let nombreUsuario = usuarioActual ? usuarioActual.Nombres : "Desconocido"
+    let respuestaOperacion = { error: true }
+    let nuevoSaldo = 0
+    let tipoCapital = ""
+    let operacion = ""
+    let mensajeExito = ""
+
     // Paso -> ejecutar la operación correspondiente
     switch (datos.tipo) {
         case "aumentarEconomico":
-            mainWindow.webContents.send("EAumentarCapitalEconomico", datos.monto)
-            // Ejecutar directamente la operación
-            let respAumEco = BDrespaldo.AumentarCapitalEconomico(datos.monto)
-            if (respAumEco.error == false) {
-                let usuarioActual = GestorSesion.obtenerUsuarioActual()
-                mainWindow.webContents.send("ModificarMensaje", {
-                    tipo: "MensajeBueno",
-                    texto: "El capital económico se aumentó correctamente"
-                })
-                mainWindow.webContents.send("EActualizarCapitales", {
-                    CapitalEconomico: BDrespaldo.ObtenerCapitalEconomicoEmpresarial().CapitalEconomico,
-                    CapitalMaterial: BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial,
-                    rolUsuario: usuarioActual ? usuarioActual.Rol : "Cajero"
-                })
+            respuestaOperacion = BDrespaldo.AumentarCapitalEconomico(datos.monto)
+            if (respuestaOperacion.error == false) {
+                let respCapital = BDrespaldo.ObtenerCapitalEconomicoEmpresarial()
+                nuevoSaldo = respCapital.CapitalEconomico
+                tipoCapital = "Capital"
+                operacion = "Aumentar"
+                mensajeExito = "El capital económico se aumentó correctamente"
             }
             break;
         case "disminuirEconomico":
-            let respDisEco = BDrespaldo.DisminuirCapitalEconomico(datos.monto)
-            if (respDisEco.error == false) {
-                let usuarioActual = GestorSesion.obtenerUsuarioActual()
-                mainWindow.webContents.send("ModificarMensaje", {
-                    tipo: "MensajeBueno",
-                    texto: "El capital económico se disminuyó correctamente"
-                })
-                mainWindow.webContents.send("EActualizarCapitales", {
-                    CapitalEconomico: BDrespaldo.ObtenerCapitalEconomicoEmpresarial().CapitalEconomico,
-                    CapitalMaterial: BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial,
-                    rolUsuario: usuarioActual ? usuarioActual.Rol : "Cajero"
-                })
+            respuestaOperacion = BDrespaldo.DisminuirCapitalEconomico(datos.monto)
+            if (respuestaOperacion.error == false) {
+                let respCapital = BDrespaldo.ObtenerCapitalEconomicoEmpresarial()
+                nuevoSaldo = respCapital.CapitalEconomico
+                tipoCapital = "Capital"
+                operacion = "Disminuir"
+                mensajeExito = "El capital económico se disminuyó correctamente"
             }
             break;
         case "aumentarMaterial":
-            let respAumMat = BDrespaldo.AumentarCapitalMaterial(datos.monto)
-            if (respAumMat.error == false) {
-                let usuarioActual = GestorSesion.obtenerUsuarioActual()
-                mainWindow.webContents.send("ModificarMensaje", {
-                    tipo: "MensajeBueno",
-                    texto: "El capital material se aumentó correctamente"
-                })
-                mainWindow.webContents.send("EActualizarCapitales", {
-                    CapitalEconomico: BDrespaldo.ObtenerCapitalEconomicoEmpresarial().CapitalEconomico,
-                    CapitalMaterial: BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial,
-                    rolUsuario: usuarioActual ? usuarioActual.Rol : "Cajero"
-                })
+            respuestaOperacion = BDrespaldo.AumentarCapitalMaterial(datos.monto)
+            if (respuestaOperacion.error == false) {
+                let respCapital = BDrespaldo.ObtenerCapitalMaterialEmpresarial()
+                nuevoSaldo = respCapital.CapitalMaterial
+                tipoCapital = "Material"
+                operacion = "Aumentar"
+                mensajeExito = "El capital material se aumentó correctamente"
             }
             break;
         case "disminuirMaterial":
-            let respDisMat = BDrespaldo.DisminuirCapitalMaterial(datos.monto)
-            if (respDisMat.error == false) {
-                let usuarioActual = GestorSesion.obtenerUsuarioActual()
-                mainWindow.webContents.send("ModificarMensaje", {
-                    tipo: "MensajeBueno",
-                    texto: "El capital material se disminuyó correctamente"
-                })
-                mainWindow.webContents.send("EActualizarCapitales", {
-                    CapitalEconomico: BDrespaldo.ObtenerCapitalEconomicoEmpresarial().CapitalEconomico,
-                    CapitalMaterial: BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial,
-                    rolUsuario: usuarioActual ? usuarioActual.Rol : "Cajero"
-                })
+            respuestaOperacion = BDrespaldo.DisminuirCapitalMaterial(datos.monto)
+            if (respuestaOperacion.error == false) {
+                let respCapital = BDrespaldo.ObtenerCapitalMaterialEmpresarial()
+                nuevoSaldo = respCapital.CapitalMaterial
+                tipoCapital = "Material"
+                operacion = "Disminuir"
+                mensajeExito = "El capital material se disminuyó correctamente"
             }
             break;
+    }
+
+    if (respuestaOperacion.error == false) {
+        // Actualizar UI
+        mainWindow.webContents.send("ModificarMensaje", {
+            tipo: "MensajeBueno",
+            texto: mensajeExito
+        })
+        mainWindow.webContents.send("EActualizarCapitales", {
+            CapitalEconomico: BDrespaldo.ObtenerCapitalEconomicoEmpresarial().CapitalEconomico,
+            CapitalMaterial: BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial,
+            rolUsuario: usuarioActual ? usuarioActual.Rol : "Cajero"
+        })
+
+        // Registrar movimiento empresarial
+        let movimiento = {
+            Tipo: tipoCapital,
+            Operacion: operacion,
+            Fecha: ObtenerFecha(),
+            Usuario: nombreUsuario,
+            Importe: datos.monto,
+            Detalle: datos.detalle,
+            Hora: ObtenerHora(),
+            CapturaSaldo: nuevoSaldo
+        }
+        MovimientoEmpresarial.GuardarMovimiento(movimiento)
+        console.log("Main: Movimiento empresarial registrado:", movimiento)
+
+    } else {
+        mainWindow.webContents.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "No se pudo realizar la operación"
+        })
     }
 })
 
