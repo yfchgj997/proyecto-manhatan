@@ -1763,8 +1763,30 @@ ipcMain.on("EEliminarMovimientoMaterial", (event, Movimiento) => {
 })
 
 
+
+// Evento -> ver detalles del día
+ipcMain.on('EQuiereVerDetallesDia', (event, datos) => {
+    console.log('Main: se llamó al evento ver detalles del día');
+    console.log('Main: fecha:', datos.fecha);
+    let Respuesta = BDrespaldo.ObtenerMovimientoMaterialEconomico(datos.fecha, datos.fecha, null);
+    if (Respuesta.error === false) {
+        let datosDetalles = {
+            fecha: datos.fecha,
+            movimientos: Respuesta.ListaCombinadaResultante || []
+        };
+        console.log('Main: Se encontraron ' + datosDetalles.movimientos.length + ' movimientos');
+        event.sender.send('EMostrarDetallesDia', datosDetalles);
+    } else {
+        console.error('Main: Error al obtener los movimientos');
+        event.sender.send('EMostrarDetallesDia', {
+            fecha: datos.fecha,
+            movimientos: []
+        });
+    }
+});
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
         app.quit();
     }
 });
+
