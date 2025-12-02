@@ -13,6 +13,7 @@ const Cliente = require(path.join(__dirname, "../objetos/Cliente/Cliente.js"))
 const CuentaEmpresarial = require(path.join(__dirname, "../objetos/CuentaEmpresarial/CuentaEmpresarial.js"))
 const CapturaCuenta = require(path.join(__dirname, "../objetos/CapturaDeCuenta/CapturaDeCuenta.js"))
 const Usuarios = require(path.join(__dirname, "../objetos/Usuarios/Usuarios.js"));
+const VerificadorDeCodigo = require(path.join(__dirname, "../objetos/VerificadorDeCodigo/VerificadorDeCodigo.js"));
 
 // Función para guardar clientes en un archivo JSON con asignación automática de ID
 function GuardarUsuarioRespaldo(usuario) {
@@ -579,6 +580,29 @@ function DisminuirCapitalMaterial(monto) {
     }
 
 }
+
+// Funcion -> verificar codigo
+function VerificarCodigo(Codigo) {
+
+    // mensaje de flujo
+    console.log("BD: verificando codigo")
+    console.log("BD: Codigo: ", Codigo)
+
+    // Paso -> comparar codigo
+    let Respuesta = VerificadorDeCodigo.CompararCodigo(Codigo)
+    if (Respuesta.error == true) {
+        console.log("BD: error al verificar el codigo")
+        return { "CodigoCorrecto": false }
+    } else {
+        console.log("BD: resultado de verificacion: ", Respuesta.resultado)
+        if (Respuesta.resultado == true) {
+            return { "CodigoCorrecto": true }
+        } else {
+            return { "CodigoCorrecto": false }
+        }
+    }
+
+}
 module.exports = {
     GuardarUsuarioRespaldo,
     ObtenerTablaUsuarios,
@@ -606,5 +630,6 @@ module.exports = {
     AumentarCapitalEconomico,
     DisminuirCapitalEconomico,
     AumentarCapitalMaterial,
-    DisminuirCapitalMaterial
+    DisminuirCapitalMaterial,
+    VerificarCodigo
 };

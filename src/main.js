@@ -71,6 +71,7 @@ let loginWindow
 let respuesta
 let SelectUserWindow
 let InputMontoWindow
+let InputCodigoWindow
 
 // ====================================================================================================
 // FUNCIÓN AUXILIAR PARA VALIDAR PRIVILEGIOS
@@ -1712,7 +1713,7 @@ ipcMain.on("EFiltrarMovimientosMateriales", (event, datos) => {
     }
 })
 
-ipcMain.on("EEliminarMovimientoMaterial", (event, Movimiento) => {
+ipcMain.on("EEliminarMovimientoMaterial", async (event, Movimiento) => {
 
     // Paso -> Validar privilegio
     if (!validarPrivilegio("movimientosMateriales", "eliminar", event)) {
@@ -1723,42 +1724,122 @@ ipcMain.on("EEliminarMovimientoMaterial", (event, Movimiento) => {
     console.log("Main: eliminando un movimiento material, este es el movimiento:")
     console.log(Movimiento)
 
-    // Paso -> mostrar la ventana de confirmacion
-    const opciones = {
-        type: "question",
-        buttons: ["Cancelar", "Aceptar"],
-        defaultId: 0,
-        title: "Confirmación",
-        message: `¿Estás seguro de que deseas eliminar el movimiento?`,
-    };
-    const respuesta = dialog.showMessageBoxSync(null, opciones);
+    // Paso -> solicitar código de seguridad
+    let codigoCorrecto = await SolicitarCodigo();
 
-    if (respuesta === 1) {
-        console.log("Main: la decision fue confirmada");
+    if (!codigoCorrecto) {
+        console.log("Main: código incorrecto o cancelado, no se eliminará el movimiento");
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "Código incorrecto. El movimiento no se eliminó"
+        });
+        return; // Detener la ejecución
+    }
 
-        let Respuesta = BDrespaldo.EliminarMovimientoMaterial(Movimiento.ID)
-        if (Respuesta.error == true) {
-            // Paso -> actualizar el mensaje
-            event.sender.send("ModificarMensaje", {
-                tipo: "MensajeMalo",
-                texto: "El movimiento no se pudo eliminar"
-            });
-        } else {
-            // Paso -> actualizar el mensaje
-            event.sender.send("ModificarMensaje", {
-                tipo: "MensajeBueno",
-                texto: "El movimiento si se pudo eliminar"
-            });
-            // Paso -> actualizar la tabla de clientes en la ventana
-            let fecha = ObtenerFecha()
-            let Respuesta = BDrespaldo.ObtenerTablaMovimientosMateriales(fecha, fecha)
-            if (Respuesta.error == false) {
-                // Paso -> actualizar tabla
-                event.sender.send("ActualizarTablaMovimientosMateriales", Respuesta.ListaMovimientosMateriales)
-            }
-        }
+    console.log("Main: código correcto, procediendo a eliminar");
+
+    let Respuesta = BDrespaldo.EliminarMovimientoMaterial(Movimiento.ID)
+    if (Respuesta.error == true) {
+        // Paso -> actualizar el mensaje
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "El movimiento no se pudo eliminar"
+        });
     } else {
-        console.log("Main: no se confirmo la decision");
+        // Paso -> actualizar el mensaje
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeBueno",
+            texto: "El movimiento si se pudo eliminar"
+        });
+        // Paso -> actualizar la tabla de clientes en la ventana
+        let fecha = ObtenerFecha()
+        let Respuesta = BDrespaldo.ObtenerTablaMovimientosMateriales(fecha, fecha)
+        if (Respuesta.error == false) {
+            // Paso -> actualizar tabla
+            event.sender.send("ActualizarTablaMovimientosMateriales", Respuesta.ListaMovimientosMateriales)
+        }
+    }
+})
+
+// ------------------------------------ VERIFICAR CODIGO DE SEGURIDAD --------------------------------------
+
+// Variable para resolver la promesa de verificación de código
+let resolverCodigoPromise = null;
+
+// Función -> solicitar código de seguridad (retorna Promise con true/false)
+function SolicitarCodigo() {
+    return new Promise((resolve) => {
+        // Guardar la función resolve para usarla cuando se ingrese el código
+        resolverCodigoPromise = resolve;
+
+        // mensaje de flujo
+        console.log("Main: abriendo ventana para solicitar código de seguridad")
+
+        // Paso -> crear ventana popup
+        InputCodigoWindow = new BrowserWindow({
+            width: 400,
+            height: 250,
+            resizable: false,
+            modal: true,
+            parent: mainWindow,
+            webPreferences: {
+                nodeIntegration: true,
+                contextIsolation: false
+            }
+        });
+        InputCodigoWindow.loadFile("./src/componentes/InputCodigoWindow.html")
+        InputCodigoWindow.removeMenu();
+
+        // Manejar el cierre de la ventana sin confirmar (cancelar con X)
+        InputCodigoWindow.on('closed', () => {
+            if (resolverCodigoPromise) {
+                resolverCodigoPromise(false);
+                resolverCodigoPromise = null;
+            }
+            InputCodigoWindow = null;
+        });
+    });
+}
+
+// Evento -> recibir código ingresado desde popup
+ipcMain.on("ECodigoIngresado", (event, codigo) => {
+
+    // mensaje de flujo
+    console.log("Main: verificando código")
+    console.log("Main: este es el código:", codigo)
+
+    // Paso -> verificar el código usando BDrespaldo
+    let resultado = BDrespaldo.VerificarCodigo(codigo);
+
+    console.log("Main: resultado de verificación:", resultado)
+
+    // Paso -> resolver la promesa con el resultado
+    if (resolverCodigoPromise) {
+        resolverCodigoPromise(resultado.CodigoCorrecto);
+        resolverCodigoPromise = null;
+    }
+
+    // Paso -> cerrar popup
+    if (InputCodigoWindow) {
+        InputCodigoWindow.close()
+        InputCodigoWindow = null
+    }
+})
+
+// Evento -> cancelar ingreso de código
+ipcMain.on("ECancelarIngresoCodigo", (event) => {
+    console.log("Main: cancelando ingreso de código")
+
+    // Paso -> resolver la promesa con false
+    if (resolverCodigoPromise) {
+        resolverCodigoPromise(false);
+        resolverCodigoPromise = null;
+    }
+
+    // Paso -> cerrar popup
+    if (InputCodigoWindow) {
+        InputCodigoWindow.close()
+        InputCodigoWindow = null
     }
 })
 
