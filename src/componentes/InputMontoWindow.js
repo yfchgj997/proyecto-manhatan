@@ -67,13 +67,18 @@ function ValidarYEnviarMonto() {
     // Formatear a 2 decimales
     let montoFormateado = montoNumerico.toFixed(2);
 
+    // Capturar detalle
+    let detalle = document.getElementById("CampoDetalle").value.trim();
+
     // Mensaje de flujo
     console.log("InputMontoWindow: enviando monto:", montoFormateado);
+    console.log("InputMontoWindow: enviando detalle:", detalle);
     console.log("InputMontoWindow: tipo de operación:", tipoOperacion);
 
     // Enviar el monto al proceso principal
     ipcRenderer.send("EMontoIngresado", {
         monto: montoFormateado,
+        detalle: detalle,
         tipo: tipoOperacion
     });
 }

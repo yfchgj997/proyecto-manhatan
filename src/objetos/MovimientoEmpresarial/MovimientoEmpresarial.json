@@ -1,0 +1,93 @@
+{
+    "Contador": 8,
+    "Elementos": [
+        {
+            "Tipo": "Capital",
+            "Operacion": "Disminuir",
+            "Fecha": "2025-12-01",
+            "Usuario": "Admin",
+            "Importe": "20.47",
+            "Detalle": "ingreso por emergencia",
+            "Hora": "21:36:57",
+            "CapturaSaldo": "2805.73",
+            "ID": 1
+        },
+        {
+            "Tipo": "Capital",
+            "Operacion": "Disminuir",
+            "Fecha": "2025-12-01",
+            "Usuario": "Admin",
+            "Importe": "20.50",
+            "Detalle": "ingresar material por pedido.",
+            "Hora": "21:38:10",
+            "CapturaSaldo": "476.96",
+            "ID": 2
+        },
+        {
+            "Tipo": "Capital",
+            "Operacion": "Disminuir",
+            "Fecha": "2025-12-01",
+            "Usuario": "Admin",
+            "Importe": "29.70",
+            "Detalle": "ygiuygiuyg",
+            "Hora": "21:43:43",
+            "CapturaSaldo": "2776.03",
+            "ID": 3
+        },
+        {
+            "Tipo": "Capital",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-01",
+            "Usuario": "Admin",
+            "Importe": "200.30",
+            "Detalle": "lkbcejdbqkews",
+            "Hora": "21:56:53",
+            "CapturaSaldo": "2976.33",
+            "ID": 4
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Disminuir",
+            "Fecha": "2025-12-01",
+            "Usuario": "Admin",
+            "Importe": "300.00",
+            "Detalle": "kdncsnd",
+            "Hora": "21:57:33",
+            "CapturaSaldo": "176.96",
+            "ID": 5
+        },
+        {
+            "Tipo": "Capital",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-01",
+            "Usuario": "Admin",
+            "Importe": "346.00",
+            "Detalle": "rtyrtyutfyre",
+            "Hora": "22:00:44",
+            "CapturaSaldo": "3322.33",
+            "ID": 6
+        },
+        {
+            "Tipo": "Capital",
+            "Operacion": "Disminuir",
+            "Fecha": "2025-12-01",
+            "Usuario": "Admin",
+            "Importe": "200.40",
+            "Detalle": "rgerg4g",
+            "Hora": "22:13:58",
+            "CapturaSaldo": "3121.93",
+            "ID": 7
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Disminuir",
+            "Fecha": "2025-12-01",
+            "Usuario": "Admin",
+            "Importe": "76.96",
+            "Detalle": "gergew",
+            "Hora": "22:14:33",
+            "CapturaSaldo": "100.00",
+            "ID": 8
+        }
+    ]
+}
