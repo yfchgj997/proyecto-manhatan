@@ -603,6 +603,25 @@ function VerificarCodigo(Codigo) {
     }
 
 }
+// Funcion -> modificar codigo
+function ModificarCodigo(NuevoCodigo) {
+
+    // mensaje de flujo
+    console.log("BD: modificando codigo")
+    console.log("BD: NuevoCodigo: ", NuevoCodigo)
+
+    // Paso -> cambiar codigo
+    let Respuesta = VerificadorDeCodigo.CambiarCodigo(NuevoCodigo)
+    if (Respuesta.Error == true) {
+        console.log("BD: error al modificar el codigo")
+        return { "Error": true }
+    } else {
+        console.log("BD: codigo modificado con exito")
+        return { "Error": false }
+    }
+
+}
+
 module.exports = {
     GuardarUsuarioRespaldo,
     ObtenerTablaUsuarios,
@@ -631,5 +650,6 @@ module.exports = {
     DisminuirCapitalEconomico,
     AumentarCapitalMaterial,
     DisminuirCapitalMaterial,
-    VerificarCodigo
+    VerificarCodigo,
+    ModificarCodigo
 };

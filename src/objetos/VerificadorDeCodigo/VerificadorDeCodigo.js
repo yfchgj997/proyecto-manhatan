@@ -70,7 +70,35 @@ function CompararCodigo(Codigo) {
     }
 }
 
+// Funcion -> cambiar codigo
+function CambiarCodigo(NuevoCodigo) {
+
+    ErrorGeneral = false
+
+    // mensaje de flujo
+    console.log("\nVerificadorDeCodigo: se cambiara el codigo actual")
+
+    try {
+        // Paso -> crear objeto a guardar
+        let NuevoContenido = {
+            "Codigo": NuevoCodigo
+        }
+
+        // Paso -> guardar en archivo
+        fs.writeFileSync(RutaCodigo, JSON.stringify(NuevoContenido, null, 4))
+
+        console.log("VerificadorDeCodigo: codigo actualizado correctamente")
+
+    } catch (error) {
+        console.log("/nVerificadorDeCodigo: no se pudo actualizar el archivo VerificadorDeCodigo.json")
+        ErrorGeneral = true
+    }
+
+    return ({ "Error": ErrorGeneral })
+}
+
 // EXPORTAR
 module.exports = {
-    CompararCodigo
+    CompararCodigo,
+    CambiarCodigo
 }

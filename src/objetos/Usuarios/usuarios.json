@@ -10,14 +10,6 @@
             "ID": 1
         },
         {
-            "Nombres": "Usuario Cajero",
-            "Apellidos": "Normal",
-            "Contrasena": "user123",
-            "Rol": "Cajero",
-            "Estado": "Activo",
-            "ID": 2
-        },
-        {
             "Nombres": "cambio echo por una IA",
             "Apellidos": "no se",
             "Contrasena": "321",

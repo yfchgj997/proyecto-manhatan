@@ -2,9 +2,9 @@
 <html>
 
 <head>
-    <title>Verificar Codigo</title>
+    <title>Cambiar Codigo</title>
     <link rel="stylesheet" href="../index.css">
-    <script defer src="./InputCodigoWindow.js"></script>
+    <script defer src="./CambiarCodigoWindow.js"></script>
     <style>
         body {
             margin: 0;
@@ -15,7 +15,7 @@
             height: 100vh;
         }
 
-        #InputCodigoWindow {
+        #CambiarCodigoWindow {
             padding: 40px;
             height: 100vh;
             box-sizing: border-box;
@@ -51,7 +51,7 @@
             font-size: 14px;
         }
 
-        #CampoCodigo {
+        #CampoNuevoCodigo {
             width: 100%;
             padding: 14px 18px;
             font-size: 18px;
@@ -63,7 +63,7 @@
             background: white;
         }
 
-        #CampoCodigo:focus {
+        #CampoNuevoCodigo:focus {
             border-color: #9D4EDD;
             box-shadow: 0 0 0 3px rgba(157, 78, 221, 0.1);
         }
@@ -86,12 +86,12 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        #BtnConfirmar {
+        #BtnAceptar {
             background: linear-gradient(135deg, #7B2CBF 0%, #9D4EDD 100%);
             color: white;
         }
 
-        #BtnConfirmar:hover {
+        #BtnAceptar:hover {
             background: linear-gradient(135deg, #9D4EDD 0%, #C77dFF 100%);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
@@ -111,11 +111,34 @@
         .btn-popup:active {
             transform: translateY(0);
         }
+
+        #MensajeCambio {
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            display: none;
+            transition: all 0.3s ease;
+        }
+
+        #MensajeCambio.exito {
+            background-color: #4caf50;
+            color: white;
+            display: block;
+        }
+
+        #MensajeCambio.error {
+            background-color: #f44336;
+            color: white;
+            display: block;
+        }
     </style>
 </head>
 
 <body>
-    <div id="InputCodigoWindow">
+    <div id="CambiarCodigoWindow">
         <h2 id="TituloVentana">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -123,16 +146,17 @@
                 <line x1="12" y1="8" x2="12" y2="12"></line>
                 <line x1="12" y1="16" x2="12.01" y2="16"></line>
             </svg>
-            Por favor ingresa el codigo de seguridad
+            Nuevo Formulario
         </h2>
         <div class="input-container">
-            <label for="CampoCodigo">Codigo:</label>
-            <input id="CampoCodigo" type="text" placeholder="Ingrese el codigo" autofocus>
+            <label for="CampoNuevoCodigo">Nuevo Codigo:</label>
+            <input id="CampoNuevoCodigo" type="text" placeholder="Ingrese el nuevo codigo" autofocus>
         </div>
         <div class="buttons-container">
-            <button id="BtnConfirmar" class="btn-popup">Confirmar</button>
+            <button id="BtnAceptar" class="btn-popup">Aceptar</button>
             <button id="BtnCancelar" class="btn-popup">Cancelar</button>
         </div>
+        <div id="MensajeCambio"></div>
     </div>
 </body>
 
