@@ -205,7 +205,7 @@ ipcMain.on("EGuardarNuevoCliente", (event, Cliente) => {
         });
 
         // Paso -> actualizar la tabla de clientes en la ventana
-        let clientes = BDrespaldo.ObtenerTablaClientes()
+        let clientes = []
         event.sender.send("ActualizarTablaClientes", clientes)
 
     } else {// no se pudo guardar
@@ -245,7 +245,7 @@ ipcMain.on("EEliminarCliente", (event, Cliente) => {
         BDrespaldo.EliminarCliente(Cliente.ID)
 
         // Paso -> actualizar la tabla de clientes en la ventana
-        let clientes = BDrespaldo.ObtenerTablaClientes()
+        let clientes = []
         event.sender.send("ActualizarTablaClientes", clientes)
 
         // Paso -> actualizar el mensaje
@@ -276,7 +276,7 @@ ipcMain.on("EEditarCliente", (event, cliente) => {
     });
 
     // Paso -> actualizar la tabla de clientes en la ventana
-    let clientes = BDrespaldo.ObtenerTablaClientes()
+    let clientes = []
     event.sender.send("ActualizarTablaClientes", clientes)
 
 })

@@ -629,6 +629,201 @@ select,
 
 .fila-movimiento:hover {
     background-color: #f4f9ff;
+    background: #ffc107;
+}
+
+.opciones>.OpcionEliminar {
+    background: #dc3545;
+}
+
+.opciones>.OpcionMostrar {
+    background: #17a2b8;
+}
+
+.Tabla th {
+    color: #B2B2B2;
+    font-size: 16px;
+    text-align: center;
+}
+
+.Tabla td {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.opciones {
+    margin-right: 8px;
+}
+
+.BotonOpcion {
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.BotonOpcion:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.opciones>.OpcionVer {
+    background: #007bff;
+}
+
+.opciones>.OpcionEditar {
+    background: #ffc107;
+}
+
+.opciones>.OpcionEliminar {
+    background: #dc3545;
+}
+
+/* botones */
+.Boton {
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #7B2CBF 0%, #9D4EDD 100%);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
+}
+
+.Boton:hover {
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #9D4EDD 0%, #C77dFF 100%);
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(156, 39, 176, 0.5);
+}
+
+#BotonDescargarTabla {
+    width: 100px;
+    height: 48px;
+}
+
+.EspacioCuentaEmpresarial {
+    width: 100%;
+    display: flex;
+}
+
+.Capital {
+    background: #9C27B0;
+    margin: 10px;
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+/* ---------------------------------------- BORRAR ---------------------------------------------- */
+
+/* =============================
+   CONTENEDOR PRINCIPAL
+============================= */
+#EstadoCuentaContenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 25px;
+    width: 95%;
+    margin: auto;
+    font-family: Arial, sans-serif;
+}
+
+/* =============================
+   BOTONES
+============================= */
+#ContenedorBotones {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+}
+
+.BotonCode {
+    padding: 10px 20px;
+    background-color: #9C27B0;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.BotonCode:hover {
+    background-color: #7B1FA2;
+}
+
+/* =============================
+   TARJETA CLIENTE
+============================= */
+#TarjetaCliente {
+    background: #f7f7f7;
+    color: rgb(0, 0, 0);
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#TarjetaCliente p {
+    margin: 6px 0;
+}
+
+/* =============================
+   TÍTULOS
+============================= */
+#TituloEstado,
+#TituloMovimientos {
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+/* =============================
+   CONTENEDOR MOVIMIENTOS
+============================= */
+#ContenedorMovimientos {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* =============================
+   TABLA DE MOVIMIENTOS
+============================= */
+#TablaMovimientos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#TablaMovimientos th {
+    background: #9C27B0;
+    color: white;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 2px solid #dddddd;
+}
+
+#TablaMovimientos td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.fila-movimiento:hover {
+    background-color: #f4f9ff;
 }
 
 /* =============================
@@ -639,4 +834,21 @@ select,
     font-size: 16px;
     margin-top: 10px;
     text-align: center;
+}
+
+/* =============================
+   BOTONES ENCABEZADO USUARIOS
+============================= */
+.BotonesEncabezado {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.BotonesEncabezado>.BotonEncabezado {
+    width: auto;
+    min-width: 120px;
+    height: 48px;
+    padding: 0 20px;
+    white-space: nowrap;
 }

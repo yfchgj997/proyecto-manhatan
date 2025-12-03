@@ -2,22 +2,6 @@
     "Contador": 25,
     "Elementos": [
         {
-            "Nombres": "Admin",
-            "Apellidos": "Principal",
-            "Contrasena": "admin123",
-            "Rol": "Administrador",
-            "Estado": "Activo",
-            "ID": 1
-        },
-        {
-            "Nombres": "hjhffhggug",
-            "Apellidos": "gyvugv",
-            "Contrasena": "4521",
-            "Rol": "Administrador",
-            "Estado": "Activo",
-            "ID": 21
-        },
-        {
             "Nombres": "BERNARDO ",
             "Apellidos": "",
             "Contrasena": "123456",
