@@ -1,5 +1,5 @@
 {
-    "Contador": 8,
+    "Contador": 10,
     "Elementos": [
         {
             "Tipo": "Capital",
@@ -88,6 +88,28 @@
             "Hora": "22:14:33",
             "CapturaSaldo": "100.00",
             "ID": 8
+        },
+        {
+            "Tipo": "Capital",
+            "Operacion": "Disminuir",
+            "Fecha": "2025-12-03",
+            "Usuario": "BERNARDO ",
+            "Importe": "121.93",
+            "Detalle": "se está retirando por el motivo de que se tuvo gastos imprevistos.",
+            "Hora": "16:11:32",
+            "CapturaSaldo": "3000.00",
+            "ID": 9
+        },
+        {
+            "Tipo": "Capital",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-03",
+            "Usuario": "BERNARDO ",
+            "Importe": "50.00",
+            "Detalle": "se está ingresando la cantidad de 50 soles, porque eso fue lo que sobró de del gasto imprevisto.",
+            "Hora": "16:13:00",
+            "CapturaSaldo": "3050.00",
+            "ID": 10
         }
     ]
 }
