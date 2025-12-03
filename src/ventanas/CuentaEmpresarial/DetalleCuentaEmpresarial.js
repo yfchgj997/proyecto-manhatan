@@ -22,7 +22,7 @@ function GenerarCodigo(CapitalEconomico, CapitalMaterial, rolUsuario) {
     Codigo = `
         <style>
             .capital-card {
-                background: linear-gradient(135deg, #6112c2ff 0%, #e9ecef 80%);
+                background: linear-gradient(135deg, #2c90f4ff 0%, #e9ecef 80%);
                 margin: 10px 10px;
                 padding: 30px;
                 border-radius: 12px;
@@ -49,7 +49,7 @@ function GenerarCodigo(CapitalEconomico, CapitalMaterial, rolUsuario) {
             
             .capital-label {
                 font-size: 14px;
-                color: #f1f4f6ff;
+                color: #6c757d;
                 font-weight: 500;
                 margin-bottom: 8px;
                 text-transform: uppercase;

@@ -15,7 +15,7 @@
             display: flex;
             width: 100%;
             height: 100vh;
-            background: linear-gradient(135deg, #240046 0%, #5a189a 100%);
+            background: linear-gradient(135deg, #0A1828 0%, #178582 100%);
         }
 
         .Login>.left-panel {
@@ -24,72 +24,44 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, rgba(135, 56, 209, 0.2) 0%, rgba(165, 111, 220, 0.2) 100%), url('../imagenes/ImagenCiudad.jpeg');
-            background-size: cover;
-            background-position: center;
-            padding: 40px;
+            background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
+            padding: 20px;
             box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
-            gap: 20px;
-            text-align: center;
-        }
-
-        .Login>.left-panel>h3 {
-            font-size: 24px;
-            color: #e3c7f3;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            font-weight: 300;
-            margin: 0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .Login>.left-panel>h1 {
-            font-size: 64px;
-            color: #FFFFFF;
-            font-weight: 800;
-            margin: 0;
-            line-height: 1;
-            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            letter-spacing: 2px;
-        }
-
-        .Login>.left-panel>.logo-placeholder {
-            width: 120px;
-            height: 120px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px dashed rgba(224, 170, 255, 0.3);
-            border-radius: 50%;
-            margin: 20px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
         }
 
         .Login>.left-panel>.quote {
-            font-size: 23px;
-            color: #fcfbfc;
+            font-size: 18px;
+            color: #7FFFD4;
             margin-bottom: 20px;
             text-align: center;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            font-style: italic;
-            letter-spacing: 1px;
+            font-weight: 500;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .Login>.left-panel>.separator {
             width: 80%;
             height: 3px;
-            background: linear-gradient(90deg, #7B2CBF, #E0AAFF, #7B2CBF);
+            background: linear-gradient(90deg, #178582, #40E0D0, #178582);
             border: none;
             margin-bottom: 30px;
             border-radius: 2px;
-            box-shadow: 0 2px 8px rgba(224, 170, 255, 0.4);
+            box-shadow: 0 2px 8px rgba(64, 224, 208, 0.4);
+        }
+
+        .Login>.left-panel>.tree-image {
+            width: 60%;
+            max-width: 250px;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
+            transition: transform 0.3s ease;
+        }
+
+        .Login>.left-panel>.tree-image:hover {
+            transform: scale(1.05);
         }
 
         .Login>.right-panel {
             flex: 1;
-            background: linear-gradient(135deg, #10002b 0%, #240046 100%);
+            background: linear-gradient(135deg, #0A1828 0%, #1a3a52 100%);
             color: #F8F9FA;
             padding: 40px;
             display: flex;
@@ -99,12 +71,12 @@
         }
 
         .Login>.right-panel>.welcome-text {
-            font-size: 50px;
+            font-size: 32px;
             font-weight: bold;
             text-align: center;
             margin-bottom: 30px;
-            color: #fbfafc;
-            text-shadow: 0 2px 8px rgba(224, 170, 255, 0.3);
+            color: #40E0D0;
+            text-shadow: 0 2px 8px rgba(64, 224, 208, 0.3);
         }
 
         .Login>.right-panel>.theme-icon {
@@ -113,13 +85,13 @@
             right: 20px;
             font-size: 24px;
             cursor: pointer;
-            color: #E0AAFF;
+            color: #40E0D0;
         }
 
         .Login>.right-panel>.login-form {
             display: flex;
             flex-direction: column;
-            background: rgba(60, 9, 108, 0.4);
+            background: rgba(44, 62, 80, 0.4);
             padding: 30px;
             border-radius: 15px;
             backdrop-filter: blur(10px);
@@ -127,9 +99,9 @@
         }
 
         .Login>.right-panel>.login-form label {
-            font-size: 23px;
+            font-size: 14px;
             margin-bottom: 8px;
-            color: #f9f8fa;
+            color: #7FFFD4;
             font-weight: 500;
         }
 
@@ -138,23 +110,23 @@
             width: 100%;
             padding: 12px;
             margin-bottom: 20px;
-            border: 2px solid #fbfafc;
+            border: 2px solid #178582;
             border-radius: 8px;
-            font-size: 20px;
-            background: rgba(234, 186, 239, 0.9);
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.9);
             transition: all 0.3s ease;
         }
 
         .Login>.right-panel>.login-form input:focus,
         .Login>.right-panel>.login-form select:focus {
             outline: none;
-            border-color: #E0AAFF;
-            box-shadow: 0 0 12px rgba(224, 170, 255, 0.5);
+            border-color: #40E0D0;
+            box-shadow: 0 0 12px rgba(64, 224, 208, 0.5);
             background: white;
         }
 
         .Login>.right-panel>.login-form>.login-button {
-            background: linear-gradient(135deg, #7B2CBF 0%, #9D4EDD 100%);
+            background: linear-gradient(135deg, #178582 0%, #40E0D0 100%);
             color: white;
             border: none;
             padding: 14px;
@@ -164,13 +136,13 @@
             border-radius: 8px;
             margin-top: 10px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(157, 78, 221, 0.3);
+            box-shadow: 0 4px 15px rgba(64, 224, 208, 0.3);
         }
 
         .Login>.right-panel>.login-form>.login-button:hover {
-            background: linear-gradient(135deg, #9D4EDD 0%, #C77dFF 100%);
+            background: linear-gradient(135deg, #40E0D0 0%, #7FFFD4 100%);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(157, 78, 221, 0.5);
+            box-shadow: 0 6px 20px rgba(64, 224, 208, 0.5);
         }
 
         .Login>.right-panel>.login-form>.login-button:active {
@@ -182,13 +154,9 @@
 <body>
     <div class="Login">
         <div class="left-panel">
-            <h3>Inversiones</h3>
-            <h1>DUBAI</h1>
-            <div class="logo-placeholder">
-                <!-- Logo Space -->
-            </div>
+            <p class="quote">Al que madruga Dios le da más dinero</p>
             <hr class="separator">
-            <p class="quote">"Tu Oro Vale Más"</p>
+            <img src="../imagenes/arbol.png" alt="Árbol ilustrado" class="tree-image">
         </div>
         <div class="right-panel">
             <h2 class="welcome-text">Bienvenido</h2>
@@ -198,9 +166,6 @@
                 <label for="clave">Clave:</label>
                 <input type="password" id="clave" name="clave">
                 <button type="submit" class="login-button">Ingresar</button>
-                <p id="login-error"
-                    style="color: #ff4d4d; font-size: 23px; margin-top: 10px; text-align: center; display: none; font-weight: bold;">
-                </p>
             </form>
         </div>
     </div>

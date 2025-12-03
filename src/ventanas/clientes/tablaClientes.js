@@ -22,6 +22,8 @@ function CargarTablaClientes(clientes) {
                         <th>Numero</th>
                         <th>Nombres y Apellidos</th>
                         <th>DNI</th>
+                        <th>Dinero</th>
+                        <th>Material</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -31,7 +33,7 @@ function CargarTablaClientes(clientes) {
         clientes.forEach((cliente, index) => {
             let numeroFila = String(index + 1).padStart(2, '0');
             let datosCliente = JSON.stringify(cliente); // Se pasa el objeto cliente directamente
-
+        
             // mensaje de flujo
             console.log("Este es el cliente que se pondra en la tabla: ")
             console.log(datosCliente)
@@ -41,10 +43,12 @@ function CargarTablaClientes(clientes) {
                     <td>${numeroFila}</td>
                     <td class="nombre-usuario">${cliente.Nombres} ${cliente.Apellidos}</td>
                     <td class="cargo-usuario">${cliente.DNI}</td>
+                    <td class="saldo-economico">${cliente.SaldoEconomico}</td>
+                    <td class="saldo-material">${cliente.SaldoMaterial}</td>
                     <td class="opciones">
-                        <button class="BotonOpcion OpcionEditar">✎</button>
-                        <button class="BotonOpcion OpcionEliminar">✖</button>
-                        <button class="BotonOpcion OpcionMostrar">◉</button>
+                        <button class="BotonOpcion OpcionEditar">e</button>
+                        <button class="BotonOpcion OpcionEliminar">-</button>
+                        <button class="BotonOpcion OpcionMostrar">m</button>
                     </td>
                 </tr>
             `;
@@ -79,10 +83,10 @@ function CargarTablaClientes(clientes) {
                 btn.addEventListener("click", function () {
                     let fila = this.closest("tr");
                     let datosCliente = fila.getAttribute("data-info");
-
+                    
                     try {
                         let clienteObjeto = JSON.parse(datosCliente);
-
+                        
                         if (typeof ipcRenderer !== "undefined") {
                             // mensaje de flujo
                             console.log("MENSAJE: enviando un evento de mostrar formulario con el siguiente cliente:")
@@ -104,7 +108,7 @@ function CargarTablaClientes(clientes) {
 
                     try {
                         let clienteObjeto = JSON.parse(datosCliente);
-
+                        
                         if (typeof ipcRenderer !== "undefined") {
                             ipcRenderer.send("EEliminarCliente", clienteObjeto);
                         } else {
