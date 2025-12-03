@@ -712,7 +712,7 @@ select,
 }
 
 .DetallesDiaHeader {
-    background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
+    background: linear-gradient(135deg, #007bff 0%, #178582 100%);
     color: white;
     padding: 20px 30px;
     display: flex;
@@ -765,8 +765,7 @@ select,
     margin-bottom: 0;
 }
 
-.SeccionMovimientos h3 {
-    color: #8B5CF6;
+.SeccionMovimientos h3 {`r`n    color: #007bff;
     margin: 0 0 15px 0;
     font-size: 20px;
     border-bottom: 2px solid #8B5CF6;
@@ -782,8 +781,7 @@ select,
     overflow: hidden;
 }
 
-.SeccionMovimientos th {
-    background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
+.SeccionMovimientos th {`r`n    background: linear-gradient(135deg, #007bff 0%, #178582 100%);
     color: white;
     padding: 12px;
     text-align: left;
@@ -815,21 +813,45 @@ select,
     font-size: 15px;
 }
 
-.BadgeTipo {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
+
+
+/* Estilos para el botón Ver */
+button[Tipo='Ver'] {
+    background: linear-gradient(135deg, #00838f 0%, #006064 100%);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
     font-weight: 600;
+    font-size: 13px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 131, 143, 0.3);
+}
+
+button[Tipo='Ver']:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 131, 143, 0.4);
+    background: linear-gradient(135deg, #0097a7 0%, #00838f 100%);
+}
+
+
+
+/* Badge de Tipo (INGRESO / RETIRO) */
+.BadgeTipo {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
     text-transform: uppercase;
 }
 
 .BadgeTipo.ingreso {
-    background: #D1FAE5;
-    color: #065F46;
+    background-color: #10b981;
+    color: white;
 }
 
 .BadgeTipo.egreso {
-    background: #FEE2E2;
-    color: #991B1B;
+    background-color: #ef4444;
+    color: white;
 }

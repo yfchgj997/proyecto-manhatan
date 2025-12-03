@@ -33,7 +33,7 @@ function GenerarCodigo(datosFiltrados, fechaSeleccionada, CapitalEconomicoEmpres
                 <td>${siguienteCapitalEconomico} S/.</td>
                 <td>${dato.CapitalMaterialInicial} g.</td>
                 <td>${siguienteCapitalMaterial}</td>
-                <td><button IDMovimiento="${dato.IDMovimiento}" Tipo="${dato.Tipo}">Ver</button></td>
+                <td><button class="BotonVerAzul" IDMovimiento="${dato.IDMovimiento}" Tipo="${dato.Tipo}">Ver</button></td>
             </tr>
         `;
     }).join("");
@@ -41,6 +41,21 @@ function GenerarCodigo(datosFiltrados, fechaSeleccionada, CapitalEconomicoEmpres
 
     // Generar código HTML de la tabla
     let NuevoCodigo = `
+            <style>
+                .BotonVerAzul {
+                    background-color: #007bff;
+                    color: white;
+                    border: none;
+                    padding: 6px 12px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-weight: bold;
+                    transition: background-color 0.2s;
+                }
+                .BotonVerAzul:hover {
+                    background-color: #0056b3;
+                }
+            </style>
             <table class="Tabla tabla-cv">
                 <thead>
                     <tr>

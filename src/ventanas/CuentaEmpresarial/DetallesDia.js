@@ -10,13 +10,14 @@ function GenerarTablaMovimientosEconomicos(movimientos) {
     }
 
     let filas = movimientos.map(mov => {
-        const badgeClass = mov.Tipo === 'INGRESO' ? 'ingreso' : 'egreso';
+        const tipoUpper = (mov.Tipo || '').toUpperCase();
+        const badgeClass = tipoUpper === 'INGRESO' ? 'ingreso' : 'egreso';
         return `
             <tr>
                 <td>${mov.Fecha}</td>
                 <td>${mov.Hora || 'N/A'}</td>
                 <td><span class="BadgeTipo ${badgeClass}">${mov.Tipo}</span></td>
-                <td>${mov.ClienteN || 'N/A'}</td>
+                <td>${mov.ClienteN || mov.ClienteNombres || 'N/A'}</td>
                 <td>S/. ${mov.Importe || '0.00'}</td>
                 <td>${mov.Observacion || ''}</td>
             </tr>
@@ -49,13 +50,14 @@ function GenerarTablaMovimientosMateriales(movimientos) {
     }
 
     let filas = movimientos.map(mov => {
-        const badgeClass = mov.Tipo === 'INGRESO' ? 'ingreso' : 'egreso';
+        const tipoUpper = (mov.Tipo || '').toUpperCase();
+        const badgeClass = tipoUpper === 'INGRESO' ? 'ingreso' : 'egreso';
         return `
             <tr>
                 <td>${mov.Fecha}</td>
                 <td>${mov.Hora || 'N/A'}</td>
                 <td><span class="BadgeTipo ${badgeClass}">${mov.Tipo}</span></td>
-                <td>${mov.ClienteN || 'N/A'}</td>
+                <td>${mov.ClienteN || mov.ClienteNombres || 'N/A'}</td>
                 <td>${mov.Peso || '0'} g.</td>
                 <td>${mov.Observacion || ''}</td>
             </tr>
@@ -88,13 +90,14 @@ function GenerarTablaVentasOcasionales(ventas) {
     }
 
     let filas = ventas.map(venta => {
-        const badgeClass = venta.Tipo === 'COMPRA' ? 'ingreso' : 'egreso';
+        const tipoUpper = (venta.Tipo || '').toUpperCase();
+        const badgeClass = (tipoUpper === 'COMPRA' || tipoUpper === 'INGRESO') ? 'ingreso' : 'egreso';
         return `
             <tr>
                 <td>${venta.Fecha}</td>
                 <td>${venta.Hora || 'N/A'}</td>
                 <td><span class="BadgeTipo ${badgeClass}">${venta.Tipo}</span></td>
-                <td>${venta.ClienteN || 'N/A'}</td>
+                <td>${venta.ClienteN || venta.ClienteNombres || venta.Cliente || 'N/A'}</td>
                 <td>${venta.Peso || '0'} g.</td>
                 <td>S/. ${venta.Importe || '0.00'}</td>
             </tr>
@@ -120,6 +123,50 @@ function GenerarTablaVentasOcasionales(ventas) {
     `;
 }
 
+// Función -> generar HTML para movimientos empresariales
+function GenerarTablaMovimientosEmpresariales(movimientos) {
+    if (!movimientos || movimientos.length === 0) {
+        return '<p class="MensajeVacio">No hay movimientos empresariales para esta fecha</p>';
+    }
+
+    let filas = movimientos.map(mov => {
+        return `
+            <tr>
+                <td>${mov.ID}</td>
+                <td>${mov.Fecha}</td>
+                <td>${mov.Hora}</td>
+                <td>${mov.Usuario}</td>
+                <td>${mov.Tipo}</td>
+                <td>${mov.Operacion || ""}</td>
+                <td>${mov.Importe}</td>
+                <td>${mov.Detalle || ""}</td>
+                <td>${mov.CapturaSaldo}</td>
+            </tr>
+        `;
+    }).join('');
+
+    return `
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Usuario</th>
+                    <th>Tipo</th>
+                    <th>Operación</th>
+                    <th>Importe</th>
+                    <th>Detalle</th>
+                    <th>Saldo</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${filas}
+            </tbody>
+        </table>
+    `;
+}
+
 // Función -> generar HTML completo de la ventana modal
 function GenerarVentanaDetalles(datos) {
     console.log("DetallesDia: Generando ventana de detalles con datos:", datos);
@@ -128,26 +175,31 @@ function GenerarVentanaDetalles(datos) {
     const movimientosEconomicos = datos.movimientos.filter(m => m.Registro === "Economico");
     const movimientosMateriales = datos.movimientos.filter(m => m.Registro === "Material");
     const ventasOcasionales = datos.movimientos.filter(m => m.Registro === "VentaOcasional");
+    const movimientosEmpresariales = datos.movimientosEmpresariales || [];
 
     return `
         <div class="DetallesDiaOverlay" id="DetallesDiaOverlay">
             <div class="DetallesDiaContenedor">
                 <div class="DetallesDiaHeader">
-                    <h2>Detalles del Día - ${datos.fecha}</h2>
+                    <h2>Movimientos de ${datos.fecha}</h2>
                     <button class="CerrarDetalles" id="CerrarDetalles">×</button>
                 </div>
                 <div class="DetallesDiaBody">
                     <div class="SeccionMovimientos">
-                        <h3>📊 Movimientos Económicos</h3>
+                        <h3> Movimientos Económicos</h3>
                         ${GenerarTablaMovimientosEconomicos(movimientosEconomicos)}
                     </div>
                     <div class="SeccionMovimientos">
-                        <h3>💎 Movimientos Materiales</h3>
+                        <h3> Movimientos Materiales</h3>
                         ${GenerarTablaMovimientosMateriales(movimientosMateriales)}
                     </div>
                     <div class="SeccionMovimientos">
-                        <h3>🛒 Ventas Ocasionales</h3>
+                        <h3> Ventas Ocasionales</h3>
                         ${GenerarTablaVentasOcasionales(ventasOcasionales)}
+                    </div>
+                    <div class="SeccionMovimientos">
+                        <h3> Movimientos Empresariales</h3>
+                        ${GenerarTablaMovimientosEmpresariales(movimientosEmpresariales)}
                     </div>
                 </div>
             </div>
@@ -167,7 +219,7 @@ function CerrarVentanaDetalles() {
 // Función -> mostrar ventana de detalles
 function MostrarDetallesDia(datos) {
     console.log("DetallesDia: Mostrando detalles del día");
-    
+
     // Guardar datos actuales
     DatosActuales = datos;
 
