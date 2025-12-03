@@ -44,3 +44,35 @@ function CancelarOperacion() {
     console.log("InputCodigoWindow: operación cancelada");
     ipcRenderer.send("ECancelarIngresoCodigo");
 }
+
+// Evento -> mostrar mensaje de verificación
+ipcRenderer.on("EMostrarMensajeVerificacion", (event, datos) => {
+
+    // mensaje de flujo
+    console.log("InputCodigoWindow: mostrando mensaje de verificación")
+    console.log("InputCodigoWindow: tipo:", datos.tipo)
+    console.log("InputCodigoWindow: texto:", datos.texto)
+
+    // Paso -> obtener el elemento del mensaje
+    let mensajeElement = document.getElementById("MensajeVerificacion")
+
+    // Paso -> limpiar clases previas
+    mensajeElement.className = ""
+
+    // Paso -> agregar la clase según el tipo
+    if (datos.tipo === "exito") {
+        mensajeElement.classList.add("exito")
+    } else if (datos.tipo === "error") {
+        mensajeElement.classList.add("error")
+
+        // Paso -> ocultar el mensaje de error después de 3 segundos
+        setTimeout(() => {
+            mensajeElement.className = ""
+            mensajeElement.textContent = ""
+        }, 3000)
+    }
+
+    // Paso -> establecer el texto del mensaje
+    mensajeElement.textContent = datos.texto
+
+})

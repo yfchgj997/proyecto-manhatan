@@ -111,6 +111,29 @@
         .btn-popup:active {
             transform: translateY(0);
         }
+
+        #MensajeVerificacion {
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            display: none;
+            transition: all 0.3s ease;
+        }
+
+        #MensajeVerificacion.exito {
+            background-color: #4caf50;
+            color: white;
+            display: block;
+        }
+
+        #MensajeVerificacion.error {
+            background-color: #f44336;
+            color: white;
+            display: block;
+        }
     </style>
 </head>
 
@@ -133,6 +156,7 @@
             <button id="BtnConfirmar" class="btn-popup">Confirmar</button>
             <button id="BtnCancelar" class="btn-popup">Cancelar</button>
         </div>
+        <div id="MensajeVerificacion"></div>
     </div>
 </body>
 

@@ -1805,8 +1805,8 @@ function SolicitarCodigo() {
 
         // Paso -> crear ventana popup
         InputCodigoWindow = new BrowserWindow({
-            width: 380,
-            height: 320,
+            width: 360,
+            height: 380,
             resizable: false,
             modal: true,
             parent: mainWindow,
@@ -1841,16 +1841,45 @@ ipcMain.on("ECodigoIngresado", (event, codigo) => {
 
     console.log("Main: resultado de verificación:", resultado)
 
-    // Paso -> resolver la promesa con el resultado
-    if (resolverCodigoPromise) {
-        resolverCodigoPromise(resultado.CodigoCorrecto);
-        resolverCodigoPromise = null;
-    }
+    if (resultado.CodigoCorrecto) {
+        // Código correcto
+        console.log("Main: código correcto")
 
-    // Paso -> cerrar popup
-    if (InputCodigoWindow) {
-        InputCodigoWindow.close()
-        InputCodigoWindow = null
+        // Paso -> enviar mensaje de éxito al popup
+        if (InputCodigoWindow) {
+            InputCodigoWindow.webContents.send("EMostrarMensajeVerificacion", {
+                tipo: "exito",
+                texto: "Código correcto"
+            })
+        }
+
+        // Paso -> resolver la promesa con true
+        if (resolverCodigoPromise) {
+            resolverCodigoPromise(true);
+            resolverCodigoPromise = null;
+        }
+
+        // Paso -> cerrar popup después de 1 segundo
+        setTimeout(() => {
+            if (InputCodigoWindow) {
+                InputCodigoWindow.close()
+                InputCodigoWindow = null
+            }
+        }, 1000)
+
+    } else {
+        // Código incorrecto
+        console.log("Main: código incorrecto")
+
+        // Paso -> enviar mensaje de error al popup
+        if (InputCodigoWindow) {
+            InputCodigoWindow.webContents.send("EMostrarMensajeVerificacion", {
+                tipo: "error",
+                texto: "Código incorrecto"
+            })
+        }
+
+        // NO resolver la promesa ni cerrar la ventana, permitir reintentar
     }
 })
 
@@ -1881,8 +1910,8 @@ ipcMain.on("EQuiereCambiarCodigo", (event) => {
 
     // Paso -> crear ventana popup
     CambiarCodigoWindow = new BrowserWindow({
-        width: 400,
-        height: 300,
+        width: 360,
+        height: 380,
         resizable: false,
         modal: true,
         parent: mainWindow,

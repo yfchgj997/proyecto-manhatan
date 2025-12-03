@@ -61,6 +61,12 @@ ipcRenderer.on("EMostrarMensajeCambio", (event, datos) => {
         mensajeElement.classList.add("exito")
     } else if (datos.tipo === "error") {
         mensajeElement.classList.add("error")
+
+        // Paso -> ocultar el mensaje de error después de 3 segundos
+        setTimeout(() => {
+            mensajeElement.className = ""
+            mensajeElement.textContent = ""
+        }, 3000)
     }
 
     // Paso -> establecer el texto del mensaje
