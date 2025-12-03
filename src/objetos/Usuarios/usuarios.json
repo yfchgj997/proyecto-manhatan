@@ -1,54 +1,6 @@
 {
-    "Contador": 24,
+    "Contador": 25,
     "Elementos": [
-        {
-            "Nombres": "Admin",
-            "Apellidos": "Principal",
-            "Contrasena": "admin123",
-            "Rol": "Administrador",
-            "Estado": "Activo",
-            "ID": 1
-        },
-        {
-            "Nombres": "Usuario Cajero",
-            "Apellidos": "Normal",
-            "Contrasena": "user123",
-            "Rol": "Cajero",
-            "Estado": "Activo",
-            "ID": 2
-        },
-        {
-            "Nombres": "Berning",
-            "Apellidos": "Pari",
-            "Contrasena": "7374",
-            "Rol": "Administrador",
-            "Estado": "Activo",
-            "ID": 3
-        },
-        {
-            "Nombres": "cambio echo por una IA",
-            "Apellidos": "no se",
-            "Contrasena": "321",
-            "Rol": "Cajero",
-            "Estado": "Activo",
-            "ID": 4
-        },
-        {
-            "Nombres": "wef",
-            "Apellidos": "wefw",
-            "Contrasena": "1234",
-            "Rol": "Administrador",
-            "Estado": "Inactivo",
-            "ID": 19
-        },
-        {
-            "Nombres": "hjhffhggug",
-            "Apellidos": "gyvugv",
-            "Contrasena": "4521",
-            "Rol": "Administrador",
-            "Estado": "Activo",
-            "ID": 21
-        },
         {
             "Nombres": "BERNARDO ",
             "Apellidos": "",
@@ -64,6 +16,14 @@
             "Rol": "Cajero",
             "Estado": "Activo",
             "ID": 24
+        },
+        {
+            "Nombres": "BER",
+            "Apellidos": "BER",
+            "Contrasena": "BER",
+            "Rol": "Cajero",
+            "Estado": "Activo",
+            "ID": 25
         }
     ]
 }
