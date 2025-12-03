@@ -1,5 +1,5 @@
 {
-    "Contador": 1,
+    "Contador": 4,
     "Elementos": [
         {
             "Nombres": "ASD",
@@ -9,6 +9,33 @@
             "SaldoMaterial": "0.00",
             "FechaIngreso": "2025-11-30",
             "ID": 1
+        },
+        {
+            "Nombres": "K",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2025-12-02",
+            "ID": 2
+        },
+        {
+            "Nombres": "O",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2025-12-02",
+            "ID": 3
+        },
+        {
+            "Nombres": "U",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2025-12-02",
+            "ID": 4
         }
     ]
 }

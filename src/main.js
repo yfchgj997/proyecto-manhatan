@@ -71,6 +71,8 @@ let loginWindow
 let respuesta
 let SelectUserWindow
 let InputMontoWindow
+let InputCodigoWindow
+let CambiarCodigoWindow
 
 // ====================================================================================================
 // FUNCIÓN AUXILIAR PARA VALIDAR PRIVILEGIOS
@@ -318,7 +320,7 @@ ipcMain.on("EFiltrarListaCV", (event, datos) => {
 });
 
 // Evento -> eliminar compra venta
-ipcMain.on("EEliminarCV", (event, datosCompraVenta) => {
+ipcMain.on("EEliminarCV", async (event, datosCompraVenta) => {
 
     // Paso -> Validar privilegio
     if (!validarPrivilegio("compraVenta", "eliminar", event)) {
@@ -328,6 +330,18 @@ ipcMain.on("EEliminarCV", (event, datosCompraVenta) => {
     // mensaje de flujo
     console.log("MENSAJE: eliminando compra venta, estos son los datos:")
     console.log(datosCompraVenta)
+
+    // Paso -> solicitar código de seguridad
+    let codigoCorrecto = await SolicitarCodigo();
+
+    if (!codigoCorrecto) {
+        console.log("Main: código incorrecto o cancelado, no se eliminará la compra venta");
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "Código incorrecto. La compra venta no se eliminó"
+        });
+        return; // Detener la ejecución
+    }
 
     // Paso -> eliminar en la base de datos el cliente
     respuesta = BDrespaldo.EliminarCompraVenta(datosCompraVenta)
@@ -800,7 +814,7 @@ ipcMain.on("EGuardarNuevoCliente", (event, Cliente) => {
 })
 
 // Evento -> eliminar un cliente
-ipcMain.on("EEliminarCliente", (event, Cliente) => {
+ipcMain.on("EEliminarCliente", async (event, Cliente) => {
 
     // Paso -> Validar privilegio
     if (!validarPrivilegio("clientes", "eliminar", event)) {
@@ -811,56 +825,52 @@ ipcMain.on("EEliminarCliente", (event, Cliente) => {
     console.log("Main: Se eliminara el siguiente cliente:");
     console.log(Cliente);
 
-    // Mostrar una ventana de confirmación
-    const opciones = {
-        type: "question",
-        buttons: ["Cancelar", "Aceptar"],
-        defaultId: 0,
-        title: "Confirmación",
-        message: `¿Estás seguro de que deseas eliminar al cliente ${Cliente.Nombres} ${Cliente.Apellidos}?`,
-    };
+    // Paso -> solicitar código de seguridad
+    let codigoCorrecto = await SolicitarCodigo();
 
-    const respuesta = dialog.showMessageBoxSync(null, opciones);
-    if (respuesta === 1) {
+    if (!codigoCorrecto) {
+        console.log("Main: código incorrecto o cancelado, no se eliminará el cliente");
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "Código incorrecto. El cliente no se eliminó"
+        });
+        return; // Detener la ejecución
+    }
 
-        console.log("Main: Se ha confirmado su decision");
+    console.log("Main: Se ha confirmado su decision");
 
-        // Paso -> eliminar cliente
-        let Respuesta = BDrespaldo.EliminarCliente(Cliente.ID)
-        // Paso -> mostrar mensaje al usuario
-        if (Respuesta.error == false) {// se guardo sin errores
+    // Paso -> eliminar cliente
+    let Respuesta = BDrespaldo.EliminarCliente(Cliente.ID)
+    // Paso -> mostrar mensaje al usuario
+    if (Respuesta.error == false) {// se guardo sin errores
 
-            // mensaje de flujo
-            console.log("Main: el cliente se elimino sin errores")
+        // mensaje de flujo
+        console.log("Main: el cliente se elimino sin errores")
 
-            // Paso -> mostrar el mensaje en la ventana
-            event.sender.send("ModificarMensaje", {
-                tipo: "MensajeBueno",
-                texto: "El cliente se elimino correctamente"
-            });
+        // Paso -> mostrar el mensaje en la ventana
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeBueno",
+            texto: "El cliente se elimino correctamente"
+        });
 
-            // Paso -> actualizar la tabla de clientes en la ventana
-            let res = BDrespaldo.ObtenerTablaClientes()
-            event.sender.send("ActualizarTablaClientes", res.ListaDeClientes)
+        // Paso -> actualizar la tabla de clientes en la ventana
+        let res = BDrespaldo.ObtenerTablaClientes()
+        event.sender.send("ActualizarTablaClientes", res.ListaDeClientes)
 
-        } else {// no se pudo guardar
+    } else {// no se pudo guardar
 
-            // mensaje de flujo
-            console.log("Main: el cliente no se pudo eliminar")
+        // mensaje de flujo
+        console.log("Main: el cliente no se pudo eliminar")
 
-            // Paso -> mostrar el mensaje en la ventana
-            event.sender.send("ModificarMensaje", {
-                tipo: "MensajeMalo",
-                texto: "Hubo un error al eliminar al cliente"
-            });
-        }
-
-    } else {
-        console.log("Main: no se ha confirmado su decision");
+        // Paso -> mostrar el mensaje en la ventana
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "Hubo un error al eliminar al cliente"
+        });
     }
 });
 
-ipcMain.on("EEditarCliente", (event, cliente) => {
+ipcMain.on("EEditarCliente", async (event, cliente) => {
 
     // Paso -> Validar privilegio
     if (!validarPrivilegio("clientes", "editar", event)) {
@@ -870,6 +880,18 @@ ipcMain.on("EEditarCliente", (event, cliente) => {
     // mensaje de flujo
     console.log("Main: editando los datos de este cliente: ")
     console.log(cliente)
+
+    // Paso -> solicitar código de seguridad
+    let codigoCorrecto = await SolicitarCodigo();
+
+    if (!codigoCorrecto) {
+        console.log("Main: código incorrecto o cancelado, no se editará el cliente");
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "Código incorrecto. El cliente no se editó"
+        });
+        return; // Detener la ejecución
+    }
 
     // Paso -> editar los datos en la base de datos
     let Respuesta = BDrespaldo.EditarCliente(cliente)
@@ -1064,7 +1086,7 @@ ipcMain.on("EGuardarNuevoMovimiento", (event, Movimiento) => {
     }
 })
 
-ipcMain.on("EEliminarMovimiento", (event, Movimiento) => {
+ipcMain.on("EEliminarMovimiento", async (event, Movimiento) => {
 
     // Paso -> Validar privilegio
     if (!validarPrivilegio("movimientosEconomicos", "eliminar", event)) {
@@ -1075,42 +1097,40 @@ ipcMain.on("EEliminarMovimiento", (event, Movimiento) => {
     console.log("Main: eliminando un movimiento, este es el movimiento:")
     console.log(Movimiento)
 
-    // Paso -> mostrar la ventana de confirmacion
-    const opciones = {
-        type: "question",
-        buttons: ["Cancelar", "Aceptar"],
-        defaultId: 0,
-        title: "Confirmación",
-        message: `¿Estás seguro de que deseas eliminar el movimiento?`,
-    };
-    const respuesta = dialog.showMessageBoxSync(null, opciones);
+    // Paso -> solicitar código de seguridad
+    let codigoCorrecto = await SolicitarCodigo();
 
-    if (respuesta === 1) {
-        console.log("Main: la decision fue confirmada");
+    if (!codigoCorrecto) {
+        console.log("Main: código incorrecto o cancelado, no se eliminará el movimiento");
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "Código incorrecto. El movimiento no se eliminó"
+        });
+        return; // Detener la ejecución
+    }
 
-        let Respuesta = BDrespaldo.EliminarMovimiento(Movimiento.ID)
-        if (Respuesta.error == true) {
-            // Paso -> actualizar el mensaje
-            event.sender.send("ModificarMensaje", {
-                tipo: "MensajeMalo",
-                texto: "El movimiento no se pudo eliminar"
-            });
-        } else {
-            // Paso -> actualizar el mensaje
-            event.sender.send("ModificarMensaje", {
-                tipo: "MensajeBueno",
-                texto: "El movimiento si se pudo eliminar"
-            });
-            // Paso -> actualizar la tabla de clientes en la ventana
-            let fecha = ObtenerFecha()
-            let Respuesta = BDrespaldo.ObtenerTablaMovimientos(fecha, fecha)
-            if (Respuesta.error == false) {
-                // Paso -> actualizar tabla
-                event.sender.send("ActualizarTablaMovimientos", Respuesta.ListaMovimentosEconomicos)
-            }
-        }
+    console.log("Main: la decision fue confirmada");
+
+    let Respuesta = BDrespaldo.EliminarMovimiento(Movimiento.ID)
+    if (Respuesta.error == true) {
+        // Paso -> actualizar el mensaje
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "El movimiento no se pudo eliminar"
+        });
     } else {
-        console.log("Main: no se confirmo la decision");
+        // Paso -> actualizar el mensaje
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeBueno",
+            texto: "El movimiento si se pudo eliminar"
+        });
+        // Paso -> actualizar la tabla de clientes en la ventana
+        let fecha = ObtenerFecha()
+        let Respuesta = BDrespaldo.ObtenerTablaMovimientos(fecha, fecha)
+        if (Respuesta.error == false) {
+            // Paso -> actualizar tabla
+            event.sender.send("ActualizarTablaMovimientos", Respuesta.ListaMovimentosEconomicos)
+        }
     }
 })
 
@@ -1461,7 +1481,7 @@ ipcMain.on("EGuardarNuevoUsuario", (event, Usuario) => {
     }
 })
 
-ipcMain.on("EEliminarUsuario", (event, Usuario) => {
+ipcMain.on("EEliminarUsuario", async (event, Usuario) => {
 
     // Paso -> Validar privilegio
     if (!validarPrivilegio("usuarios", "eliminar", event)) {
@@ -1472,37 +1492,34 @@ ipcMain.on("EEliminarUsuario", (event, Usuario) => {
     console.log("MENSAJE: Se eliminara un usuario, los datos son:");
     console.log(Usuario);
 
-    // Mostrar una ventana de confirmación
-    const opciones = {
-        type: "question",
-        buttons: ["Cancelar", "Aceptar"],
-        defaultId: 0,
-        title: "Confirmación",
-        message: `¿Estás seguro de que deseas eliminar al usuario ${Usuario.Nombres} ${Usuario.Apellidos}?`,
-    };
+    // Paso -> solicitar código de seguridad
+    let codigoCorrecto = await SolicitarCodigo();
 
-    const respuesta = dialog.showMessageBoxSync(null, opciones);
-
-    if (respuesta === 1) {
-        console.log("Eliminando usuario...");
-
-        // Paso -> eliminar usuario
-        BDrespaldo.EliminarUsuario(Usuario.ID)
-
-        // Paso -> actualizar la tabla de clientes en la ventana
-        let usuarios = BDrespaldo.ObtenerTablaUsuarios()
-        event.sender.send("ActualizarTablaUsuarios", usuarios)
-
-        // Paso -> actualizar el mensaje
+    if (!codigoCorrecto) {
+        console.log("Main: código incorrecto o cancelado, no se eliminará el usuario");
         event.sender.send("ModificarMensaje", {
-            tipo: "MensajeBueno",
-            texto: "El usuario se elimino correctamente"
+            tipo: "MensajeMalo",
+            texto: "Código incorrecto. El usuario no se eliminó"
         });
-
-        // Aquí puedes agregar la lógica para eliminar el cliente del archivo o la base de datos
-    } else {
-        console.log("La eliminación del usuario ha sido cancelada.");
+        return; // Detener la ejecución
     }
+
+    console.log("Eliminando usuario...");
+
+    // Paso -> eliminar usuario
+    BDrespaldo.EliminarUsuario(Usuario.ID)
+
+    // Paso -> actualizar la tabla de clientes en la ventana
+    let usuarios = BDrespaldo.ObtenerTablaUsuarios()
+    event.sender.send("ActualizarTablaUsuarios", usuarios)
+
+    // Paso -> actualizar el mensaje
+    event.sender.send("ModificarMensaje", {
+        tipo: "MensajeBueno",
+        texto: "El usuario se elimino correctamente"
+    });
+
+    // Aquí puedes agregar la lógica para eliminar el cliente del archivo o la base de datos
 });
 
 // Evento -> mostrar formulario editar usuario
@@ -1517,7 +1534,7 @@ ipcMain.on("EQuiereFormularioEditarUsuario", (event, usuario) => {
 
 })
 
-ipcMain.on("EEditarUsuario", (event, usuario) => {
+ipcMain.on("EEditarUsuario", async (event, usuario) => {
 
     // Paso -> Validar privilegio
     if (!validarPrivilegio("usuarios", "editar", event)) {
@@ -1527,6 +1544,18 @@ ipcMain.on("EEditarUsuario", (event, usuario) => {
     // mensaje de flujo
     console.log("MENSAJE: editando los datos de este usuario: ")
     console.log(usuario)
+
+    // Paso -> solicitar código de seguridad
+    let codigoCorrecto = await SolicitarCodigo();
+
+    if (!codigoCorrecto) {
+        console.log("Main: código incorrecto o cancelado, no se editará el usuario");
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "Código incorrecto. El usuario no se editó"
+        });
+        return; // Detener la ejecución
+    }
 
     // Paso -> editar los datos en la base de datos
     BDrespaldo.EditarUsuario(usuario)
@@ -1712,7 +1741,7 @@ ipcMain.on("EFiltrarMovimientosMateriales", (event, datos) => {
     }
 })
 
-ipcMain.on("EEliminarMovimientoMaterial", (event, Movimiento) => {
+ipcMain.on("EEliminarMovimientoMaterial", async (event, Movimiento) => {
 
     // Paso -> Validar privilegio
     if (!validarPrivilegio("movimientosMateriales", "eliminar", event)) {
@@ -1723,42 +1752,243 @@ ipcMain.on("EEliminarMovimientoMaterial", (event, Movimiento) => {
     console.log("Main: eliminando un movimiento material, este es el movimiento:")
     console.log(Movimiento)
 
-    // Paso -> mostrar la ventana de confirmacion
-    const opciones = {
-        type: "question",
-        buttons: ["Cancelar", "Aceptar"],
-        defaultId: 0,
-        title: "Confirmación",
-        message: `¿Estás seguro de que deseas eliminar el movimiento?`,
-    };
-    const respuesta = dialog.showMessageBoxSync(null, opciones);
+    // Paso -> solicitar código de seguridad
+    let codigoCorrecto = await SolicitarCodigo();
 
-    if (respuesta === 1) {
-        console.log("Main: la decision fue confirmada");
+    if (!codigoCorrecto) {
+        console.log("Main: código incorrecto o cancelado, no se eliminará el movimiento");
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "Código incorrecto. El movimiento no se eliminó"
+        });
+        return; // Detener la ejecución
+    }
 
-        let Respuesta = BDrespaldo.EliminarMovimientoMaterial(Movimiento.ID)
-        if (Respuesta.error == true) {
-            // Paso -> actualizar el mensaje
-            event.sender.send("ModificarMensaje", {
-                tipo: "MensajeMalo",
-                texto: "El movimiento no se pudo eliminar"
-            });
-        } else {
-            // Paso -> actualizar el mensaje
-            event.sender.send("ModificarMensaje", {
-                tipo: "MensajeBueno",
-                texto: "El movimiento si se pudo eliminar"
-            });
-            // Paso -> actualizar la tabla de clientes en la ventana
-            let fecha = ObtenerFecha()
-            let Respuesta = BDrespaldo.ObtenerTablaMovimientosMateriales(fecha, fecha)
-            if (Respuesta.error == false) {
-                // Paso -> actualizar tabla
-                event.sender.send("ActualizarTablaMovimientosMateriales", Respuesta.ListaMovimientosMateriales)
+    console.log("Main: código correcto, procediendo a eliminar");
+
+    let Respuesta = BDrespaldo.EliminarMovimientoMaterial(Movimiento.ID)
+    if (Respuesta.error == true) {
+        // Paso -> actualizar el mensaje
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "El movimiento no se pudo eliminar"
+        });
+    } else {
+        // Paso -> actualizar el mensaje
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeBueno",
+            texto: "El movimiento si se pudo eliminar"
+        });
+        // Paso -> actualizar la tabla de clientes en la ventana
+        let fecha = ObtenerFecha()
+        let Respuesta = BDrespaldo.ObtenerTablaMovimientosMateriales(fecha, fecha)
+        if (Respuesta.error == false) {
+            // Paso -> actualizar tabla
+            event.sender.send("ActualizarTablaMovimientosMateriales", Respuesta.ListaMovimientosMateriales)
+        }
+    }
+})
+
+// ------------------------------------ VERIFICAR CODIGO DE SEGURIDAD --------------------------------------
+
+// Variable para resolver la promesa de verificación de código
+let resolverCodigoPromise = null;
+
+// Función -> solicitar código de seguridad (retorna Promise con true/false)
+function SolicitarCodigo() {
+    return new Promise((resolve) => {
+        // Guardar la función resolve para usarla cuando se ingrese el código
+        resolverCodigoPromise = resolve;
+
+        // mensaje de flujo
+        console.log("Main: abriendo ventana para solicitar código de seguridad")
+
+        // Paso -> crear ventana popup
+        InputCodigoWindow = new BrowserWindow({
+            width: 360,
+            height: 380,
+            resizable: false,
+            modal: true,
+            parent: mainWindow,
+            webPreferences: {
+                nodeIntegration: true,
+                contextIsolation: false
             }
+        });
+        InputCodigoWindow.loadFile("./src/componentes/InputCodigoWindow.html")
+        InputCodigoWindow.removeMenu();
+
+        // Manejar el cierre de la ventana sin confirmar (cancelar con X)
+        InputCodigoWindow.on('closed', () => {
+            if (resolverCodigoPromise) {
+                resolverCodigoPromise(false);
+                resolverCodigoPromise = null;
+            }
+            InputCodigoWindow = null;
+        });
+    });
+}
+
+// Evento -> recibir código ingresado desde popup
+ipcMain.on("ECodigoIngresado", (event, codigo) => {
+
+    // mensaje de flujo
+    console.log("Main: verificando código")
+    console.log("Main: este es el código:", codigo)
+
+    // Paso -> verificar el código usando BDrespaldo
+    let resultado = BDrespaldo.VerificarCodigo(codigo);
+
+    console.log("Main: resultado de verificación:", resultado)
+
+    if (resultado.CodigoCorrecto) {
+        // Código correcto
+        console.log("Main: código correcto")
+
+        // Paso -> enviar mensaje de éxito al popup
+        if (InputCodigoWindow) {
+            InputCodigoWindow.webContents.send("EMostrarMensajeVerificacion", {
+                tipo: "exito",
+                texto: "Código correcto"
+            })
+        }
+
+        // Paso -> resolver la promesa con true
+        if (resolverCodigoPromise) {
+            resolverCodigoPromise(true);
+            resolverCodigoPromise = null;
+        }
+
+        // Paso -> cerrar popup después de 1 segundo
+        setTimeout(() => {
+            if (InputCodigoWindow) {
+                InputCodigoWindow.close()
+                InputCodigoWindow = null
+            }
+        }, 1000)
+
+    } else {
+        // Código incorrecto
+        console.log("Main: código incorrecto")
+
+        // Paso -> enviar mensaje de error al popup
+        if (InputCodigoWindow) {
+            InputCodigoWindow.webContents.send("EMostrarMensajeVerificacion", {
+                tipo: "error",
+                texto: "Código incorrecto"
+            })
+        }
+
+        // NO resolver la promesa ni cerrar la ventana, permitir reintentar
+    }
+})
+
+// Evento -> cancelar ingreso de código
+ipcMain.on("ECancelarIngresoCodigo", (event) => {
+    console.log("Main: cancelando ingreso de código")
+
+    // Paso -> resolver la promesa con false
+    if (resolverCodigoPromise) {
+        resolverCodigoPromise(false);
+        resolverCodigoPromise = null;
+    }
+
+    // Paso -> cerrar popup
+    if (InputCodigoWindow) {
+        InputCodigoWindow.close()
+        InputCodigoWindow = null
+    }
+})
+
+// ------------------------------------ CAMBIAR CODIGO DE SEGURIDAD --------------------------------------
+
+// Evento -> quiere cambiar codigo
+ipcMain.on("EQuiereCambiarCodigo", (event) => {
+
+    // mensaje de flujo
+    console.log("Main: abriendo ventana para cambiar codigo de seguridad")
+
+    // Paso -> crear ventana popup
+    CambiarCodigoWindow = new BrowserWindow({
+        width: 360,
+        height: 380,
+        resizable: false,
+        modal: true,
+        parent: mainWindow,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    CambiarCodigoWindow.loadFile("./src/componentes/CambiarCodigoWindow.html")
+    CambiarCodigoWindow.removeMenu();
+})
+
+// Evento -> recibir nuevo codigo desde popup
+ipcMain.on("ECambiarCodigo", async (event, NuevoCodigo) => {
+
+    // mensaje de flujo
+    console.log("Main: cambiando codigo de seguridad")
+    console.log("Main: este es el nuevo codigo:", NuevoCodigo)
+
+    // Paso -> solicitar código de seguridad para verificar
+    let codigoCorrecto = await SolicitarCodigo();
+
+    if (!codigoCorrecto) {
+        console.log("Main: no se pudo cambiar por ahora")
+
+        // Paso -> enviar mensaje de error al popup
+        if (CambiarCodigoWindow) {
+            CambiarCodigoWindow.webContents.send("EMostrarMensajeCambio", {
+                tipo: "error",
+                texto: "Código de verificación incorrecto"
+            })
+        }
+        return; // Detener la ejecución
+    }
+
+    // Paso -> cambiar el código usando BDrespaldo
+    let Respuesta = BDrespaldo.ModificarCodigo(NuevoCodigo);
+
+    if (Respuesta.Error == true) {
+        console.log("Main: no se pudo guardar el nuevo código")
+
+        // Paso -> enviar mensaje de error al popup
+        if (CambiarCodigoWindow) {
+            CambiarCodigoWindow.webContents.send("EMostrarMensajeCambio", {
+                tipo: "error",
+                texto: "No se pudo guardar el nuevo código"
+            })
         }
     } else {
-        console.log("Main: no se confirmo la decision");
+        console.log("Main: código cambiado exitosamente")
+
+        // Paso -> enviar mensaje de éxito al popup
+        if (CambiarCodigoWindow) {
+            CambiarCodigoWindow.webContents.send("EMostrarMensajeCambio", {
+                tipo: "exito",
+                texto: "Código cambiado correctamente"
+            })
+        }
+
+        // Paso -> cerrar popup después de 1.5 segundos
+        setTimeout(() => {
+            if (CambiarCodigoWindow) {
+                CambiarCodigoWindow.close()
+                CambiarCodigoWindow = null
+            }
+        }, 1500)
+    }
+})
+
+// Evento -> cancelar cambio de codigo
+ipcMain.on("ECancelarCambioCodigo", (event) => {
+    console.log("Main: cancelando cambio de codigo")
+
+    // Paso -> cerrar popup
+    if (CambiarCodigoWindow) {
+        CambiarCodigoWindow.close()
+        CambiarCodigoWindow = null
     }
 })
 
