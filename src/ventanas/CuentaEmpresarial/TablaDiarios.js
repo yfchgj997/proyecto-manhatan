@@ -41,21 +41,7 @@ function GenerarCodigo(datosFiltrados, fechaSeleccionada, CapitalEconomicoEmpres
 
     // Generar código HTML de la tabla
     let NuevoCodigo = `
-            <style>
-                .BotonVerAzul {
-                    background-color: #007bff;
-                    color: white;
-                    border: none;
-                    padding: 6px 12px;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    font-weight: bold;
-                    transition: background-color 0.2s;
-                }
-                .BotonVerAzul:hover {
-                    background-color: #0056b3;
-                }
-            </style>
+
             <table class="Tabla tabla-cv">
                 <thead>
                     <tr>

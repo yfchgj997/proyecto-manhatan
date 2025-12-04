@@ -182,7 +182,12 @@ function GenerarVentanaDetalles(datos) {
             <div class="DetallesDiaContenedor">
                 <div class="DetallesDiaHeader">
                     <h2>Movimientos de ${datos.fecha}</h2>
-                    <button class="CerrarDetalles" id="CerrarDetalles">×</button>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="BotonDescargar" id="BotonDescargarExcel">
+                            Descargar Excel
+                        </button>
+                        <button class="CerrarDetalles" id="CerrarDetalles">×</button>
+                    </div>
                 </div>
                 <div class="DetallesDiaBody">
                     <div class="SeccionMovimientos">
@@ -240,6 +245,14 @@ function MostrarDetallesDia(datos) {
 
     if (botonCerrar) {
         botonCerrar.addEventListener('click', CerrarVentanaDetalles);
+    }
+
+    const botonDescargar = document.getElementById("BotonDescargarExcel");
+    if (botonDescargar) {
+        botonDescargar.addEventListener('click', () => {
+            console.log("Solicitando exportación de Excel...");
+            ipcRenderer.send("EExportarDetallesDia", datos);
+        });
     }
 
     if (overlay) {
