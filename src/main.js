@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+﻿const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
 const xlsx = require("xlsx");
 const shell = require("electron").shell;
@@ -2028,8 +2028,170 @@ ipcMain.on("ECancelarCambioCodigo", (event) => {
 })
 
 
+// Evento -> ver detalles del día
+ipcMain.on('EQuiereVerDetallesDia', (event, datos) => {
+    console.log('Main: se llamó al evento ver detalles del día');
+    console.log('Main: fecha:', datos.fecha);
+
+    // 1. Obtener movimientos económicos, materiales y ventas ocasionales
+    let Respuesta = BDrespaldo.ObtenerMovimientoMaterialEconomico(datos.fecha, datos.fecha, null);
+
+    // 2. Obtener movimientos empresariales
+    let RespuestaEmpresariales = MovimientoEmpresarial.ObtenerMovimientos();
+    let movimientosEmpresarialesFiltrados = [];
+
+    if (RespuestaEmpresariales.error === false) {
+        // Filtrar por fecha
+        movimientosEmpresarialesFiltrados = RespuestaEmpresariales.Elementos.filter(m => m.Fecha === datos.fecha);
+    }
+
+    if (Respuesta.error === false) {
+        let datosDetalles = {
+            fecha: datos.fecha,
+            movimientos: Respuesta.ListaCombinadaResultante || [],
+            movimientosEmpresariales: movimientosEmpresarialesFiltrados || []
+        };
+        console.log('Main: Se encontraron ' + datosDetalles.movimientos.length + ' movimientos generales');
+        console.log('Main: Se encontraron ' + datosDetalles.movimientosEmpresariales.length + ' movimientos empresariales');
+        event.sender.send('EMostrarDetallesDia', datosDetalles);
+    } else {
+        console.error('Main: Error al obtener los movimientos');
+        event.sender.send('EMostrarDetallesDia', {
+            fecha: datos.fecha,
+            movimientos: [],
+            movimientosEmpresariales: []
+        });
+    }
+});
+
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
         app.quit();
     }
 });
+
+
+
+// Evento -> Exportar Detalles del Día a Excel
+ipcMain.on("EExportarDetallesDia", (event, datos) => {
+    console.log("Main: Exportando detalles del día a Excel", datos.fecha);
+
+    const carpetaDescargas = app.getPath("downloads");
+    let nombreArchivo = `Reporte_Diario_${datos.fecha}.xlsx`;
+    let rutaArchivo = path.join(carpetaDescargas, nombreArchivo);
+    let contador = 1;
+
+    while (fs.existsSync(rutaArchivo)) {
+        nombreArchivo = `Reporte_Diario_${datos.fecha} (${contador}).xlsx`;
+        rutaArchivo = path.join(carpetaDescargas, nombreArchivo);
+        contador++;
+    }
+
+    try {
+        const workbook = new ExcelJS.Workbook();
+
+        // Estilo para encabezados
+        const headerStyle = (cell) => {
+            cell.font = { bold: true };
+            cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFFF00" } };
+            cell.alignment = { horizontal: "center" };
+        };
+
+        // Función helper para crear hojas
+        const crearHoja = (nombre, columnas, data) => {
+            if (!data || data.length === 0) return;
+            const ws = workbook.addWorksheet(nombre);
+            ws.columns = columnas;
+
+            data.forEach(item => {
+                ws.addRow(item);
+            });
+
+            ws.getRow(1).eachCell(headerStyle);
+        };
+
+        // 1. Movimientos Económicos
+        const movEconomicos = datos.movimientos.filter(m => m.Registro === "Economico");
+        console.log("Exportar Excel: Encontrados " + movEconomicos.length + " movimientos económicos");
+
+        crearHoja("Economicos", [
+            { header: "Fecha", key: "Fecha", width: 15 },
+            { header: "Hora", key: "Hora", width: 10 },
+            { header: "Tipo", key: "Tipo", width: 15 },
+            { header: "Cliente", key: "ClienteNombres", width: 30 }, // Usando ClienteNombres o ClienteN
+            { header: "Importe", key: "Importe", width: 15 },
+            { header: "Observación", key: "Observacion", width: 40 }
+        ], movEconomicos.map(m => ({
+            ...m,
+            ClienteNombres: m.ClienteN || m.ClienteNombres, // Normalizar
+            Importe: parseFloat(m.Importe || 0) // Asegurar que sea número
+        })));
+
+        // 2. Movimientos Materiales
+        const movMateriales = datos.movimientos.filter(m => m.Registro === "Material");
+        console.log("Exportar Excel: Encontrados " + movMateriales.length + " movimientos materiales");
+
+        crearHoja("Materiales", [
+            { header: "Fecha", key: "Fecha", width: 15 },
+            { header: "Hora", key: "Hora", width: 10 },
+            { header: "Tipo", key: "Tipo", width: 15 },
+            { header: "Cliente", key: "ClienteNombres", width: 30 },
+            { header: "Peso", key: "Peso", width: 15 },
+            { header: "Observación", key: "Observacion", width: 40 }
+        ], movMateriales.map(m => ({
+            ...m,
+            ClienteNombres: m.ClienteN || m.ClienteNombres,
+            Peso: (m.Peso || '0') + ' g.' // Formato "0 g."
+        })));
+
+        // 3. Ventas Ocasionales
+        const ventasOcasionales = datos.movimientos.filter(m => m.Registro === "VentaOcasional");
+        console.log("Exportar Excel: Encontrados " + ventasOcasionales.length + " ventas ocasionales");
+
+        crearHoja("Ventas Ocasionales", [
+            { header: "Fecha", key: "Fecha", width: 15 },
+            { header: "Hora", key: "Hora", width: 10 },
+            { header: "Tipo", key: "Tipo", width: 15 },
+            { header: "Cliente", key: "Cliente", width: 30 },
+            { header: "Peso", key: "Peso", width: 15 },
+            { header: "Importe", key: "Importe", width: 15 }
+        ], ventasOcasionales.map(m => ({
+            ...m,
+            Cliente: m.ClienteN || m.ClienteNombres || m.Cliente,
+            Peso: (m.Peso || '0') + ' g.', // Formato "0 g."
+            Importe: parseFloat(m.Importe || 0)
+        })));
+
+        // 4. Movimientos Empresariales
+        const movEmpresariales = datos.movimientosEmpresariales || [];
+        console.log("Exportar Excel: Encontrados " + movEmpresariales.length + " movimientos empresariales");
+
+        crearHoja("Empresariales", [
+            { header: "ID", key: "ID", width: 10 },
+            { header: "Fecha", key: "Fecha", width: 15 },
+            { header: "Hora", key: "Hora", width: 10 },
+            { header: "Usuario", key: "Usuario", width: 20 },
+            { header: "Tipo", key: "Tipo", width: 15 },
+            { header: "Operación", key: "Operacion", width: 15 },
+            { header: "Importe", key: "Importe", width: 15 },
+            { header: "Detalle", key: "Detalle", width: 30 },
+            { header: "Saldo", key: "CapturaSaldo", width: 15 }
+        ], movEmpresariales);
+
+        workbook.xlsx.writeFile(rutaArchivo).then(() => {
+            shell.openPath(rutaArchivo);
+            event.sender.send("ModificarMensaje", {
+                tipo: "MensajeBueno",
+                texto: `Reporte generado: ${nombreArchivo}`
+            });
+        });
+
+    } catch (error) {
+        console.error("Error generando Excel:", error);
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "Error al generar el reporte Excel"
+        });
+    }
+});
+

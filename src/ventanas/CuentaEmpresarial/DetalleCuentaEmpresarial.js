@@ -1,4 +1,5 @@
 const { ipcRenderer } = require("electron")
+const DetallesDia = require("./DetallesDia.js")
 
 // Variables
 
