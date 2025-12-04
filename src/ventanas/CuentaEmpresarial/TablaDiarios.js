@@ -33,7 +33,7 @@ function GenerarCodigo(datosFiltrados, fechaSeleccionada, CapitalEconomicoEmpres
                 <td>${siguienteCapitalEconomico} S/.</td>
                 <td>${dato.CapitalMaterialInicial} g.</td>
                 <td>${siguienteCapitalMaterial}</td>
-                <td><button IDMovimiento="${dato.IDMovimiento}" Tipo="${dato.Tipo}">Ver</button></td>
+                <td><button class="BotonVerAzul" IDMovimiento="${dato.IDMovimiento}" Tipo="${dato.Tipo}">Ver</button></td>
             </tr>
         `;
     }).join("");
@@ -41,6 +41,7 @@ function GenerarCodigo(datosFiltrados, fechaSeleccionada, CapitalEconomicoEmpres
 
     // Generar código HTML de la tabla
     let NuevoCodigo = `
+
             <table class="Tabla tabla-cv">
                 <thead>
                     <tr>
@@ -80,6 +81,25 @@ function CargarTablaDiarios(datos, fecha, CapitalEconomicoEmpresarial, CapitalMa
 
         // Insertar el código HTML en el espacio
         Espacio.innerHTML = Codigo;
+
+        // Agregar event listeners a todos los botones "Ver"
+        const { ipcRenderer } = require('electron');
+        let botonesVer = Espacio.querySelectorAll('button[IDMovimiento]');
+
+        console.log(`TablaDiarios: Agregando event listeners a ${botonesVer.length} botones Ver`);
+
+        botonesVer.forEach(boton => {
+            boton.addEventListener('click', (e) => {
+                // Obtener la fecha de la fila
+                const fila = e.target.closest('tr');
+                const fecha = fila.querySelector('td').textContent;
+
+                console.log(`TablaDiarios: Click en botón Ver para fecha: ${fecha}`);
+
+                // Enviar evento al main.js para obtener los detalles del día
+                ipcRenderer.send('EQuiereVerDetallesDia', { fecha });
+            });
+        });
 
     } else {
         console.error("ERROR: No se encontró el espacio para cargar TablaDiarios");
