@@ -487,10 +487,139 @@ ipcMain.on("EQuiereVerDetallesMovimientosEmpresariales", (event) => {
 
     if (respuesta.error == false) {
         movimientos = respuesta.Elementos
+
+        // Ordenar movimientos por fecha y hora (antiguo a reciente)
+        movimientos.sort((a, b) => {
+            let fechaA = new Date(`${a.Fecha}T${a.Hora}`);
+            let fechaB = new Date(`${b.Fecha}T${b.Hora}`);
+            return fechaA - fechaB;
+        });
     }
 
     event.sender.send("ECargarTablaMovimientosEmpresariales", movimientos)
 })
+
+// Evento -> exportar movimientos empresariales a Excel
+ipcMain.on("EQuiereExportarMovimientosEmpresariales", async (event) => {
+    console.log("Main: exportando movimientos empresariales a Excel");
+
+    // Obtener movimientos
+    let respuesta = MovimientoEmpresarial.ObtenerMovimientos();
+    if (respuesta.error) {
+        console.error("Main: Error al obtener movimientos para exportar");
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "Error al obtener datos para exportar"
+        });
+        return;
+    }
+
+    let movimientos = respuesta.Elementos;
+
+    // Ordenar por Fecha y Hora
+    movimientos.sort((a, b) => {
+        let fechaA = new Date(`${a.Fecha}T${a.Hora}`);
+        let fechaB = new Date(`${b.Fecha}T${b.Hora}`);
+        return fechaA - fechaB;
+    });
+
+    // Crear libro y hoja
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Movimientos');
+
+    // Definir columnas
+    // Fecha | Hora | Cliente (omitir) | Usuario | Observación (Detalle) | I.DINERO | E.DINERO | S.DINERO | I.MATERIAL | E.MATERIAL | S.MATERIAL
+    worksheet.columns = [
+        { header: 'Fecha', key: 'Fecha', width: 15 },
+        { header: 'Hora', key: 'Hora', width: 15 },
+        { header: 'Usuario', key: 'Usuario', width: 20 },
+        { header: 'Detalle', key: 'Detalle', width: 40 },
+        { header: 'I.DINERO', key: 'IDinero', width: 15 },
+        { header: 'E.DINERO', key: 'EDinero', width: 15 },
+        { header: 'S.DINERO', key: 'SDinero', width: 15 },
+        { header: 'I.MATERIAL', key: 'IMaterial', width: 15 },
+        { header: 'E.MATERIAL', key: 'EMaterial', width: 15 },
+        { header: 'S.MATERIAL', key: 'SMaterial', width: 15 }
+    ];
+
+    // Estilo de cabecera (Amarillo)
+    worksheet.getRow(1).eachCell((cell) => {
+        cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFFF00' }
+        };
+        cell.font = { bold: true };
+        cell.alignment = { horizontal: 'center' };
+    });
+
+    // Agregar filas
+    movimientos.forEach(mov => {
+        let row = {
+            Fecha: mov.Fecha,
+            Hora: mov.Hora,
+            Usuario: mov.Usuario,
+            Detalle: mov.Detalle,
+            IDinero: '',
+            EDinero: '',
+            SDinero: '',
+            IMaterial: '',
+            EMaterial: '',
+            SMaterial: ''
+        };
+
+        if (mov.Tipo === "Capital") {
+            if (mov.Operacion === "Aumentar") {
+                row.IDinero = parseFloat(mov.Importe);
+            } else if (mov.Operacion === "Disminuir") {
+                row.EDinero = parseFloat(mov.Importe);
+            }
+            row.SDinero = parseFloat(mov.CapturaSaldo);
+        } else if (mov.Tipo === "Material") {
+            if (mov.Operacion === "Aumentar") {
+                row.IMaterial = parseFloat(mov.Importe);
+            } else if (mov.Operacion === "Disminuir") {
+                row.EMaterial = parseFloat(mov.Importe);
+            }
+            row.SMaterial = parseFloat(mov.CapturaSaldo);
+        }
+
+        worksheet.addRow(row);
+    });
+
+    // Guardar archivo
+    const filePath = path.join(app.getPath('desktop'), 'MovimientosEmpresariales.xlsx');
+
+    try {
+        await workbook.xlsx.writeFile(filePath);
+        console.log(`✅ Excel generado: ${filePath}`);
+
+        // Abrir archivo
+        const command = process.platform === 'win32' ? `start "" "${filePath}"` : process.platform === 'darwin' ? `open "${filePath}"` : `xdg-open "${filePath}"`;
+        exec(command, (err) => {
+            if (err) {
+                console.error("❌ Error al abrir el Excel:", err);
+                event.sender.send("ModificarMensaje", {
+                    tipo: "MensajeMalo",
+                    texto: "Se generó el Excel pero no se pudo abrir automáticamente"
+                });
+            } else {
+                console.log("📂 Excel abierto correctamente.");
+                event.sender.send("ModificarMensaje", {
+                    tipo: "MensajeBueno",
+                    texto: "Excel exportado y abierto correctamente"
+                });
+            }
+        });
+
+    } catch (error) {
+        console.error("❌ Error al guardar el Excel:", error);
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "Error al guardar el archivo Excel"
+        });
+    }
+});
 
 // Evento -> aumentar capital economico
 ipcMain.on("EAumentarCapitalEconomico", (event, monto) => {
