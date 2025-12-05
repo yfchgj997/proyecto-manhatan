@@ -55,6 +55,7 @@ function MostrarMenu(datos) {
         // Paso -> obtener el espacio donde se colocara el menu
         let codigo = `
                 <div class="Empresa">
+                    <img src="./imagenes/LogoRedSur.png" alt="Logo REDSUR" class="logo-redsur">
                     <h1>REDSUR</h1>
                     <p>Bienvenido: ${datos.usuarioIngresado.Nombres}</p>
                     <p style="font-size: 0.9em; color: #888;">Rol: ${rol}</p>

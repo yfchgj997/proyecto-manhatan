@@ -1,4 +1,4 @@
-* {
+﻿* {
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
@@ -15,7 +15,7 @@
 
 /* menu */
 #EspacioMenu {
-    background: radial-gradient(circle at top left, #5B9FED 0%, #2563EB 40%, #1E40AF 70%, #1E3A8A 100%);
+    background: linear-gradient(180deg, #0A1828 0%, #2C3E50 100%);
     width: 300px;
     height: auto;
     display: flex;
@@ -30,14 +30,14 @@
 }
 
 #EspacioMenu>.Empresa>h1 {
-    color: #FFFFFF;
+    color: #40E0D0;
     text-align: center;
     font-size: 48px;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 2px 8px rgba(64, 224, 208, 0.3);
 }
 
 #EspacioMenu>.Empresa>p {
-    color: rgba(255, 255, 255, 0.9);
+    color: #7FFFD4;
     text-align: center;
 }
 
@@ -64,14 +64,14 @@
 }
 
 .menu-item:hover {
-    background: linear-gradient(90deg, #1E3A8A 0%, rgba(64, 224, 208, 0.3) 100%);
-    border-left: 4px solid #3B82F6;
+    background: linear-gradient(90deg, #178582 0%, rgba(64, 224, 208, 0.3) 100%);
+    border-left: 4px solid #40E0D0;
     padding-left: 14px;
 }
 
 .menu-item.active {
-    background: linear-gradient(90deg, #1E3A8A 0%, rgba(64, 224, 208, 0.4) 100%);
-    border-left: 4px solid #60A5FA;
+    background: linear-gradient(90deg, #178582 0%, rgba(64, 224, 208, 0.4) 100%);
+    border-left: 4px solid #7FFFD4;
     padding-left: 14px;
 }
 
@@ -118,7 +118,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0px 36px;
-    border-bottom: solid 3px #1E3A8A;
+    border-bottom: solid 3px #178582;
     background: linear-gradient(90deg, rgba(23, 133, 130, 0.05) 0%, transparent 100%);
 }
 
@@ -257,7 +257,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0px 36px;
-    border-bottom: solid 3px #1E3A8A;
+    border-bottom: solid 3px #178582;
 }
 
 .Encabezado>.BotonEncabezado {
@@ -290,7 +290,7 @@
 
 /* formulario */
 .Formulario {
-    background: radial-gradient(circle at top right, #2563EB 0%, #1E40AF 40%, #1E3A8A 70%, #1E3A8A 100%);
+    background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
     width: 100%;
     height: 100%;
     display: flex;
@@ -300,7 +300,6 @@
     justify-content: center;
     margin-bottom: 100px;
     overflow: auto;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* encabezado de formulario */
@@ -323,7 +322,7 @@
 }
 
 .Formulario>.Campos>.Campo>p {
-    color: #93C5FD;
+    color: #B2B2B2;
     font-size: 16px;
 }
 
@@ -474,7 +473,7 @@ select,
 /* botones */
 .Boton {
     transition: all 0.3s ease;
-    background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+    background: linear-gradient(135deg, #178582 0%, #40E0D0 100%);
     border: none;
     border-radius: 10px;
     color: white;
@@ -484,7 +483,7 @@ select,
 
 .Boton:hover {
     transition: all 0.3s ease;
-    background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
+    background: linear-gradient(135deg, #40E0D0 0%, #7FFFD4 100%);
     cursor: pointer;
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(64, 224, 208, 0.5);
@@ -501,7 +500,7 @@ select,
 }
 
 .Capital {
-    background: #3B82F6;
+    background: #449eff;
     margin: 10px;
     flex-grow: 1;
     padding: 20px;
@@ -509,8 +508,7 @@ select,
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+    border-radius: 5px;
 }
 
 /* ---------------------------------------- BORRAR ---------------------------------------------- */
@@ -568,7 +566,7 @@ select,
 }
 
 /* =============================
-   T�TULOS
+   TÃTULOS
 ============================= */
 #TituloEstado,
 #TituloMovimientos {
@@ -620,9 +618,29 @@ select,
     margin-top: 10px;
     text-align: center;
 }
-
 /* =============================
-   BOT?N VER EN TABLA DIARIOS
+   BOTÓN VER EN TABLA DIARIOS
+============================= */
+.TablaDiarios button {
+    background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+}
+
+.TablaDiarios button:hover {
+    background: linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.5);
+}
+/* =============================
+   BOTÃ“N VER EN TABLA DIARIOS
 ============================= */
 .TablaDiarios button {
     background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
@@ -644,29 +662,7 @@ select,
 }
 
 /* =============================
-   BOT�N VER EN TABLA DIARIOS
-============================= */
-.TablaDiarios button {
-    background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 12px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
-}
-
-.TablaDiarios button:hover {
-    background: linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.5);
-}
-
-/* =============================
-   VENTANA MODAL DETALLES DEL D�A
+   VENTANA MODAL DETALLES DEL DÃA
 ============================= */
 .DetallesDiaOverlay {
     position: fixed;
@@ -716,7 +712,7 @@ select,
 }
 
 .DetallesDiaHeader {
-    background: linear-gradient(135deg, #1E40AF 0%, #1E3A8A 100%);
+    background: linear-gradient(135deg, #007bff 0%, #178582 100%);
     color: white;
     padding: 20px 30px;
     display: flex;
@@ -769,8 +765,7 @@ select,
     margin-bottom: 0;
 }
 
-.SeccionMovimientos h3 {
-    `r`n color: #007bff;
+.SeccionMovimientos h3 {`r`n    color: #007bff;
     margin: 0 0 15px 0;
     font-size: 20px;
     border-bottom: 2px solid #8B5CF6;
@@ -786,8 +781,7 @@ select,
     overflow: hidden;
 }
 
-.SeccionMovimientos th {
-    `r`n background: linear-gradient(135deg, #1E40AF 0%, #1E3A8A 100%);
+.SeccionMovimientos th {`r`n    background: linear-gradient(135deg, #007bff 0%, #178582 100%);
     color: white;
     padding: 12px;
     text-align: left;
@@ -821,9 +815,9 @@ select,
 
 
 
-/* Estilos para el bot?n Ver */
+/* Estilos para el botón Ver */
 button[Tipo='Ver'] {
-    background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+    background: linear-gradient(135deg, #00838f 0%, #006064 100%);
     color: white;
     border: none;
     padding: 6px 12px;
@@ -838,7 +832,7 @@ button[Tipo='Ver'] {
 button[Tipo='Ver']:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0, 131, 143, 0.4);
-    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+    background: linear-gradient(135deg, #0097a7 0%, #00838f 100%);
 }
 
 
@@ -873,7 +867,6 @@ button[Tipo='Ver']:hover {
     font-weight: bold;
     transition: background-color 0.2s;
 }
-
 .BotonVerAzul:hover {
     background-color: #0056b3;
 }
@@ -894,7 +887,6 @@ button[Tipo='Ver']:hover {
     align-items: center;
     gap: 8px;
 }
-
 .BotonDescargar:hover {
     background-color: #059669;
 }
@@ -902,10 +894,8 @@ button[Tipo='Ver']:hover {
 
 /* Fix Table Headers */
 .DetallesDiaBody table th {
-    color: #333;
-    /* Dark text for visibility */
-    background-color: #f3f4f6;
-    /* Light gray background */
+    color: #333; /* Dark text for visibility */
+    background-color: #f3f4f6; /* Light gray background */
 }
 
 /* Header Layout */
@@ -917,11 +907,3 @@ button[Tipo='Ver']:hover {
 }
 
 
-/* Logo REDSUR en menú */
-.logo-redsur {
-    width: 100px;
-    height: auto;
-    margin: 0 auto 16px auto;
-    display: block;
-    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.2));
-}
