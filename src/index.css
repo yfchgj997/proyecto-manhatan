@@ -1,4 +1,4 @@
-* {
+ï»¿* {
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
@@ -584,7 +584,7 @@ select,
     margin: 6px 0;
 }
 
-/* ======================   TÍTULOS
+/* ======================   Tï¿½TULOS
 ============================= */
 #TituloEstado,
 #TituloMovimientos {
@@ -773,7 +773,7 @@ select,
     margin: 6px 0;
 }
 
-/* ======================   TÍTULOS
+/* ======================   Tï¿½TULOS
 ============================= */
 #TituloEstado,
 #TituloMovimientos {
@@ -838,6 +838,7 @@ select,
     padding: 0 20px;
     white-space: nowrap;
 }
+
 .DetallesDiaHeader h2 {
     margin: 0;
     font-size: 24px;
@@ -883,7 +884,8 @@ select,
     margin-bottom: 0;
 }
 
-.SeccionMovimientos h3 {`r`n    color: #007bff;
+.SeccionMovimientos h3 {
+    color: #007bff;
     margin: 0 0 15px 0;
     font-size: 20px;
     border-bottom: 2px solid #8B5CF6;
@@ -899,7 +901,8 @@ select,
     overflow: hidden;
 }
 
-.SeccionMovimientos th {`r`n    background: linear-gradient(135deg, #007bff 0%, #178582 100%);
+.SeccionMovimientos th {
+    background: linear-gradient(135deg, #007bff 0%, #178582 100%);
     color: white;
     padding: 12px;
     text-align: left;
@@ -985,6 +988,7 @@ button[Tipo='Ver']:hover {
     font-weight: bold;
     transition: background-color 0.2s;
 }
+
 .BotonVerAzul:hover {
     background-color: #0056b3;
 }
@@ -1005,6 +1009,7 @@ button[Tipo='Ver']:hover {
     align-items: center;
     gap: 8px;
 }
+
 .BotonDescargar:hover {
     background-color: #059669;
 }
@@ -1012,8 +1017,10 @@ button[Tipo='Ver']:hover {
 
 /* Fix Table Headers */
 .DetallesDiaBody table th {
-    color: #333; /* Dark text for visibility */
-    background-color: #f3f4f6; /* Light gray background */
+    color: #333;
+    /* Dark text for visibility */
+    background-color: #f3f4f6;
+    /* Light gray background */
 }
 
 /* Header Layout */
@@ -1042,8 +1049,13 @@ button[Tipo='Ver']:hover {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .DetallesDiaContenedor {
@@ -1058,11 +1070,12 @@ button[Tipo='Ver']:hover {
 }
 
 @keyframes slideIn {
-    from { 
+    from {
         transform: translateY(-50px);
         opacity: 0;
     }
-    to { 
+
+    to {
         transform: translateY(0);
         opacity: 1;
     }
