@@ -1,5 +1,5 @@
 {
-    "Contador": 10,
+    "Contador": 12,
     "Elementos": [
         {
             "Tipo": "Capital",
@@ -88,6 +88,28 @@
             "Hora": "16:13:00",
             "CapturaSaldo": "3050.00",
             "ID": 10
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Disminuir",
+            "Fecha": "2025-12-04",
+            "Usuario": "BERNARDO ",
+            "Importe": "4.00",
+            "Detalle": "N",
+            "Hora": "00:34:37",
+            "CapturaSaldo": "100.00",
+            "ID": 11
+        },
+        {
+            "Tipo": "Capital",
+            "Operacion": "Disminuir",
+            "Fecha": "2025-12-04",
+            "Usuario": "BERNARDO ",
+            "Importe": "42.00",
+            "Detalle": "n",
+            "Hora": "00:34:46",
+            "CapturaSaldo": "3000.00",
+            "ID": 12
         }
     ]
 }

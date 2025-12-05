@@ -24,6 +24,7 @@ function ModificarCodigo(fecha) {
                         <p>Cliente:</p>
                         <input id="CampoCliente" name="cliente" type="text">
                     </div>
+
                     <div class="Campo">
                         <p>Monto Material:</p>
                         <input id="CampoMontoMaterial" name="montoMaterial" type="number" step="0.01">
@@ -37,19 +38,19 @@ function ModificarCodigo(fecha) {
                         <input id="CampoPrecioCambio" name="precioCambio" type="number" step="0.01">
                     </div>
                 </div>
-                <button class="Boton BotonFormulario" id="BotonGuardarNuevoCompraVenta">Guardar</button>
+                <button class="Boton BotonFormulario" id="BotonGuardarNuevoVentaDeOro">Guardar</button>
             </div>
         `;
 
     return codigo; // Devuelve el HTML generado
 }
 
-function GuardarCompraVenta(usuarioAutenticado) {
+function GuardarVentaDeOro(usuarioAutenticado) {
     // Mensaje de flujo
     console.log("MENSAJE: Guardando un nuevo compra venta");
 
     // Capturar los datos raw para validación
-    let tipo = "compra";
+    let tipo = "venta";
     let fecha = document.getElementById("CampoFechaMovimiento").value;
     let cliente = document.getElementById("CampoCliente").value;
     let montoMaterial = document.getElementById("CampoMontoMaterial").value;
@@ -124,7 +125,7 @@ function GuardarCompraVenta(usuarioAutenticado) {
     }
 
     // Capturar los datos
-    let NuevoCompraVenta = {
+    let NuevoVentaDeOro = {
         "Tipo": tipo,
         "Fecha": fecha,
         "EmpleadoNombre": usuarioAutenticado.Nombres,
@@ -137,10 +138,10 @@ function GuardarCompraVenta(usuarioAutenticado) {
 
     // Mensaje de flujo
     console.log("MENSAJE: Estos son los datos de compra venta:");
-    console.log(NuevoCompraVenta);
+    console.log(NuevoVentaDeOro);
 
     // Enviar los datos del movimiento al proceso principal
-    ipcRenderer.send("EQuiereGuardarNuevoCompraVenta", NuevoCompraVenta);
+    ipcRenderer.send("EQuiereGuardarNuevoVentaDeOro", NuevoVentaDeOro);
 }
 
 function FormatearDecimales(input) {
@@ -154,16 +155,16 @@ function FormatearDecimales(input) {
 }
 
 // Funcion -> cargar componente
-function CargarFormularioNuevoCompraVenta(usuarioAutenticado, fecha) {
+function CargarFormularioNuevoVentaDeOro(usuarioAutenticado, fecha) {
 
     console.log("MENSAJE: cargando el componente formulario nuevo compra venta");
 
-    let EspacioFormularioNuevoCompraVenta = document.getElementById("EspacioFormularioNuevoCompraVenta");
+    let EspacioFormularioNuevoVentaDeOro = document.getElementById("EspacioFormularioNuevoVentaDeOro");
 
-    if (EspacioFormularioNuevoCompraVenta) {
+    if (EspacioFormularioNuevoVentaDeOro) {
         // Paso -> actualizar el HTML generado
         codigo = ModificarCodigo(fecha);
-        EspacioFormularioNuevoCompraVenta.innerHTML = codigo;
+        EspacioFormularioNuevoVentaDeOro.innerHTML = codigo;
 
         // Agregar validacion de decimales
         FormatearDecimales(document.getElementById("CampoMontoMaterial"));
@@ -178,12 +179,12 @@ function CargarFormularioNuevoCompraVenta(usuarioAutenticado, fecha) {
         aplicarMayusculas(document.getElementById("CampoCliente"));
 
         // Paso -> habilitar navegación con Enter
-        habilitarNavegacionEnter(EspacioFormularioNuevoCompraVenta);
+        habilitarNavegacionEnter(EspacioFormularioNuevoVentaDeOro);
 
         // Asegurarse de que el botón existe antes de agregar el evento
-        let botonGuardar = document.getElementById("BotonGuardarNuevoCompraVenta");
+        let botonGuardar = document.getElementById("BotonGuardarNuevoVentaDeOro");
         if (botonGuardar) {
-            botonGuardar.addEventListener("click", () => { GuardarCompraVenta(usuarioAutenticado) });
+            botonGuardar.addEventListener("click", () => { GuardarVentaDeOro(usuarioAutenticado) });
         } else {
             console.log("ERROR: No se encontró el botón 'BotonGuardarNuevoMovimiento'");
         }
@@ -208,4 +209,4 @@ ipcRenderer.on("EActualizarSoloCliente", (event, cliente) => {
     }
 });
 
-module.exports = { CargarFormularioNuevoCompraVenta };
+module.exports = { CargarFormularioNuevoVentaDeOro };
