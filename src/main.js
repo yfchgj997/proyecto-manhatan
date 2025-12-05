@@ -239,9 +239,12 @@ ipcMain.on("EQuiereGestionarCompraVenta", (event, usuarioAutenticado) => {
     let respuesta = BDrespaldo.TablaCV(fecha, fecha)
 
     if (respuesta.error == false) {
+        // Paso -> filtrar solo las compras
+        let listaCompras = respuesta.listaCV.filter(item => item.Tipo === 'compra');
+
         // paso -> obtener datos
         let datos = {
-            "listaCV": respuesta.listaCV,
+            "listaCV": listaCompras,
             "fecha": fecha,
             "usuarioAutenticado": usuarioAutenticado
         }
@@ -286,10 +289,12 @@ ipcMain.on("EQuiereGuardarNuevoCompraVenta", (event, datosCompraVenta) => {
         let fecha = ObtenerFecha(); // Obtener la fecha actual
         let respuesta = BDrespaldo.TablaCV(fecha, fecha)
         if (respuesta.error == false) {
+            // Paso -> filtrar solo las compras
+            let listaCompras = respuesta.listaCV.filter(item => item.Tipo === 'compra');
             // paso -> cargar el componente compra venta
             console.log("asdfasfdsdasfdfasdfasdfasdfasdfsdafdsafasdfsdafasd")
-            console.log(respuesta.listaCV)
-            event.sender.send("EActualizarTablaCompraVenta", respuesta.listaCV)
+            console.log(listaCompras)
+            event.sender.send("EActualizarTablaCompraVenta", listaCompras)
         }
 
     } else {// no se pudo guardar
@@ -316,8 +321,11 @@ ipcMain.on("EFiltrarListaCV", (event, datos) => {
 
     console.log(respuesta)
 
+    // Paso -> filtrar solo las compras
+    let listaCompras = respuesta.listaCV.filter(item => item.Tipo === 'compra');
+
     // Enviar la lista filtrada al frontend
-    event.sender.send("EActualizarTablaCompraVenta", respuesta.listaCV);
+    event.sender.send("EActualizarTablaCompraVenta", listaCompras);
 });
 
 // Evento -> eliminar compra venta
@@ -363,6 +371,93 @@ ipcMain.on("EEliminarCV", async (event, datosCompraVenta) => {
         });
         // Enviar la lista filtrada al frontend
         event.sender.send("EActualizarTablaCompraVenta", respuesta.listaCV);
+    }
+})
+
+// ------------------------------------- EVENTOS DE VENTA DE ORO ---------------------------------------
+
+// evento -> quiere gestionar venta de oro
+ipcMain.on("EQuiereGestionarVentaDeOro", (event, usuarioAutenticado) => {
+
+    // mensaje de flujo
+    console.log("MENSAJE: se invoco al evento quiere gestionar venta de oro")
+    console.log("MENSAJE: este es el usuario que gestionara la venta de oro")
+    console.log(usuarioAutenticado)
+
+    // filtrar lista por fechas
+    let fecha = ObtenerFecha(); // Obtener la fecha actual
+    let respuesta = BDrespaldo.TablaCV(fecha, fecha)
+    console.log(respuesta)
+
+    if (respuesta.error == false) {
+        // Paso -> filtrar solo las ventas
+        let listaVentas = respuesta.listaCV.filter(item => item.Tipo === 'venta');
+
+        // paso -> obtener datos
+        let datos = {
+            "listaCV": listaVentas,
+            "fecha": fecha,
+            "usuarioAutenticado": usuarioAutenticado
+        }
+
+        // paso -> cargar el componente venta de oro
+        event.sender.send("ECargarComponenteVentaDeOro", datos)
+    }
+
+})
+
+// evento -> guardar nueva venta de oro
+ipcMain.on("EQuiereGuardarNuevoVentaDeOro", (event, datosVentaDeOro) => {
+
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("compraVenta", "crear", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
+
+    // mensaje de flujo
+    console.log("MENSAJE: guardando nuevo venta de oro, estos son los datos:")
+    console.log(datosVentaDeOro)
+
+    // Paso -> agregar la hora a la venta de oro
+    datosVentaDeOro.Hora = ObtenerHora()
+
+    // Paso -> guardar en la base de datos el nuevo registro
+    respuesta = BDrespaldo.GuardarCompraVenta(datosVentaDeOro)
+
+    // Paso -> mostrar mensaje al usuario
+    if (respuesta.error == false) {// se guardo sin errores
+
+        // mensaje de flujo
+        console.log("MENSAJE: la venta de oro se guardo sin errores")
+
+        // Paso -> mostrar el mensaje en la ventana
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeBueno",
+            texto: "La venta de oro se guardó correctamente"
+        });
+
+        // Paso -> obtener la lista de venta de oro
+        let fecha = ObtenerFecha(); // Obtener la fecha actual
+        let respuesta = BDrespaldo.TablaCV(fecha, fecha)
+        if (respuesta.error == false) {
+            // Paso -> filtrar solo las ventas
+            let listaVentas = respuesta.listaCV.filter(item => item.Tipo === 'venta');
+            // paso -> cargar el componente venta de oro
+            console.log("Actualizando tabla venta de oro")
+            console.log(listaVentas)
+            event.sender.send("EActualizarTablaVentaDeOro", listaVentas)
+        }
+
+    } else {// no se pudo guardar
+
+        // mensaje de flujo
+        console.log("MENSAJE: la venta de oro no se pudo guardar")
+
+        // Paso -> informar al usuario
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "La venta de oro no se guardó correctamente"
+        });
     }
 })
 
