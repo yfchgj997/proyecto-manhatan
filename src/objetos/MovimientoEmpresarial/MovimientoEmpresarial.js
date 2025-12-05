@@ -1,13 +1,25 @@
 const fs = require('fs');
 const path = require('path');
 
-// Ruta al archivo JSON
-const rutaArchivo = path.join(__dirname, 'MovimientoEmpresarial.json');
+// Rutas a los archivos JSON
+const rutaArchivoEconomico = path.join(__dirname, 'MovimientoEmpresarialEconómico.json');
+const rutaArchivoMaterial = path.join(__dirname, 'MovimientoEmpresarialMaterial.json');
 
 // Función -> Guardar un nuevo movimiento empresarial
 function GuardarMovimiento(movimiento) {
     try {
-        // Leer el archivo JSON
+        let rutaArchivo;
+
+        // Determinar qué archivo usar según el tipo de movimiento
+        if (movimiento.Tipo === "Capital") {
+            rutaArchivo = rutaArchivoEconomico;
+        } else if (movimiento.Tipo === "Material") {
+            rutaArchivo = rutaArchivoMaterial;
+        } else {
+            throw new Error("Tipo de movimiento no válido: " + movimiento.Tipo);
+        }
+
+        // Leer el archivo JSON correspondiente
         let data = fs.readFileSync(rutaArchivo, 'utf8');
         let movimientos = JSON.parse(data);
 
@@ -30,12 +42,32 @@ function GuardarMovimiento(movimiento) {
     }
 }
 
-// Función -> Obtener todos los movimientos (opcional, para futuro uso)
+// Función -> Obtener todos los movimientos (combinados)
 function ObtenerMovimientos() {
     try {
-        let data = fs.readFileSync(rutaArchivo, 'utf8');
-        let movimientos = JSON.parse(data);
-        return { error: false, Elementos: movimientos.Elementos };
+        let movimientosCombinados = [];
+
+        // Leer movimientos económicos
+        if (fs.existsSync(rutaArchivoEconomico)) {
+            let dataEconomico = fs.readFileSync(rutaArchivoEconomico, 'utf8');
+            let jsonEconomico = JSON.parse(dataEconomico);
+            movimientosCombinados = movimientosCombinados.concat(jsonEconomico.Elementos);
+        }
+
+        // Leer movimientos materiales
+        if (fs.existsSync(rutaArchivoMaterial)) {
+            let dataMaterial = fs.readFileSync(rutaArchivoMaterial, 'utf8');
+            let jsonMaterial = JSON.parse(dataMaterial);
+            movimientosCombinados = movimientosCombinados.concat(jsonMaterial.Elementos);
+        }
+
+        // Ordenar por ID o Fecha si es necesario (opcional, pero recomendable si se muestran juntos)
+        // Por ahora los devolvemos tal cual, o podríamos ordenarlos por ID global si fuera único, pero ahora son independientes.
+        // El consumidor (main.js) podría esperar un orden.
+        // Dado que los IDs pueden repetirse entre archivos (1 en eco, 1 en mat), el ordenamiento por ID podría ser confuso si se mezclan.
+        // Mejor no ordenar aquí y dejar que el consumidor decida, o concatenar simplemente.
+
+        return { error: false, Elementos: movimientosCombinados };
     } catch (error) {
         console.error("Error al obtener movimientos empresariales:", error);
         return { error: true, Elementos: [] };
