@@ -61,7 +61,8 @@ function MostrarMenu(datos) {
                 </div>
                 <div class="Opciones">
                     ${puedeVerCuentaEmpresarial ? '<button Opcion="CuentaEmpresarial" class="menu-item active">Cuenta Empresarial</button>' : ''}
-                    ${puedeVerCompraVenta ? '<button Opcion="VentasOcasional" class="menu-item">Venta Ocasional</button>' : ''}
+                    ${puedeVerCompraVenta ? '<button Opcion="VentasOcasional" class="menu-item">Compra De Oro</button>' : ''}
+                    ${puedeVerCompraVenta ? '<button Opcion="VentaDeOro" class="menu-item">Venta De Oro</button>' : ''}
                     ${puedeVerMovimientosMateriales ? '<button Opcion="MovimientoMaterial" class="menu-item">Movimiento - Material</button>' : ''}
                     ${puedeVerMovimientos ? '<button Opcion="VerMovimientos" class="menu-item">Movimiento - Economico</button>' : ''}
                     ${puedeVerClientes ? '<button Opcion="VerClientes" class="menu-item">Clientes</button>' : ''}

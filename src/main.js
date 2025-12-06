@@ -239,9 +239,12 @@ ipcMain.on("EQuiereGestionarCompraVenta", (event, usuarioAutenticado) => {
     let respuesta = BDrespaldo.TablaCV(fecha, fecha)
 
     if (respuesta.error == false) {
+        // Paso -> filtrar solo las compras
+        let listaCompras = respuesta.listaCV.filter(item => item.Tipo === 'compra');
+
         // paso -> obtener datos
         let datos = {
-            "listaCV": respuesta.listaCV,
+            "listaCV": listaCompras,
             "fecha": fecha,
             "usuarioAutenticado": usuarioAutenticado
         }
@@ -286,10 +289,12 @@ ipcMain.on("EQuiereGuardarNuevoCompraVenta", (event, datosCompraVenta) => {
         let fecha = ObtenerFecha(); // Obtener la fecha actual
         let respuesta = BDrespaldo.TablaCV(fecha, fecha)
         if (respuesta.error == false) {
+            // Paso -> filtrar solo las compras
+            let listaCompras = respuesta.listaCV.filter(item => item.Tipo === 'compra');
             // paso -> cargar el componente compra venta
             console.log("asdfasfdsdasfdfasdfasdfasdfasdfsdafdsafasdfsdafasd")
-            console.log(respuesta.listaCV)
-            event.sender.send("EActualizarTablaCompraVenta", respuesta.listaCV)
+            console.log(listaCompras)
+            event.sender.send("EActualizarTablaCompraVenta", listaCompras)
         }
 
     } else {// no se pudo guardar
@@ -316,8 +321,11 @@ ipcMain.on("EFiltrarListaCV", (event, datos) => {
 
     console.log(respuesta)
 
+    // Paso -> filtrar solo las compras
+    let listaCompras = respuesta.listaCV.filter(item => item.Tipo === 'compra');
+
     // Enviar la lista filtrada al frontend
-    event.sender.send("EActualizarTablaCompraVenta", respuesta.listaCV);
+    event.sender.send("EActualizarTablaCompraVenta", listaCompras);
 });
 
 // Evento -> eliminar compra venta
@@ -363,6 +371,93 @@ ipcMain.on("EEliminarCV", async (event, datosCompraVenta) => {
         });
         // Enviar la lista filtrada al frontend
         event.sender.send("EActualizarTablaCompraVenta", respuesta.listaCV);
+    }
+})
+
+// ------------------------------------- EVENTOS DE VENTA DE ORO ---------------------------------------
+
+// evento -> quiere gestionar venta de oro
+ipcMain.on("EQuiereGestionarVentaDeOro", (event, usuarioAutenticado) => {
+
+    // mensaje de flujo
+    console.log("MENSAJE: se invoco al evento quiere gestionar venta de oro")
+    console.log("MENSAJE: este es el usuario que gestionara la venta de oro")
+    console.log(usuarioAutenticado)
+
+    // filtrar lista por fechas
+    let fecha = ObtenerFecha(); // Obtener la fecha actual
+    let respuesta = BDrespaldo.TablaCV(fecha, fecha)
+    console.log(respuesta)
+
+    if (respuesta.error == false) {
+        // Paso -> filtrar solo las ventas
+        let listaVentas = respuesta.listaCV.filter(item => item.Tipo === 'venta');
+
+        // paso -> obtener datos
+        let datos = {
+            "listaCV": listaVentas,
+            "fecha": fecha,
+            "usuarioAutenticado": usuarioAutenticado
+        }
+
+        // paso -> cargar el componente venta de oro
+        event.sender.send("ECargarComponenteVentaDeOro", datos)
+    }
+
+})
+
+// evento -> guardar nueva venta de oro
+ipcMain.on("EQuiereGuardarNuevoVentaDeOro", (event, datosVentaDeOro) => {
+
+    // Paso -> Validar privilegio
+    if (!validarPrivilegio("compraVenta", "crear", event)) {
+        return; // Detener ejecución si no tiene privilegio
+    }
+
+    // mensaje de flujo
+    console.log("MENSAJE: guardando nuevo venta de oro, estos son los datos:")
+    console.log(datosVentaDeOro)
+
+    // Paso -> agregar la hora a la venta de oro
+    datosVentaDeOro.Hora = ObtenerHora()
+
+    // Paso -> guardar en la base de datos el nuevo registro
+    respuesta = BDrespaldo.GuardarCompraVenta(datosVentaDeOro)
+
+    // Paso -> mostrar mensaje al usuario
+    if (respuesta.error == false) {// se guardo sin errores
+
+        // mensaje de flujo
+        console.log("MENSAJE: la venta de oro se guardo sin errores")
+
+        // Paso -> mostrar el mensaje en la ventana
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeBueno",
+            texto: "La venta de oro se guardó correctamente"
+        });
+
+        // Paso -> obtener la lista de venta de oro
+        let fecha = ObtenerFecha(); // Obtener la fecha actual
+        let respuesta = BDrespaldo.TablaCV(fecha, fecha)
+        if (respuesta.error == false) {
+            // Paso -> filtrar solo las ventas
+            let listaVentas = respuesta.listaCV.filter(item => item.Tipo === 'venta');
+            // paso -> cargar el componente venta de oro
+            console.log("Actualizando tabla venta de oro")
+            console.log(listaVentas)
+            event.sender.send("EActualizarTablaVentaDeOro", listaVentas)
+        }
+
+    } else {// no se pudo guardar
+
+        // mensaje de flujo
+        console.log("MENSAJE: la venta de oro no se pudo guardar")
+
+        // Paso -> informar al usuario
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "La venta de oro no se guardó correctamente"
+        });
     }
 })
 
@@ -487,10 +582,139 @@ ipcMain.on("EQuiereVerDetallesMovimientosEmpresariales", (event) => {
 
     if (respuesta.error == false) {
         movimientos = respuesta.Elementos
+
+        // Ordenar movimientos por fecha y hora (antiguo a reciente)
+        movimientos.sort((a, b) => {
+            let fechaA = new Date(`${a.Fecha}T${a.Hora}`);
+            let fechaB = new Date(`${b.Fecha}T${b.Hora}`);
+            return fechaA - fechaB;
+        });
     }
 
     event.sender.send("ECargarTablaMovimientosEmpresariales", movimientos)
 })
+
+// Evento -> exportar movimientos empresariales a Excel
+ipcMain.on("EQuiereExportarMovimientosEmpresariales", async (event) => {
+    console.log("Main: exportando movimientos empresariales a Excel");
+
+    // Obtener movimientos
+    let respuesta = MovimientoEmpresarial.ObtenerMovimientos();
+    if (respuesta.error) {
+        console.error("Main: Error al obtener movimientos para exportar");
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "Error al obtener datos para exportar"
+        });
+        return;
+    }
+
+    let movimientos = respuesta.Elementos;
+
+    // Ordenar por Fecha y Hora
+    movimientos.sort((a, b) => {
+        let fechaA = new Date(`${a.Fecha}T${a.Hora}`);
+        let fechaB = new Date(`${b.Fecha}T${b.Hora}`);
+        return fechaA - fechaB;
+    });
+
+    // Crear libro y hoja
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Movimientos');
+
+    // Definir columnas
+    // Fecha | Hora | Cliente (omitir) | Usuario | Observación (Detalle) | I.DINERO | E.DINERO | S.DINERO | I.MATERIAL | E.MATERIAL | S.MATERIAL
+    worksheet.columns = [
+        { header: 'Fecha', key: 'Fecha', width: 15 },
+        { header: 'Hora', key: 'Hora', width: 15 },
+        { header: 'Usuario', key: 'Usuario', width: 20 },
+        { header: 'Detalle', key: 'Detalle', width: 40 },
+        { header: 'I.DINERO', key: 'IDinero', width: 15 },
+        { header: 'E.DINERO', key: 'EDinero', width: 15 },
+        { header: 'S.DINERO', key: 'SDinero', width: 15 },
+        { header: 'I.MATERIAL', key: 'IMaterial', width: 15 },
+        { header: 'E.MATERIAL', key: 'EMaterial', width: 15 },
+        { header: 'S.MATERIAL', key: 'SMaterial', width: 15 }
+    ];
+
+    // Estilo de cabecera (Amarillo)
+    worksheet.getRow(1).eachCell((cell) => {
+        cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFFF00' }
+        };
+        cell.font = { bold: true };
+        cell.alignment = { horizontal: 'center' };
+    });
+
+    // Agregar filas
+    movimientos.forEach(mov => {
+        let row = {
+            Fecha: mov.Fecha,
+            Hora: mov.Hora,
+            Usuario: mov.Usuario,
+            Detalle: mov.Detalle,
+            IDinero: '',
+            EDinero: '',
+            SDinero: '',
+            IMaterial: '',
+            EMaterial: '',
+            SMaterial: ''
+        };
+
+        if (mov.Tipo === "Capital") {
+            if (mov.Operacion === "Aumentar") {
+                row.IDinero = parseFloat(mov.Importe);
+            } else if (mov.Operacion === "Disminuir") {
+                row.EDinero = parseFloat(mov.Importe);
+            }
+            row.SDinero = parseFloat(mov.CapturaSaldo);
+        } else if (mov.Tipo === "Material") {
+            if (mov.Operacion === "Aumentar") {
+                row.IMaterial = parseFloat(mov.Importe);
+            } else if (mov.Operacion === "Disminuir") {
+                row.EMaterial = parseFloat(mov.Importe);
+            }
+            row.SMaterial = parseFloat(mov.CapturaSaldo);
+        }
+
+        worksheet.addRow(row);
+    });
+
+    // Guardar archivo
+    const filePath = path.join(app.getPath('desktop'), 'MovimientosEmpresariales.xlsx');
+
+    try {
+        await workbook.xlsx.writeFile(filePath);
+        console.log(`✅ Excel generado: ${filePath}`);
+
+        // Abrir archivo
+        const command = process.platform === 'win32' ? `start "" "${filePath}"` : process.platform === 'darwin' ? `open "${filePath}"` : `xdg-open "${filePath}"`;
+        exec(command, (err) => {
+            if (err) {
+                console.error("❌ Error al abrir el Excel:", err);
+                event.sender.send("ModificarMensaje", {
+                    tipo: "MensajeMalo",
+                    texto: "Se generó el Excel pero no se pudo abrir automáticamente"
+                });
+            } else {
+                console.log("📂 Excel abierto correctamente.");
+                event.sender.send("ModificarMensaje", {
+                    tipo: "MensajeBueno",
+                    texto: "Excel exportado y abierto correctamente"
+                });
+            }
+        });
+
+    } catch (error) {
+        console.error("❌ Error al guardar el Excel:", error);
+        event.sender.send("ModificarMensaje", {
+            tipo: "MensajeMalo",
+            texto: "Error al guardar el archivo Excel"
+        });
+    }
+});
 
 // Evento -> aumentar capital economico
 ipcMain.on("EAumentarCapitalEconomico", (event, monto) => {

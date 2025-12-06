@@ -1,5 +1,5 @@
 {
-    "Contador": 16,
+    "Contador": 19,
     "Elementos": [
         {
             "Tipo": "venta",
@@ -108,6 +108,42 @@
             "PrecioCambio": 234,
             "Hora": "09:09:50",
             "ID": 16
+        },
+        {
+            "Tipo": "compra",
+            "Fecha": "2025-12-04",
+            "EmpleadoNombre": "BERNARDO ",
+            "EmpleadoID": 22,
+            "Cliente": "QW",
+            "MontoMaterial": 6,
+            "MontoEconomico": 12,
+            "PrecioCambio": 2,
+            "Hora": "00:22:03",
+            "ID": 17
+        },
+        {
+            "Tipo": "venta",
+            "Fecha": "2025-12-04",
+            "EmpleadoNombre": "BERNARDO ",
+            "EmpleadoID": 22,
+            "Cliente": "K",
+            "MontoMaterial": 2,
+            "MontoEconomico": 4,
+            "PrecioCambio": 2,
+            "Hora": "00:34:06",
+            "ID": 18
+        },
+        {
+            "Tipo": "venta",
+            "Fecha": "2025-12-04",
+            "EmpleadoNombre": "BERNARDO ",
+            "EmpleadoID": 22,
+            "Cliente": "JHER",
+            "MontoMaterial": 2,
+            "MontoEconomico": 4,
+            "PrecioCambio": 2,
+            "Hora": "00:35:19",
+            "ID": 19
         }
     ]
 }
