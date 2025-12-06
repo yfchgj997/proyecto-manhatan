@@ -69,25 +69,48 @@ function GenerarHTML(datos) {
             </div>
         </div>
 
-        <!-- BOTONES -->
-        <div id="ContenedorBotones">
-            <button class="BotonCode" id="BotonDescargarTabla">Descargar</button>
-            <button class="BotonCode" id="BotonVolverDeEstadoDeCuenta">Volver</button>
+        <!-- ENCABEZADO -->
+        <div class="EstadoCuentaHeader">
+            <h2 id="TituloEstado">Estado de Cuenta</h2>
+            <div id="ContenedorBotones">
+                <button class="BotonCode" id="BotonDescargarTabla">Descargar</button>
+                <button class="BotonCode" id="BotonVolverDeEstadoDeCuenta">Volver</button>
+            </div>
         </div>
 
         <!-- TARJETA DEL CLIENTE -->
-        <div id="TarjetaCliente" class="tarjeta">
-            <h2 id="TituloEstado">Estado de Cuenta del Cliente</h2>
-
-            <p><strong>Nombres:</strong> ${cliente.Nombres}</p>
-            <p><strong>Apellidos:</strong> ${cliente.Apellidos}</p>
-            <p><strong>DNI:</strong> ${cliente.DNI}</p>
-
-            <p><strong>Saldo Económico:</strong> S/ ${cliente.SaldoEconomico}</p>
-            <p><strong>Saldo Material:</strong> ${cliente.SaldoMaterial} g</p>
-
-            <p><strong>Fecha de Ingreso:</strong> ${cliente.FechaIngreso}</p>
-            <p><strong>ID Interno:</strong> ${cliente.ID}</p>
+        <div id="TarjetaCliente" class="tarjeta" style="margin-bottom: 20px;">
+            <h3 style="margin-bottom: 15px; color: #7B1FA2;">Información del Cliente</h3>
+            <div class="InfoGrid">
+                <div class="InfoItem">
+                    <strong>Nombres:</strong>
+                    <span>${cliente.Nombres}</span>
+                </div>
+                <div class="InfoItem">
+                    <strong>Apellidos:</strong>
+                    <span>${cliente.Apellidos}</span>
+                </div>
+                <div class="InfoItem">
+                    <strong>DNI:</strong>
+                    <span>${cliente.DNI}</span>
+                </div>
+                <div class="InfoItem">
+                    <strong>ID Interno:</strong>
+                    <span>${cliente.ID}</span>
+                </div>
+                <div class="InfoItem">
+                    <strong>Saldo Económico:</strong>
+                    <span>S/ ${cliente.SaldoEconomico}</span>
+                </div>
+                <div class="InfoItem">
+                    <strong>Saldo Material:</strong>
+                    <span>${cliente.SaldoMaterial} g</span>
+                </div>
+                <div class="InfoItem">
+                    <strong>Fecha de Ingreso:</strong>
+                    <span>${cliente.FechaIngreso}</span>
+                </div>
+            </div>
         </div>
 
         <!-- MOVIMIENTOS -->
