@@ -1,4 +1,14 @@
 {
-    "Contador": 0,
-    "Elementos": []
+    "Contador": 1,
+    "Elementos": [
+        {
+            "Nombres": "JHERSON",
+            "Apellidos": "SEDSE",
+            "DNI": "98765432",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2025-12-05",
+            "ID": 1
+        }
+    ]
 }
