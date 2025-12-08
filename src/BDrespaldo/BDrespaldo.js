@@ -170,7 +170,11 @@ function ObtenerTablaMovimientos(FechaInicial, FechaFinal) {
     if (Respuesta.error == true) {
         return ({ "error": true })
     } else {
-        return ({ "error": false, "ListaMovimentosEconomicos": Respuesta.ListaMovimientosEconomicos })
+        // Agregar "Registro":"Economico" a cada elemento
+        let ListaConRegistro = Respuesta.ListaMovimientosEconomicos.map(m => {
+            return { ...m, Registro: "Economico" };
+        });
+        return ({ "error": false, "ListaMovimentosEconomicos": ListaConRegistro })
     }
 
 }
@@ -193,10 +197,18 @@ function AplicarFiltros(Cliente, FechaInicial, FechaFinal) {
             // Paso -> aplicar el filtro de clientes
             switch (Cliente) {
                 case "todos":
-                    return ({ "error": false, "ListaMovimientosEconomicos": ListaMovimentosEconomicos })
+                    // Agregar "Registro":"Economico" a cada elemento
+                    let ListaConRegistroTodos = ListaMovimentosEconomicos.map(m => {
+                        return { ...m, Registro: "Economico" };
+                    });
+                    return ({ "error": false, "ListaMovimientosEconomicos": ListaConRegistroTodos })
                 default:
                     let ListaFiltrada = ListaMovimentosEconomicos.filter(Movimiento => Movimiento.ClienteID == Cliente)
-                    return ({ "error": false, "ListaMovimientosEconomicos": ListaFiltrada })
+                    // Agregar "Registro":"Economico" a cada elemento
+                    let ListaConRegistro = ListaFiltrada.map(m => {
+                        return { ...m, Registro: "Economico" };
+                    });
+                    return ({ "error": false, "ListaMovimientosEconomicos": ListaConRegistro })
             }
 
         }
@@ -280,7 +292,11 @@ function ObtenerTablaMovimientosMateriales(FechaInicial, FechaFinal) {
         return ({ "error": true })
     } else {
         console.log("BD: se obtuvo con exito ")
-        return ({ "error": false, "ListaMovimientosMateriales": Respuesta.ListaMovimientosMateriales })
+        // Agregar "Registro":"Material" a cada elemento
+        let ListaConRegistro = Respuesta.ListaMovimientosMateriales.map(m => {
+            return { ...m, Registro: "Material" };
+        });
+        return ({ "error": false, "ListaMovimientosMateriales": ListaConRegistro })
     }
 
 }
@@ -322,10 +338,18 @@ function FiltrarMovimientosMateriales(Cliente, FechaInicial, FechaFinal) {
             // Paso -> aplicar el filtro de clientes
             switch (Cliente) {
                 case "todos":
-                    return ({ "error": false, "ListaMovimientosMateriales": ListaMovimientosMateriales })
+                    // Agregar "Registro":"Material" a cada elemento
+                    let ListaConRegistroTodos = ListaMovimientosMateriales.map(m => {
+                        return { ...m, Registro: "Material" };
+                    });
+                    return ({ "error": false, "ListaMovimientosMateriales": ListaConRegistroTodos })
                 default:
                     let ListaFiltrada = ListaMovimientosMateriales.filter(Movimiento => Movimiento.ClienteID == Cliente)
-                    return ({ "error": false, "ListaMovimientosMateriales": ListaFiltrada })
+                    // Agregar "Registro":"Material" a cada elemento
+                    let ListaConRegistro = ListaFiltrada.map(m => {
+                        return { ...m, Registro: "Material" };
+                    });
+                    return ({ "error": false, "ListaMovimientosMateriales": ListaConRegistro })
             }
 
         }
