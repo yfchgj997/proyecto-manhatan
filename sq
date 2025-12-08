@@ -1,0 +1,42 @@
+[33m54b6f5f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m [FIX][JA] arreglar la descarga en exel de mov material y economico
+[33mc2c86b4[m [FIX][BP] uniendo cambios de la funcionalidad de Separar Movimientos empresariales
+[33mf8c97c1[m Merge pull request #7 from yfchgj997/feature/botonVer
+[33m2d7cd6f[m[33m ([m[1;31morigin/feature/botonVer[m[33m)[m [ADD][F] Funcionalidad de detalles de tablas por fechas + funcionalidad de descargar mediante excel
+[33mdc0442d[m Fix encoding errors, update UI styles to blue theme, and fix data display in modal
+[33m3e19ac3[m Revert "Merge pull request #5 from yfchgj997/FCodigoDUBAI"
+[33m14a3534[m Merge pull request #5 from yfchgj997/FCodigoDUBAI
+[33mc578adb[m[33m ([m[1;31morigin/FCodigoDUBAI[m[33m, [m[1;32mFCodigoDUBAI[m[33m)[m detalles completos
+[33m3c74aa7[m detalles casi completos
+[33mc9133fb[m funcionalidad completa de solicitud de codigo
+[33m5fac7ba[m uniendo cambios
+[33m1f5a7c2[m implementacion de boton ver mas funcionalidades
+[33mdccdacb[m Merge pull request #4 from yfchgj997/feature/registroMovimientoEmpresarial
+[33mc70e768[m[33m ([m[1;31morigin/feature/registroMovimientoEmpresarial[m[33m)[m [AD][BP] tabla movimiento empresarial y botón ver detalles
+[33m524b2b4[m funcion creada en main, falta implementar para los demas
+[33mc385dac[m [FIX][BP] correción campo de contraseña
+[33m8782288[m [FIX][BP] Cambios iniciales para la empresa DUBAI completado
+[33m6a14449[m Merge branch 'EmpresaDUBAI' of https://github.com/yfchgj997/proyecto-manhatan into EmpresaDUBAI kjbircebidcbei.
+[33ma5fbf61[m [FIX][BP] cambio de color para empresa DUBAI
+[33md98212d[m modificar los botones y ponerles iconos
+[33m3127967[m funcion de no mostrar los clientes y no mostrar su capital
+[33md6a4fa9[m cambiar todos los nombres
+[33m2cc4211[m [FIX][JA] cambiar el nombre de la empresa
+[33m8436b7c[m [AD][BP] rediseño del Login
+[33mac069a4[m [FIX][BP] aumentar funciones faltantes
+[33m13ea8b7[m Merge pull request #3 from yfchgj997/feature/combinarEstadoCuenta
+[33m887acfd[m[33m ([m[1;31morigin/feature/combinarEstadoCuenta[m[33m, [m[1;32mfeature/combinarEstadoCuenta[m[33m)[m [FIX][JA] tercer cambio y arreglo de conflictos
+[33m88c6886[m Merge pull request #2 from yfchgj997/feature/manejoRoles into main
+[33m5bf23a8[m[33m ([m[1;31morigin/feature/manejoRoles[m[33m)[m [FIX][BP] Arreglando conflitos
+[33md2e5290[m [AD][BP] privilegios y Cuenta empresarial
+[33mc916268[m Merge pull request #1 from yfchgj997/feature/modificarboletaredsur
+[33m039d43e[m combinacioin de estado de cuenta completo
+[33m2b99e73[m[33m ([m[1;31morigin/feature/modificarboletaredsur[m[33m)[m archivo de boletaMovimiento
+[33ma877c29[m feat: rediseño UI con paleta azul-verde moderna para login y menú
+[33mac02d97[m feat: agregado apellido del cliente en boletas de impresión
+[33me70b4d2[m [ADD][BP] Manejo de privilegios mediante roles
+[33m6721c5f[m [FIX][YFCHGJ] opcion inactivo eliminado
+[33mfb42823[m comit de prueba text
+[33m8d968e6[m [FIX][BP] validación de campos no obligatorios
+[33m43092cc[m [FIX][BP] Validaciones de campos y fechas
+[33m248c64e[m [FIX] implementación de validaciones y mejora de manejo de numeros en decimales
+[33mc5a5e1f[m version inicial

@@ -169,6 +169,20 @@
             "Hora": "20:22:50",
             "ID": 36,
             "CapturaSaldo": "-37.29"
+        },
+        {
+            "Tipo": "Retiro",
+            "Fecha": "2025-12-06",
+            "UsuarioID": 1,
+            "UsuarioNombres": "Admin",
+            "ClienteID": "1",
+            "ClienteNombres": "O",
+            "ClienteApellidos": "",
+            "Importe": "9.00",
+            "Observacion": "",
+            "Hora": "12:22:19",
+            "ID": 37,
+            "CapturaSaldo": "-9.00"
         }
     ]
 }
