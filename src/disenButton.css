@@ -73,7 +73,7 @@
 /* Boton Code */
 .BotonCode {
     padding: 10px 20px;
-    background-color: #4aa3ff;
+    background-color: #0d41cf;
     border: none;
     border-radius: 6px;
     color: white;
@@ -83,7 +83,7 @@
 }
 
 .BotonCode:hover {
-    background-color: #1b82e9;
+    background-color: #2551cc;
 }
 
 /* Botones contenedor */

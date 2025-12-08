@@ -80,7 +80,7 @@ function GenerarHTML(datos) {
 
         <!-- TARJETA DEL CLIENTE -->
         <div id="TarjetaCliente" class="tarjeta" style="margin-bottom: 20px;">
-            <h3 style="margin-bottom: 15px; color: #7B1FA2;">Información del Cliente</h3>
+            <h3 style="margin-bottom: 15px; color: #0b41f5ff;">Información del Cliente</h3>
             <div class="InfoGrid">
                 <div class="InfoItem">
                     <strong>Nombres:</strong>
