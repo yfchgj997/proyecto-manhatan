@@ -1280,31 +1280,104 @@ button[Tipo='Ver']:hover {
     }
 }
 
+.DetallesDiaOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+}
+
+.DetallesDiaContenedor {
+    background: #ffffff;
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+    border-radius: 16px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
 .DetallesDiaHeader {
-    background: linear-gradient(135deg, #007bff 0%, #178582 100%);
+    background: linear-gradient(135deg, #7B2CBF 0%, #511885 100%);
     color: white;
     padding: 20px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
 }
 
 .DetallesDiaHeader h2 {
     margin: 0;
     font-size: 24px;
     font-weight: 600;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.BotonDescargar {
+    background: #ffffff;
+    color: #4A148C;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.BotonDescargar:hover {
+    background: #f3e5f5;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .CerrarDetalles {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
     border: none;
     color: white;
-    font-size: 32px;
-    width: 40px;
-    height: 40px;
+    font-size: 28px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1313,21 +1386,40 @@ button[Tipo='Ver']:hover {
 
 .CerrarDetalles:hover {
     background: rgba(255, 255, 255, 0.3);
-    transform: rotate(90deg);
+    transform: rotate(90deg) scale(1.1);
 }
 
 .DetallesDiaBody {
     padding: 30px;
     overflow-y: auto;
-    max-height: calc(85vh - 90px);
+    background: #f8f9fa;
+    flex: 1;
+}
+
+.DetallesDiaBody::-webkit-scrollbar {
+    width: 8px;
+}
+
+.DetallesDiaBody::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.DetallesDiaBody::-webkit-scrollbar-thumb {
+    background: #cfd8dc;
+    border-radius: 4px;
+}
+
+.DetallesDiaBody::-webkit-scrollbar-thumb:hover {
+    background: #b0bec5;
 }
 
 .SeccionMovimientos {
     margin-bottom: 30px;
-    background: #F9FAFB;
-    border-radius: 8px;
-    padding: 20px;
-    border: 1px solid #E5E7EB;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid #eaeaea;
 }
 
 .SeccionMovimientos:last-child {
@@ -1335,35 +1427,42 @@ button[Tipo='Ver']:hover {
 }
 
 .SeccionMovimientos h3 {
-    color: #007bff;
-    margin: 0 0 15px 0;
-    font-size: 20px;
-    border-bottom: 2px solid #8B5CF6;
-    padding-bottom: 10px;
-    font-weight: 600;
+    color: #511885;
+    margin: 0 0 20px 0;
+    font-size: 18px;
+    border-bottom: 2px solid #E1BEE7;
+    padding-bottom: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .SeccionMovimientos table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     background: white;
-    border-radius: 6px;
+    border-radius: 8px;
     overflow: hidden;
+    border: 1px solid #f0f0f0;
 }
 
 .SeccionMovimientos th {
-    background: linear-gradient(135deg, #007bff 0%, #178582 100%);
-    color: white;
-    padding: 12px;
+    background: #F3E5F5;
+    color: #4A148C;
+    padding: 14px 16px;
     text-align: left;
-    font-weight: 600;
-    font-size: 14px;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #E1BEE7;
 }
 
 .SeccionMovimientos td {
-    padding: 12px;
-    border-bottom: 1px solid #E5E7EB;
-    color: #374151;
+    padding: 14px 16px;
+    border-bottom: 1px solid #f5f5f5;
+    color: #424242;
     font-size: 14px;
 }
 
@@ -1372,8 +1471,7 @@ button[Tipo='Ver']:hover {
 }
 
 .SeccionMovimientos tbody tr:hover {
-    background: #F3F4F6;
-    transition: background 0.2s ease;
+    background: #FAFAFA;
 }
 
 .MensajeVacio {
