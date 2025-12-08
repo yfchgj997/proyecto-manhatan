@@ -2,6 +2,24 @@
     "Contador": 1,
     "Elementos": [
         {
+            "Nombres": "ASD",
+            "Apellidos": "ASDF",
+            "DNI": "32",
+            "SaldoEconomico": "400.00",
+            "SaldoMaterial": "0.00",
+            "FechaIngreso": "2025-11-30",
+            "ID": 1
+        },
+        {
+            "Nombres": "K",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2025-12-02",
+            "ID": 2
+        },
+        {
             "Nombres": "O",
             "Apellidos": "",
             "DNI": "",
