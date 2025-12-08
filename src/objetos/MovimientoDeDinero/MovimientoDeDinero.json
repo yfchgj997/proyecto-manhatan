@@ -106,18 +106,18 @@
             "CapturaSaldo": "23.45"
         },
         {
-            "Tipo": "Ingreso",
+            "Tipo": "Retiro",
             "Fecha": "2025-12-06",
-            "UsuarioID": 22,
-            "UsuarioNombres": "BERNARDO ",
+            "UsuarioID": 1,
+            "UsuarioNombres": "Admin",
             "ClienteID": "1",
-            "ClienteNombres": "ASD",
-            "ClienteApellidos": "ASDF",
-            "Importe": "400.00",
-            "Observacion": "F3REF3",
-            "Hora": "17:41:46",
+            "ClienteNombres": "O",
+            "ClienteApellidos": "",
+            "Importe": "3.00",
+            "Observacion": "DF",
+            "Hora": "12:34:18",
             "ID": 30,
-            "CapturaSaldo": "400.00"
+            "CapturaSaldo": "-3.00"
         }
     ]
 }
