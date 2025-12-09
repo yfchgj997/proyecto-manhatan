@@ -885,13 +885,30 @@ ipcMain.on("EQuiereIngresarMonto", (event, datos) => {
 })
 
 // Evento -> recibir monto ingresado desde popup
-ipcMain.on("EMontoIngresado", (event, datos) => {
+ipcMain.on("EMontoIngresado", async (event, datos) => {
 
     // mensaje de flujo
     console.log("Main: monto ingresado desde popup")
     console.log("Main: monto:", datos.monto)
     console.log("Main: detalle:", datos.detalle)
     console.log("Main: tipo:", datos.tipo)
+
+    // Paso -> solicitar código de seguridad
+    let codigoCorrecto = await SolicitarCodigo();
+
+    if (!codigoCorrecto) {
+        console.log("Main: código incorrecto o cancelado, no se modificará el capital");
+        // No cerrar el popup de monto, solo mostrar mensaje
+        if (InputMontoWindow) {
+            InputMontoWindow.webContents.send("ModificarMensaje", {
+                tipo: "MensajeMalo",
+                texto: "Código incorrecto. La operación no se realizó"
+            });
+        }
+        return; // Detener la ejecución
+    }
+
+    console.log("Main: código correcto, procediendo con la operación");
 
     // Paso -> cerrar popup
     if (InputMontoWindow) {
