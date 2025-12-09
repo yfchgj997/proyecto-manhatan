@@ -1,0 +1,45 @@
+/* Botones de Opciones con Iconos - FORZADOS */
+.BotonOpcion {
+    border: none !important;
+    background: transparent !important;
+    cursor: pointer !important;
+    padding: 10px !important;
+    border-radius: 50% !important;
+    transition: background-color 0.2s, transform 0.1s, color 0.2s !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: white !important;
+    /* Iconos blancos por defecto */
+    margin: 0 4px !important;
+}
+
+.BotonOpcion:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    transform: scale(1.1) !important;
+}
+
+.BotonOpcion svg {
+    width: 24px !important;
+    height: 24px !important;
+    fill: currentColor !important;
+    color: white !important;
+}
+
+.OpcionEliminar {
+    color: white !important;
+}
+
+.OpcionEliminar:hover {
+    background-color: rgba(220, 53, 69, 0.1) !important;
+    color: #dc3545 !important;
+}
+
+.OpcionVer {
+    color: white !important;
+}
+
+.OpcionVer:hover {
+    background-color: rgba(13, 110, 253, 0.1) !important;
+    color: #0d6efd !important;
+}
