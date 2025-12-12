@@ -33,7 +33,7 @@ function GenerarCodigo(datosFiltrados, fechaSeleccionada, CapitalEconomicoEmpres
                 <td>${siguienteCapitalEconomico} S/.</td>
                 <td>${dato.CapitalMaterialInicial} g.</td>
                 <td>${siguienteCapitalMaterial}</td>
-                <td><button class="BotonVerAzul" IDMovimiento="${dato.IDMovimiento}" Tipo="${dato.Tipo}">Ver</button></td>
+                <td><button class="BotonVerAzul" IDMovimiento="${dato.IDMovimiento}" Tipo="${dato.Tipo}" title="Ver"><i class="bi bi-eye"></i></button></td>
             </tr>
         `;
     }).join("");

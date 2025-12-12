@@ -35,7 +35,7 @@ function ModificarCodigo(clientes, fecha) {
                     </div>
                 </div>
                 <div class="Botones">
-<button class="Boton" id="BotonBuscar">Buscar</button>
+<button class="Boton" id="BotonBuscar" title="Buscar"><i class="bi bi-search"></i></button>
                 </div>
             </div>
         `;

@@ -52,8 +52,8 @@ function CargarTablaMovimientos(movimientos) {
                     <td class="cliente-movimiento">${movimiento.ClienteNombres}</td>
                     <td class="importe-movimiento">${movimiento.Importe}</td>
                     <td class="opciones">
-                        <button class="BotonOpcion OpcionEliminar">-</button>
-                        <button class="BotonOpcion OpcionVer">e</button>
+                        <button class="BotonOpcion OpcionEliminar" title="Eliminar"><i class="bi bi-trash"></i></button>
+                        <button class="BotonOpcion OpcionVer" title="Imprimir"><i class="bi bi-printer-fill"></i></button>
                     </td>
                 </tr>
             `;
@@ -66,7 +66,7 @@ function CargarTablaMovimientos(movimientos) {
                     <tr>
                         <td colspan="4" style="text-align:right; font-weight:bold;">Total:</td>
                         <td id="total-movimientos" style="font-weight:bold;">${totalMovimientos.toFixed(2)}</td>
-                        <td><button class="Boton" id="BotonDescargarTabla">Descargar</button></td>
+                        <td><button class="Boton" id="BotonDescargarTabla"> <i class="bi bi-download"></i> Descargar</button></td>
                         <td></td>
                     </tr>
                 </tfoot>
@@ -92,18 +92,18 @@ function CargarTablaMovimientos(movimientos) {
 
         // Se usa setTimeout para asegurar que el DOM se actualice antes de agregar eventos
         setTimeout(() => {
+            // Asignar eventos de impresión / ver detalle
             document.querySelectorAll(".OpcionVer").forEach(btn => {
                 btn.addEventListener("click", function () {
                     let fila = this.closest("tr");
                     let datosMovimiento = fila.getAttribute("data-info");
-                    
+
                     try {
                         let movimientoObjeto = JSON.parse(datosMovimiento);
-                        
+
                         if (typeof ipcRenderer !== "undefined") {
-                            console.log("MENSAJE: Enviando un evento de mostrar formulario con el siguiente movimiento:");
-                            console.log(movimientoObjeto);
-                            //ipcRenderer.send("EQuiereFormularioEditarMovimiento", movimientoObjeto);
+                            // Enviar a impresión o vista previa
+                            ipcRenderer.send("EImprimirMovimiento", movimientoObjeto);
                         } else {
                             console.error("ERROR: ipcRenderer no está disponible.");
                         }
@@ -113,10 +113,13 @@ function CargarTablaMovimientos(movimientos) {
                 });
             });
 
-            document.getElementById("BotonDescargarTabla").addEventListener("click",()=>{
+            // Asignar eventos de impresión / ver detalle
+
+            document.getElementById("BotonDescargarTabla").addEventListener("click", () => {
                 ipcRenderer.send("EDescargarTablaMovimientos", movimientos);
             })
 
+            // Asignar eventos de eliminación
             document.querySelectorAll(".OpcionEliminar").forEach(btn => {
                 btn.addEventListener("click", function () {
                     let fila = this.closest("tr");
@@ -124,28 +127,9 @@ function CargarTablaMovimientos(movimientos) {
 
                     try {
                         let movimientoObjeto = JSON.parse(datosMovimiento);
-                        
+
                         if (typeof ipcRenderer !== "undefined") {
                             ipcRenderer.send("EEliminarMovimiento", movimientoObjeto);
-                        } else {
-                            console.error("ERROR: ipcRenderer no está disponible.");
-                        }
-                    } catch (error) {
-                        console.error("Error al convertir datos del movimiento a objeto:", error);
-                    }
-                });
-            });
-
-            document.querySelectorAll(".OpcionVer").forEach(btn => {
-                btn.addEventListener("click", function () {
-                    let fila = this.closest("tr");
-                    let datosMovimiento = fila.getAttribute("data-info");
-
-                    try {
-                        let movimientoObjeto = JSON.parse(datosMovimiento);
-                        
-                        if (typeof ipcRenderer !== "undefined") {
-                            ipcRenderer.send("EImprimirMovimiento", movimientoObjeto);
                         } else {
                             console.error("ERROR: ipcRenderer no está disponible.");
                         }

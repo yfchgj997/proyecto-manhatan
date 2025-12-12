@@ -183,8 +183,8 @@ function GenerarVentanaDetalles(datos) {
                 <div class="DetallesDiaHeader">
                     <h2>Movimientos de ${datos.fecha}</h2>
                     <div style="display: flex; gap: 10px;">
-                        <button class="BotonDescargar" id="BotonDescargarExcel">
-                            Descargar Excel
+                        <button class="BotonDescargar" id="BotonDescargarExcel" title="Descargar Excel">
+                            <i class="bi bi-download"></i>
                         </button>
                         <button class="CerrarDetalles" id="CerrarDetalles">×</button>
                     </div>

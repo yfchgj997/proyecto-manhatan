@@ -51,7 +51,7 @@ function GenerarHTML(movimientos) {
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h2 style="margin: 0;">Detalle de Movimientos Empresariales</h2>
-            <button class="BotonCode" id="BotonVolverDeMovimientos">Volver</button>
+            <button class="BotonCode" id="BotonVolverDeMovimientos" title="Volver"> Volver </button>
         </div>
 
         <div id="ContenedorMovimientos">
