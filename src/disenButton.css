@@ -1,0 +1,279 @@
+/* =============================
+   BOTONES GENERALES
+============================= */
+
+/* Botones en Menu */
+#EspacioMenu>.Botones>.exit-button {
+    width: 100%;
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    margin-top: auto;
+    padding: 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+#EspacioMenu>.Botones>.exit-button:hover {
+    background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4);
+}
+
+/* Boton de formulario */
+.Formulario>.BotonFormulario {
+    width: 100%;
+    height: 36px;
+    margin: 10px 0px;
+}
+
+/* Botones genéricos .Boton */
+.Boton {
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #178582 0%, #40E0D0 100%);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(64, 224, 208, 0.3);
+}
+
+.Boton:hover {
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #40E0D0 0%, #7FFFD4 100%);
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(64, 224, 208, 0.5);
+}
+
+/* Boton en encabezado */
+.Encabezado>.BotonEncabezado {
+    width: 144px;
+    height: 48px;
+}
+
+#EspacioContenido>#EspacioEncabezado>#BotonEncabezado {
+    width: 144px;
+    height: 48px;
+}
+
+/* Boton select cliente */
+#BotonSelectCliente {
+    width: 100%;
+    background: white;
+    border: none;
+    border-radius: 5px;
+    color: gray;
+    padding: 8px;
+    text-align: left;
+}
+
+/* Boton Code */
+.BotonCode {
+    padding: 10px 20px;
+    background-color: #4aa3ff;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.BotonCode:hover {
+    background-color: #1b82e9;
+}
+
+/* Botones contenedor */
+#ContenedorBotones {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+}
+
+/* =============================
+   BUSCADOR ESTILOS
+   ============================= */
+.Buscador>.Botones {
+    display: flex;
+    align-items: flex-end;
+    /* Align button to bottom (with inputs) */
+    padding-bottom: 2px;
+    padding-left: 10px;
+}
+
+.Buscador>.Botones>.Boton {
+    height: 38px;
+    /* Match standard input height usually */
+    margin: 0;
+    min-width: 100px;
+}
+
+/* =============================
+   BOTONES DE OPCIONES (TABLA)
+============================= */
+.opciones {
+    text-align: center;
+    vertical-align: middle !important;
+    white-space: nowrap;
+    padding: 8px;
+    /* Adjusted padding */
+}
+
+.BotonOpcion {
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 8px 15px;
+    /* Padding mejorado */
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    /* Internal icon gap */
+    margin: 0 4px;
+    /* Spacing between buttons */
+    transition: transform 0.15s ease,
+        background-color 0.25s ease,
+        box-shadow 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.BotonOpcion:hover {
+    transform: scale(1.06);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.BotonOpcion:active {
+    transform: scale(0.95);
+}
+
+
+.OpcionVer {
+    background: #0d6efd;
+    /* Color mejorado */
+}
+
+.OpcionVer:hover {
+    background: #0b5cd5;
+}
+
+.OpcionEditar {
+    background: #ffc107;
+    color: #212529;
+}
+
+.OpcionEditar:hover {
+    background: #e6ad05;
+}
+
+.OpcionEliminar {
+    background: #dc3545;
+}
+
+.OpcionEliminar:hover {
+    background: #bb2d3b;
+}
+
+.OpcionMostrar {
+    background: #17a2b8;
+}
+
+/* Botones en filas de movimientos */
+.TablaDiarios button {
+    background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+}
+
+.TablaDiarios button:hover {
+    background: linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.5);
+}
+
+
+/* Estilos para el botón Ver (Tipo='Ver') */
+button[Tipo='Ver'] {
+    background: linear-gradient(135deg, #00838f 0%, #006064 100%);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 131, 143, 0.3);
+}
+
+button[Tipo='Ver']:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 131, 143, 0.4);
+    background: linear-gradient(135deg, #0097a7 0%, #00838f 100%);
+}
+
+
+/* Boton Ver Azul */
+.BotonVerAzul {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+    /* Added common button styles */
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.BotonVerAzul:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+}
+
+.BotonVerAzul:active {
+    transform: scale(0.96);
+    background-color: #004a9b;
+}
+
+
+/* Boton Descargar Excel */
+.BotonDescargar {
+    background-color: #10b981;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    margin-left: 10px;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.BotonDescargar:hover {
+    background-color: #059669;
+}
+
+#BotonDescargarTabla {
+    width: 100px;
+    height: 48px;
+}
