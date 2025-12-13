@@ -51,7 +51,7 @@ function CargarTablaCV(ListaCV) {
                         <td>${item.MontoEconomico}</td>
                         <td class="opciones">
                             <button class="BotonOpcion OpcionEliminar" title="Eliminar"><i class="bi bi-trash"></i></button>
-                            <button class="BotonOpcion OpcionVer" title="Ver"><i class="bi bi-eye"></i></button>
+                            <button class="BotonOpcion OpcionVer" title="Imprimir"><i class="bi bi-printer-fill"></i></button>
                         </td>
                     </tr>
                 `;
