@@ -1,4 +1,4 @@
-* {
+﻿* {
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
@@ -405,8 +405,8 @@ select,
 #EstadoCuentaContenedor {
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    padding: 25px;
+    gap: 20px;
+    padding: 10px;
     width: 95%;
     margin: auto;
     font-family: Arial, sans-serif;
@@ -431,11 +431,12 @@ select,
 
 /* =============================
    TÍTULOS
+/* ======================   T�TULOS
 ============================= */
 #TituloEstado,
 #TituloMovimientos {
     font-size: 22px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 /* =============================
@@ -458,6 +459,200 @@ select,
 
 #TablaMovimientos th {
     background: #52a5ff;
+    background: #9C27B0;
+    color: white;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 2px solid #dddddd;
+}
+
+#TablaMovimientos td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.fila-movimiento:hover {
+    background-color: #f4f9ff;
+    background: #ffc107;
+}
+
+.opciones>.OpcionEliminar {
+    background: #dc3545;
+}
+
+.opciones>.OpcionMostrar {
+    background: #17a2b8;
+}
+
+.Tabla th {
+    color: #B2B2B2;
+    font-size: 16px;
+    text-align: center;
+}
+
+.Tabla td {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.opciones {
+    margin-right: 8px;
+}
+
+.BotonOpcion {
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.BotonOpcion:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.opciones>.OpcionVer {
+    background: #007bff;
+}
+
+.opciones>.OpcionEditar {
+    background: #ffc107;
+}
+
+.opciones>.OpcionEliminar {
+    background: #dc3545;
+}
+
+/* botones */
+.Boton {
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #7B2CBF 0%, #9D4EDD 100%);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
+}
+
+.Boton:hover {
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #9D4EDD 0%, #C77dFF 100%);
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(156, 39, 176, 0.5);
+}
+
+#BotonDescargarTabla {
+    width: 100px;
+    height: 48px;
+}
+
+.EspacioCuentaEmpresarial {
+    width: 100%;
+    display: flex;
+}
+
+.Capital {
+    background: #9C27B0;
+    margin: 10px;
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+/* ---------------------------------------- BORRAR ---------------------------------------------- */
+
+/* ======================   CONTENEDOR PRINCIPAL
+============================= */
+#EstadoCuentaContenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 25px;
+    /* 10px arriba/abajo, 25px lados */
+    padding-top: 10px;
+    /* Forzando 10px explicito arriba */
+    width: 100%;
+    margin: 0 auto;
+    /* Quitamos margin top automatico si lo hubiera */
+    font-family: Arial, sans-serif;
+}
+
+/* ======================   BOTONES
+============================= */
+#ContenedorBotones {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+}
+
+.BotonCode {
+    padding: 10px 20px;
+    background-color: #9C27B0;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.BotonCode:hover {
+    background-color: #7B1FA2;
+}
+
+/* ======================   TARJETA CLIENTE
+============================= */
+#TarjetaCliente {
+    background: #f7f7f7;
+    color: rgb(0, 0, 0);
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#TarjetaCliente p {
+    margin: 6px 0;
+}
+
+/* ======================   T�TULOS
+============================= */
+#TituloEstado,
+#TituloMovimientos {
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+/* ======================   CONTENEDOR MOVIMIENTOS
+============================= */
+#ContenedorMovimientos {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* ======================   TABLA DE MOVIMIENTOS
+============================= */
+#TablaMovimientos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#TablaMovimientos th {
+    background: #9C27B0;
     color: white;
     padding: 10px;
     text-align: left;
@@ -486,7 +681,24 @@ select,
 /* =============================
    BOT�N VER EN TABLA DIARIOS
 ============================= */
+.TablaDiarios button {
+    background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+}
 
+.TablaDiarios button:hover {
+    background: linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.5);
+}
 
 /* =============================
    BOTÓN VER EN TABLA DIARIOS
@@ -528,6 +740,260 @@ select,
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.DetallesDiaHeader {
+    background: linear-gradient(135deg, #007bff 0%, #178582 100%);
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.BotonesEncabezado>.BotonEncabezado {
+    width: auto;
+    min-width: 120px;
+    height: 48px;
+    padding: 0 20px;
+    white-space: nowrap;
+}
+
+.DetallesDiaHeader h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.CerrarDetalles {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 32px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.CerrarDetalles:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.DetallesDiaBody {
+    padding: 30px;
+    overflow-y: auto;
+    max-height: calc(85vh - 90px);
+}
+
+.SeccionMovimientos {
+    margin-bottom: 30px;
+    background: #F9FAFB;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #E5E7EB;
+}
+
+.SeccionMovimientos:last-child {
+    margin-bottom: 0;
+}
+
+.SeccionMovimientos h3 {
+    color: #007bff;
+    margin: 0 0 15px 0;
+    font-size: 20px;
+    border-bottom: 2px solid #8B5CF6;
+    padding-bottom: 10px;
+    font-weight: 600;
+}
+
+.SeccionMovimientos table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.SeccionMovimientos th {
+    background: linear-gradient(135deg, #007bff 0%, #178582 100%);
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.SeccionMovimientos td {
+    padding: 12px;
+    border-bottom: 1px solid #E5E7EB;
+    color: #374151;
+    font-size: 14px;
+}
+
+.SeccionMovimientos tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.SeccionMovimientos tbody tr:hover {
+    background: #F3F4F6;
+    transition: background 0.2s ease;
+}
+
+.MensajeVacio {
+    text-align: center;
+    color: #9CA3AF;
+    padding: 30px 20px;
+    font-style: italic;
+    font-size: 15px;
+}
+
+
+
+/* Estilos para el bot�n Ver */
+button[Tipo='Ver'] {
+    background: linear-gradient(135deg, #00838f 0%, #006064 100%);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 131, 143, 0.3);
+}
+
+
+
+
+/* Badge de Tipo (INGRESO / RETIRO) */
+.BadgeTipo {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.BadgeTipo.ingreso {
+    background-color: #10b981;
+    color: white;
+}
+
+.BadgeTipo.egreso {
+    background-color: #ef4444;
+    color: white;
+}
+
+/* Boton Ver Azul */
+.BotonVerAzul {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.BotonVerAzul:hover {
+    background-color: #0056b3;
+}
+
+/* Boton Descargar Excel */
+.BotonDescargar {
+    background-color: #10b981;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    margin-left: 10px;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.BotonDescargar:hover {
+    background-color: #059669;
+}
+
+
+/* Fix Table Headers */
+.DetallesDiaBody table th {
+    color: #333;
+    /* Dark text for visibility */
+    background-color: #f3f4f6;
+    /* Light gray background */
+}
+
+/* Header Layout */
+.DetallesDiaHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+
+
+/* ===== MODAL DETALLES DEL DIA ===== */
+.DetallesDiaOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.DetallesDiaContenedor {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 1200px;
+    max-height: 85vh;
+    overflow: hidden;
     animation: slideIn 0.3s ease;
 }
 
@@ -597,6 +1063,14 @@ select,
     margin-bottom: 0;
 }
 
+.SeccionMovimientos h3 {
+    color: #007bff;
+    margin: 0 0 15px 0;
+    font-size: 20px;
+    border-bottom: 2px solid #8B5CF6;
+    padding-bottom: 10px;
+    font-weight: 600;
+}
 
 .SeccionMovimientos table {
     width: 100%;
@@ -606,7 +1080,14 @@ select,
     overflow: hidden;
 }
 
-
+.SeccionMovimientos th {
+    background: linear-gradient(135deg, #007bff 0%, #178582 100%);
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+}
 
 .SeccionMovimientos td {
     padding: 12px;
@@ -632,12 +1113,200 @@ select,
     font-size: 15px;
 }
 
+/* Badge de Tipo (INGRESO / RETIRO) */
+.BadgeTipo {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
 
+.BadgeTipo.ingreso {
+    background-color: #10b981;
+    color: white;
+}
 
-/* Estilos para el bot�n Ver */
+.BadgeTipo.egreso {
+    background-color: #ef4444;
+    color: white;
+}
 
+/* ======================   MODAL RANGO FECHAS
+============================= */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
 
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 400px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
 
+.modal-content h3 {
+    margin-bottom: 20px;
+    color: #4A148C;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.modal-campo {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.modal-campo label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #6A1B9A;
+}
+
+.modal-input {
+    padding: 10px;
+    border: 1px solid #BA68C8;
+    border-radius: 6px;
+    font-size: 16px;
+    outline: none;
+}
+
+.modal-input:focus {
+    border-color: #7B1FA2;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.DetallesDiaHeader {
+    background: linear-gradient(135deg, #007bff 0%, #178582 100%);
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.DetallesDiaHeader h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.CerrarDetalles {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 32px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.CerrarDetalles:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.DetallesDiaBody {
+    padding: 30px;
+    overflow-y: auto;
+    max-height: calc(85vh - 90px);
+}
+
+.SeccionMovimientos {
+    margin-bottom: 30px;
+    background: #F9FAFB;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #E5E7EB;
+}
+
+.SeccionMovimientos:last-child {
+    margin-bottom: 0;
+}
+
+.SeccionMovimientos h3 {
+    color: #007bff;
+    margin: 0 0 15px 0;
+    font-size: 20px;
+    border-bottom: 2px solid #8B5CF6;
+    padding-bottom: 10px;
+    font-weight: 600;
+}
+
+.SeccionMovimientos table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.SeccionMovimientos th {
+    background: linear-gradient(135deg, #007bff 0%, #178582 100%);
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.SeccionMovimientos td {
+    padding: 12px;
+    border-bottom: 1px solid #E5E7EB;
+    color: #374151;
+    font-size: 14px;
+}
+
+.SeccionMovimientos tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.SeccionMovimientos tbody tr:hover {
+    background: #F3F4F6;
+    transition: background 0.2s ease;
+}
+
+.MensajeVacio {
+    text-align: center;
+    color: #9CA3AF;
+    padding: 30px 20px;
+    font-style: italic;
+    font-size: 15px;
+}
 
 /* Badge de Tipo (INGRESO / RETIRO) */
 .BadgeTipo {
@@ -658,25 +1327,151 @@ select,
     color: white;
 }
 
-/* Boton Ver Azul */
-
-
-/* Boton Descargar Excel */
-
-
-
-/* Fix Table Headers */
-.DetallesDiaBody table th {
-    color: #333;
-    /* Dark text for visibility */
-    background-color: #f3f4f6;
-    /* Light gray background */
+/* ======================   MODAL RANGO FECHAS
+============================= */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
-/* Header Layout */
-.DetallesDiaHeader {
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 400px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.modal-content h3 {
+    margin-bottom: 20px;
+    color: #4A148C;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.modal-campo {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.modal-campo label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #6A1B9A;
+}
+
+.modal-input {
+    padding: 10px;
+    border: 1px solid #BA68C8;
+    border-radius: 6px;
+    font-size: 16px;
+    outline: none;
+}
+
+.modal-input:focus {
+    border-color: #7B1FA2;
+    box-shadow: 0 0 5px rgba(123, 31, 162, 0.3);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-around;
+}
+
+/* ======================   TARJETA CLIENTE REDISEÑO
+============================= */
+.InfoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.InfoItem {
+    background: transparent;
+    padding: 10px 0;
+    border-bottom: 1px solid #E0E0E0;
+    display: flex;
+    flex-direction: column;
+}
+
+.InfoItem strong {
+    color: #4A148C;
+    margin-bottom: 3px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.InfoItem span {
+    color: #333;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+/* Ajuste de botones en el encabezado */
+#ContenedorBotones {
+    padding-right: 10px;
+    /* Separación del borde derecho si es necesario */
+}
+
+#ContenedorBotones .BotonCode {
+    width: auto;
+    /* No ancho fijo */
+    min-width: 100px;
+    /* Mínimo razonable */
+    margin-left: 10px;
+    /* Separación entre botones */
+    padding: 8px 24px;
+    /* Padding interno más equilibrado */
+    height: 40px;
+    /* Altura controlada */
+}
+
+/* ======================   ENCABEZADO ESTADO DE CUENTA
+============================= */
+.EstadoCuentaHeader {
+    width: 100%;
+    height: auto;
+    /* Altura automática para evitar espacios vacíos excesivos */
+    min-height: 50px;
+    /* Altura mínima consistente */
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    width: 100%;
+    align-items: start;
+    /* Centrado vertical perfecto */
+    padding: 5px 0;
+    /* Espaciado interno superior/inferior */
+    border-bottom: solid 3px #7B1FA2;
+    margin-bottom: 10px;
+    margin-top: 0px;
+}
+
+.EstadoCuentaHeader h2 {
+    margin: 0;
+    color: black;
+    font-weight: bold;
+    font-size: 28px;
+    /* Tamaño legible pero elegante */
+}
+
+/* Ajuste específico para levantar los botones del borde */
+.EstadoCuentaHeader #ContenedorBotones {
+    padding-bottom: 5px;
+    /* Pequeño respiro sobre la línea */
 }

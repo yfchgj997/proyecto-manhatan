@@ -46,17 +46,6 @@
             "ID": 4
         },
         {
-            "Tipo": "Material",
-            "Operacion": "Disminuir",
-            "Fecha": "2025-12-01",
-            "Usuario": "Admin",
-            "Importe": "300.00",
-            "Detalle": "kdncsnd",
-            "Hora": "21:57:33",
-            "CapturaSaldo": "176.96",
-            "ID": 5
-        },
-        {
             "Tipo": "Capital",
             "Operacion": "Aumentar",
             "Fecha": "2025-12-01",
@@ -77,17 +66,6 @@
             "Hora": "22:13:58",
             "CapturaSaldo": "3121.93",
             "ID": 7
-        },
-        {
-            "Tipo": "Material",
-            "Operacion": "Disminuir",
-            "Fecha": "2025-12-01",
-            "Usuario": "Admin",
-            "Importe": "76.96",
-            "Detalle": "gergew",
-            "Hora": "22:14:33",
-            "CapturaSaldo": "100.00",
-            "ID": 8
         }
     ]
 }

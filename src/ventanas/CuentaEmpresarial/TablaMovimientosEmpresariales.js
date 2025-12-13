@@ -9,17 +9,36 @@ function GenerarHTML(movimientos) {
         `;
     } else {
         let filas = movimientos.map(m => {
+            let ecoInicial = "-", ecoFinal = "-", matInicial = "-", matFinal = "-";
+            let saldo = parseFloat(m.CapturaSaldo);
+            let importe = parseFloat(m.Importe);
+            let inicial = 0;
+
+            if (m.Operacion === "Aumentar") {
+                inicial = saldo - importe;
+            } else {
+                inicial = saldo + importe;
+            }
+
+            if (m.Tipo === "Capital") {
+                ecoInicial = inicial.toFixed(2);
+                ecoFinal = saldo.toFixed(2);
+            } else if (m.Tipo === "Material") {
+                matInicial = inicial.toFixed(2);
+                matFinal = saldo.toFixed(2);
+            }
+
             return `
                 <tr class="fila-movimiento">
                     <td>${m.ID}</td>
                     <td>${m.Fecha}</td>
-                    <td>${m.Hora}</td>
-                    <td>${m.Usuario}</td>
                     <td>${m.Tipo}</td>
                     <td>${m.Operacion || ""}</td>
                     <td>${m.Importe}</td>
-                    <td>${m.Detalle || ""}</td>
-                    <td>${m.CapturaSaldo}</td>
+                    <td>${ecoInicial}</td>
+                    <td>${ecoFinal}</td>
+                    <td>${matInicial}</td>
+                    <td>${matFinal}</td>
                 </tr>
             `;
         }).join("");
@@ -30,13 +49,13 @@ function GenerarHTML(movimientos) {
                     <tr style="background-color: #f2f2f2; text-align: left;">
                         <th style="padding: 12px;">ID</th>
                         <th style="padding: 12px;">Fecha</th>
-                        <th style="padding: 12px;">Hora</th>
-                        <th style="padding: 12px;">Usuario</th>
                         <th style="padding: 12px;">Tipo</th>
                         <th style="padding: 12px;">Operación</th>
                         <th style="padding: 12px;">Importe</th>
-                        <th style="padding: 12px;">Detalle</th>
-                        <th style="padding: 12px;">Saldo</th>
+                        <th style="padding: 12px;">Cap. Eco. Inicial</th>
+                        <th style="padding: 12px;">Cap. Eco. Final</th>
+                        <th style="padding: 12px;">Cap. Mat. Inicial</th>
+                        <th style="padding: 12px;">Cap. Mat. Final</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,17 +66,24 @@ function GenerarHTML(movimientos) {
     }
 
     return `
-    <div id="MovimientosEmpresarialesContenedor" style="padding: 20px;">
-
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin: 0;">Detalle de Movimientos Empresariales</h2>
-            <button class="BotonCode" id="BotonVolverDeMovimientos" title="Volver"> Volver </button>
+    <div id="VentanaClientes">
+        <div class="AreaEncabezado">
+            <div class="Encabezado">
+                <h2 style="margin: 0;">Detalle de Movimientos Empresariales</h2>
+                <div style="display: flex; gap: 10px;">
+                    <button class="BotonCode" id="BotonExportarExcel" style="background-color: #217346;">Exportar Excel</button>
+                    <button class="BotonCode" id="BotonVolverDeMovimientos">Volver</button>
+                </div>
+            </div>
         </div>
 
-        <div id="ContenedorMovimientos">
-            ${contenidoMovimientos}
+        <div class="AreaCuerpo">
+            <div class="CuerpoIzquierdo">
+                <div id="ContenedorMovimientos" style="height: 100%; overflow-y: auto; border: 1px solid #ddd; margin-bottom: 10px;">
+                    ${contenidoMovimientos}
+                </div>
+            </div>
         </div>
-
     </div>
     `;
 }
@@ -80,6 +106,10 @@ function CargarTablaMovimientosEmpresariales(movimientos) {
     setTimeout(() => {
         document.getElementById("BotonVolverDeMovimientos").addEventListener("click", () => {
             ipcRenderer.send("EQuiereGestionarCuentaEmpresarial");
+        });
+
+        document.getElementById("BotonExportarExcel").addEventListener("click", () => {
+            ipcRenderer.send("EQuiereExportarMovimientosEmpresariales");
         });
         console.log("Eventos de botones asignados correctamente.");
     }, 100);
