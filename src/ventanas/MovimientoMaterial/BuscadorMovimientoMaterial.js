@@ -2,20 +2,20 @@
 
 const { ipcRenderer } = require("electron");
 
-    // codigo
-    let codigo = ``
+// codigo
+let codigo = ``
 
 // Funciones
 
-    // Funcion -> mapear los clientes
-    function ModificarCodigo(clientes,fecha) {
+// Funcion -> mapear los clientes
+function ModificarCodigo(clientes, fecha) {
 
-        console.log("Buscador: fecha: ",fecha)
-        // Generar opciones dinámicamente
-        let opcionesClientes = clientes.map(cliente => `<option value="${cliente.ID}">${cliente.Nombres}</option>`).join("");
+    console.log("Buscador: fecha: ", fecha)
+    // Generar opciones dinámicamente
+    let opcionesClientes = clientes.map(cliente => `<option value="${cliente.ID}">${cliente.Nombres}</option>`).join("");
 
-        // Generar el código con las opciones de clientes mapeadas
-        codigo = `
+    // Generar el código con las opciones de clientes mapeadas
+    codigo = `
             <div class="Buscador"> 
                 <div class="Buscadores">
                     <div class="BuscadorUnico">
@@ -35,55 +35,55 @@ const { ipcRenderer } = require("electron");
                     </div>
                 </div>
                 <div class="Botones">
-                    <button class="Boton" id="BotonBuscar">Buscar</button>
+<button class="Boton" id="BotonBuscar" title="Buscar"><i class="bi bi-search"></i></button>
                 </div>
             </div>
         `;
+}
+
+// Funcion -> filtrar los movimientos
+function FiltrarMovimientos() {
+
+    // mensaje de flujo
+    console.log("filtrando los movimientos existentes")
+    datosFiltro = {
+        "cliente": document.getElementById("CampoClienteMovimientoBuscador").value,
+        "fechaInicio": document.getElementById("CampoTextoFechaInicial").value,
+        "fechaFinal": document.getElementById("CampoTextoFechaFinal").value
     }
+    console.log(datosFiltro)
 
-    // Funcion -> filtrar los movimientos
-    function FiltrarMovimientos (){
+    // Paso -> enviar el evento
+    ipcRenderer.send("EFiltrarMovimientosMateriales", datosFiltro)
 
-        // mensaje de flujo
-        console.log("filtrando los movimientos existentes")
-        datosFiltro = {
-            "cliente":document.getElementById("CampoClienteMovimientoBuscador").value,
-            "fechaInicio":document.getElementById("CampoTextoFechaInicial").value,
-            "fechaFinal":document.getElementById("CampoTextoFechaFinal").value
-        }
-        console.log(datosFiltro)
-
-        // Paso -> enviar el evento
-        ipcRenderer.send("EFiltrarMovimientosMateriales",datosFiltro)
-
-    }
+}
 
 
-    // Funcion -> cargar buscador de clientes
-    function MostrarBuscadorMovimientoMaterial (clientes,fecha){
+// Funcion -> cargar buscador de clientes
+function MostrarBuscadorMovimientoMaterial(clientes, fecha) {
 
-        // mensaje de flujo
-        console.log("MENSAJE: cargando el componente buscador de movimiento")
+    // mensaje de flujo
+    console.log("MENSAJE: cargando el componente buscador de movimiento")
 
-        // Paso -> obtener el espacio
-        let EspacioBuscadorMovimiento = document.getElementById("EspacioBuscadorMovimiento")
-        if(EspacioBuscadorMovimiento){
-            // Paso -> modificar codigo
-            ModificarCodigo(clientes,fecha)
-            // Paso -> ingresar el codigo html
-            EspacioBuscadorMovimiento.innerHTML = codigo 
-            // Paso -> agregar la funcionalidad del boton buscar
-            document.getElementById("BotonBuscar").addEventListener("click",FiltrarMovimientos)
-            /* document.getElementById("BuscadorBotonSelectCliente").addEventListener("click",()=>{
-                // mensaje de flujo
-                console.log("MENSAJE: se quiere seleccionar un cliente")
-                // Paso -> actualizar formulario nuevo cliente
-                ipcRenderer.send("EQuiereSeleccionarCliente")
-            }) */
-        }else{
+    // Paso -> obtener el espacio
+    let EspacioBuscadorMovimiento = document.getElementById("EspacioBuscadorMovimiento")
+    if (EspacioBuscadorMovimiento) {
+        // Paso -> modificar codigo
+        ModificarCodigo(clientes, fecha)
+        // Paso -> ingresar el codigo html
+        EspacioBuscadorMovimiento.innerHTML = codigo
+        // Paso -> agregar la funcionalidad del boton buscar
+        document.getElementById("BotonBuscar").addEventListener("click", FiltrarMovimientos)
+        /* document.getElementById("BuscadorBotonSelectCliente").addEventListener("click",()=>{
             // mensaje de flujo
-            console.log("ERROR: no se pudo encontrar el espacio para gargar el buscador movimiento")
-        }
+            console.log("MENSAJE: se quiere seleccionar un cliente")
+            // Paso -> actualizar formulario nuevo cliente
+            ipcRenderer.send("EQuiereSeleccionarCliente")
+        }) */
+    } else {
+        // mensaje de flujo
+        console.log("ERROR: no se pudo encontrar el espacio para gargar el buscador movimiento")
     }
+}
 
 module.exports = { MostrarBuscadorMovimientoMaterial };

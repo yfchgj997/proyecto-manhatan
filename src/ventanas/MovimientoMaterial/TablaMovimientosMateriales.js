@@ -52,8 +52,8 @@ function MostrarTablaMovimientos(movimientos) {
                     <td class="cliente-movimiento">${movimiento.ClienteNombres}</td>
                     <td class="importe-movimiento">${movimiento.Importe}</td>
                     <td class="opciones">
-                        <button class="BotonOpcion OpcionEliminar">-</button>
-                        <button class="BotonOpcion OpcionVer">e</button>
+                        <button class="BotonOpcion OpcionEliminar" title="Eliminar"><i class="bi bi-trash"></i></button>
+                        <button class="BotonOpcion OpcionVer" title="Imprimir"><i class="bi bi-printer-fill"></i></button>
                     </td>
                 </tr>
             `;
@@ -96,10 +96,10 @@ function MostrarTablaMovimientos(movimientos) {
                 btn.addEventListener("click", function () {
                     let fila = this.closest("tr");
                     let datosMovimiento = fila.getAttribute("data-info");
-                    
+
                     try {
                         let movimientoObjeto = JSON.parse(datosMovimiento);
-                        
+
                         if (typeof ipcRenderer !== "undefined") {
                             console.log("MENSAJE: Enviando un evento de mostrar formulario con el siguiente movimiento:");
                             console.log(movimientoObjeto);
@@ -113,7 +113,9 @@ function MostrarTablaMovimientos(movimientos) {
                 });
             });
 
-            document.getElementById("BotonDescargarTabla").addEventListener("click",()=>{
+
+
+            document.getElementById("BotonDescargarTabla").addEventListener("click", () => {
                 ipcRenderer.send("EDescargarTablaMovimientos", movimientos);
             })
 
@@ -124,7 +126,7 @@ function MostrarTablaMovimientos(movimientos) {
 
                     try {
                         let movimientoObjeto = JSON.parse(datosMovimiento);
-                        
+
                         if (typeof ipcRenderer !== "undefined") {
                             ipcRenderer.send("EEliminarMovimientoMaterial", movimientoObjeto);
                         } else {

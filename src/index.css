@@ -1,4 +1,4 @@
-* {
+Ôªø* {
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
@@ -75,31 +75,7 @@
     padding-left: 14px;
 }
 
-/* botones */
-#EspacioMenu>.Botones {
-    width: 100%;
-    height: auto;
-}
 
-/* boton de salir */
-#EspacioMenu>.Botones>.exit-button {
-    width: 100%;
-    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-    color: white;
-    margin-top: auto;
-    padding: 12px;
-    border: none;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
-}
-
-#EspacioMenu>.Botones>.exit-button:hover {
-    background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4);
-}
 
 /* contenido */
 #EspacioContenido {
@@ -129,11 +105,7 @@
     font-weight: bold;
 }
 
-/* nombre ventana */
-#EspacioContenido>#EspacioEncabezado>#BotonEncabezado {
-    width: 144px;
-    height: 48px;
-}
+
 
 .Cuerpo {
     height: 90%;
@@ -338,16 +310,9 @@ select,
     padding: 8px;
 }
 
-#BotonSelectCliente {
-    text-align: left;
-}
 
-/* boton del formulario */
-.Formulario>.BotonFormulario {
-    width: 100%;
-    height: 36px;
-    margin: 10px 0px;
-}
+
+
 
 .Buscador {
     width: 100%;
@@ -384,18 +349,7 @@ select,
     padding: 0px 20px;
 }
 
-.Botones {
-    width: auto;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: end;
-}
 
-.Botones>.Boton {
-    width: 100px;
-    height: 48px;
-}
 
 .Tabla {
     width: 100%;
@@ -407,23 +361,119 @@ select,
     height: auto;
 }
 
-.opciones {
-    margin-right: 8px;
+
+
+.Tabla th {
+    color: #B2B2B2;
+    font-size: 16px;
+    text-align: center;
 }
 
-.BotonOpcion {
+.Tabla td {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+
+
+
+
+
+
+.EspacioCuentaEmpresarial {
+    width: 100%;
+    display: flex;
+}
+
+.Capital {
+    background: #449eff;
+    margin: 10px;
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+/* ---------------------------------------- BORRAR ---------------------------------------------- */
+
+/* =============================
+   CONTENEDOR PRINCIPAL
+============================= */
+#EstadoCuentaContenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px;
+    width: 95%;
+    margin: auto;
+    font-family: Arial, sans-serif;
+}
+
+
+
+/* =============================
+   TARJETA CLIENTE
+============================= */
+#TarjetaCliente {
+    background: #f7f7f7;
+    color: rgb(0, 0, 0);
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#TarjetaCliente p {
+    margin: 6px 0;
+}
+
+/* =============================
+   T√çTULOS
+/* ======================   TÔøΩTULOS
+============================= */
+#TituloEstado,
+#TituloMovimientos {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+/* =============================
+   CONTENEDOR MOVIMIENTOS
+============================= */
+#ContenedorMovimientos {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* =============================
+   TABLA DE MOVIMIENTOS
+============================= */
+#TablaMovimientos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#TablaMovimientos th {
+    background: #52a5ff;
+    background: #9C27B0;
     color: white;
-    border: none;
-    cursor: pointer;
-    padding: 3px;
-    border-radius: 1px;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 2px solid #dddddd;
 }
 
-.opciones>.OpcionVer {
-    background: #007bff;
+#TablaMovimientos td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
 }
 
-.opciones>.OpcionEditar {
+.fila-movimiento:hover {
+    background-color: #f4f9ff;
     background: #ffc107;
 }
 
@@ -455,8 +505,19 @@ select,
     color: white;
     border: none;
     cursor: pointer;
-    padding: 3px;
-    border-radius: 1px;
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.BotonOpcion:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .opciones>.OpcionVer {
@@ -479,15 +540,15 @@ select,
     border-radius: 10px;
     color: white;
     font-size: 16px;
-    box-shadow: 0 4px 12px rgba(64, 224, 208, 0.3);
+    box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
 }
 
 .Boton:hover {
     transition: all 0.3s ease;
-    background: linear-gradient(135deg, #1E40AF 0%, #2563EB 100%);
+    background: linear-gradient(135deg, #40E0D0 0%, #7FFFD4 100%);
     cursor: pointer;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(64, 224, 208, 0.5);
+    box-shadow: 0 6px 16px rgba(156, 39, 176, 0.5);
 }
 
 #BotonDescargarTabla {
@@ -501,7 +562,7 @@ select,
 }
 
 .Capital {
-    background: #1E40AF;
+    background: #449eff;
     margin: 10px;
     flex-grow: 1;
     padding: 20px;
@@ -515,21 +576,23 @@ select,
 
 /* ---------------------------------------- BORRAR ---------------------------------------------- */
 
-/* =============================
-   CONTENEDOR PRINCIPAL
+/* ======================   CONTENEDOR PRINCIPAL
 ============================= */
 #EstadoCuentaContenedor {
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    padding: 25px;
-    width: 95%;
-    margin: auto;
+    gap: 10px;
+    padding: 10px 25px;
+    /* 10px arriba/abajo, 25px lados */
+    padding-top: 10px;
+    /* Forzando 10px explicito arriba */
+    width: 100%;
+    margin: 0 auto;
+    /* Quitamos margin top automatico si lo hubiera */
     font-family: Arial, sans-serif;
 }
 
-/* =============================
-   BOTONES
+/* ======================   BOTONES
 ============================= */
 #ContenedorBotones {
     display: flex;
@@ -539,7 +602,7 @@ select,
 
 .BotonCode {
     padding: 10px 20px;
-    background-color: #4aa3ff;
+    background-color: #9C27B0;
     border: none;
     border-radius: 6px;
     color: white;
@@ -549,11 +612,10 @@ select,
 }
 
 .BotonCode:hover {
-    background-color: #1b82e9;
+    background-color: #7B1FA2;
 }
 
-/* =============================
-   TARJETA CLIENTE
+/* ======================   TARJETA CLIENTE
 ============================= */
 #TarjetaCliente {
     background: #f7f7f7;
@@ -568,7 +630,7 @@ select,
 }
 
 /* =============================
-   TÕTULOS
+   T√çTULOS
 ============================= */
 #TituloEstado,
 #TituloMovimientos {
@@ -576,8 +638,7 @@ select,
     margin-bottom: 15px;
 }
 
-/* =============================
-   CONTENEDOR MOVIMIENTOS
+/* ======================   CONTENEDOR MOVIMIENTOS
 ============================= */
 #ContenedorMovimientos {
     background: white;
@@ -585,8 +646,7 @@ select,
     border-radius: 10px;
 }
 
-/* =============================
-   TABLA DE MOVIMIENTOS
+/* ======================   TABLA DE MOVIMIENTOS
 ============================= */
 #TablaMovimientos {
     width: 100%;
@@ -595,7 +655,7 @@ select,
 }
 
 #TablaMovimientos th {
-    background: #52a5ff;
+    background: #9C27B0;
     color: white;
     padding: 10px;
     text-align: left;
@@ -644,29 +704,12 @@ select,
 }
 
 /* =============================
-   BOT”N VER EN TABLA DIARIOS
+   BOTÔøΩN VER EN TABLA DIARIOS
 ============================= */
-.TablaDiarios button {
-    background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 12px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
-}
 
-.TablaDiarios button:hover {
-    background: linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.5);
-}
 
 /* =============================
-   VENTANA MODAL DETALLES DEL DÕA
+   VENTANA MODAL DETALLES DEL DÔøΩA
 ============================= */
 .DetallesDiaOverlay {
     position: fixed;
@@ -724,6 +767,14 @@ select,
     align-items: center;
 }
 
+.BotonesEncabezado>.BotonEncabezado {
+    width: auto;
+    min-width: 120px;
+    height: 48px;
+    padding: 0 20px;
+    white-space: nowrap;
+}
+
 .DetallesDiaHeader h2 {
     margin: 0;
     font-size: 24px;
@@ -769,14 +820,7 @@ select,
     margin-bottom: 0;
 }
 
-.SeccionMovimientos h3 {
-    `r`n color: #007bff;
-    margin: 0 0 15px 0;
-    font-size: 20px;
-    border-bottom: 2px solid #8B5CF6;
-    padding-bottom: 10px;
-    font-weight: 600;
-}
+
 
 .SeccionMovimientos table {
     width: 100%;
@@ -786,14 +830,6 @@ select,
     overflow: hidden;
 }
 
-.SeccionMovimientos th {
-    `r`n background: linear-gradient(135deg, #1E40AF 0%, #1E3A8A 100%);
-    color: white;
-    padding: 12px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 14px;
-}
 
 .SeccionMovimientos td {
     padding: 12px;
@@ -838,7 +874,7 @@ button[Tipo='Ver'] {
 button[Tipo='Ver']:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0, 131, 143, 0.4);
-    background: linear-gradient(135deg, #1E40AF 0%, #2563EB 100%);
+    background: linear-gradient(135deg, #0097a7 0%, #00838f 100%);
 }
 
 
@@ -914,14 +950,4 @@ button[Tipo='Ver']:hover {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-}
-
-
-/* Logo REDSUR en men√∫ */
-.logo-redsur {
-    width: 100px;
-    height: auto;
-    margin: 0 auto 16px auto;
-    display: block;
-    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.2));
 }
