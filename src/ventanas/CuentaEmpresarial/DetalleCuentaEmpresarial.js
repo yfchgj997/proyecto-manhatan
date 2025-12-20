@@ -22,7 +22,7 @@ function GenerarCodigo(CapitalEconomico, CapitalMaterial, rolUsuario) {
     Codigo = `
         <style>
             .capital-card {
-                background: #3B82F6;
+                background: linear-gradient(to right, #3B82F6, #FFFFFF);
                 margin: 10px 10px;
                 padding: 30px;
                 border-radius: 12px;

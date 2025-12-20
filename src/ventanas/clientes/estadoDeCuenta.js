@@ -51,7 +51,7 @@ function GenerarHTML(datos) {
         <!-- MODAL DE FECHAS -->
         <div id="ModalRangoFechas" class="modal-overlay" style="display: none;">
             <div class="modal-content">
-                <h3>Seleccionar Rango de Fechas</h3>
+                <h3>Rango de Fechas</h3>
                 <div class="modal-body">
                     <div class="modal-campo">
                         <label>Fecha Inicio:</label>
