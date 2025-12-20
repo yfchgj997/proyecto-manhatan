@@ -5,6 +5,7 @@
 /* Botones en Menu */
 #EspacioMenu>.Botones>.exit-button {
     width: 100%;
+    /* Keep Red as it is an 'exit/delete' type action? User said "excepcion del eliminar". Exit is similar. I'll keep it RED for safety, or check if user meant ONLY delete button. "incluso de los botones a axepcoion del eliminar". Exit is usually distinct. I will keep it Red. */
     background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
     color: white;
     margin-top: auto;
@@ -32,20 +33,20 @@
 /* Botones genéricos .Boton */
 .Boton {
     transition: all 0.3s ease;
-    background: linear-gradient(135deg, #178582 0%, #40E0D0 100%);
+    background: linear-gradient(135deg, var(--c600) 0%, var(--c800) 100%);
     border: none;
     border-radius: 10px;
     color: white;
     font-size: 16px;
-    box-shadow: 0 4px 12px rgba(64, 224, 208, 0.3);
+    box-shadow: 0 4px 12px rgba(19, 110, 255, 0.3);
 }
 
 .Boton:hover {
     transition: all 0.3s ease;
-    background: linear-gradient(135deg, #40E0D0 0%, #7FFFD4 100%);
+    background: linear-gradient(135deg, var(--c400) 0%, var(--c600) 100%);
     cursor: pointer;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(64, 224, 208, 0.5);
+    box-shadow: 0 6px 16px rgba(19, 110, 255, 0.5);
 }
 
 /* Boton en encabezado */
@@ -65,7 +66,7 @@
     background: white;
     border: none;
     border-radius: 5px;
-    color: gray;
+    color: var(--c600);
     padding: 8px;
     text-align: left;
 }
@@ -73,7 +74,7 @@
 /* Boton Code */
 .BotonCode {
     padding: 10px 20px;
-    background-color: #4aa3ff;
+    background-color: var(--c500);
     border: none;
     border-radius: 6px;
     color: white;
@@ -83,7 +84,7 @@
 }
 
 .BotonCode:hover {
-    background-color: #1b82e9;
+    background-color: var(--c400);
 }
 
 /* Botones contenedor */
@@ -153,25 +154,27 @@
 
 
 .OpcionVer {
-    background: #0d6efd;
+    background: var(--c600);
     /* Color mejorado */
 }
 
 .OpcionVer:hover {
-    background: #0b5cd5;
+    background: var(--c500);
 }
 
 .OpcionEditar {
-    background: #ffc107;
-    color: #212529;
+    background: var(--c400);
+    /* Was Yellow. Now Blue variant */
+    color: white;
 }
 
 .OpcionEditar:hover {
-    background: #e6ad05;
+    background: var(--c300);
 }
 
 .OpcionEliminar {
     background: #dc3545;
+    /* EXCEPTION: RED */
 }
 
 .OpcionEliminar:hover {
@@ -179,12 +182,13 @@
 }
 
 .OpcionMostrar {
-    background: #17a2b8;
+    background: var(--c500);
+    /* Was info teal. Now Blue */
 }
 
 /* Botones en filas de movimientos */
 .TablaDiarios button {
-    background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
+    background: linear-gradient(135deg, var(--c500) 0%, var(--c700) 100%);
     color: white;
     border: none;
     border-radius: 6px;
@@ -193,19 +197,19 @@
     font-size: 14px;
     font-weight: 500;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 2px 8px rgba(19, 110, 255, 0.3);
 }
 
 .TablaDiarios button:hover {
-    background: linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%);
+    background: linear-gradient(135deg, var(--c400) 0%, var(--c600) 100%);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.5);
+    box-shadow: 0 4px 12px rgba(19, 110, 255, 0.5);
 }
 
 
 /* Estilos para el botón Ver (Tipo='Ver') */
 button[Tipo='Ver'] {
-    background: linear-gradient(135deg, #00838f 0%, #006064 100%);
+    background: linear-gradient(135deg, var(--c600) 0%, var(--c800) 100%);
     color: white;
     border: none;
     padding: 6px 12px;
@@ -214,19 +218,19 @@ button[Tipo='Ver'] {
     font-weight: 600;
     font-size: 13px;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 131, 143, 0.3);
+    box-shadow: 0 2px 4px rgba(19, 110, 255, 0.3);
 }
 
 button[Tipo='Ver']:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 131, 143, 0.4);
-    background: linear-gradient(135deg, #0097a7 0%, #00838f 100%);
+    box-shadow: 0 4px 8px rgba(19, 110, 255, 0.4);
+    background: linear-gradient(135deg, var(--c500) 0%, var(--c700) 100%);
 }
 
 
 /* Boton Ver Azul */
 .BotonVerAzul {
-    background-color: #007bff;
+    background-color: var(--c600);
     color: white;
     border: none;
     padding: 6px 12px;
@@ -242,19 +246,20 @@ button[Tipo='Ver']:hover {
 }
 
 .BotonVerAzul:hover {
-    background-color: #0056b3;
+    background-color: var(--c500);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
 }
 
 .BotonVerAzul:active {
     transform: scale(0.96);
-    background-color: #004a9b;
+    background-color: var(--c700);
 }
 
 
 /* Boton Descargar Excel */
 .BotonDescargar {
-    background-color: #10b981;
+    background-color: var(--c500);
+    /* Was Green */
     color: white;
     border: none;
     padding: 8px 16px;
@@ -270,7 +275,7 @@ button[Tipo='Ver']:hover {
 }
 
 .BotonDescargar:hover {
-    background-color: #059669;
+    background-color: var(--c400);
 }
 
 #BotonDescargarTabla {

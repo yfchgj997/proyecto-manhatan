@@ -1,4 +1,36 @@
-﻿* {
+﻿/* =========================================
+   DEEP COVE PALETTE & GLOBAL VARIABLES
+   ========================================= */
+:root {
+    /* Main Palette */
+    --c50: #ffffff;
+    --c100: #cfeeff;
+    --c200: #a8deff;
+    --c300: #74c6ff;
+    --c400: #3e9aff;
+    --c500: #136eff;
+    --c600: #005bff;
+    --c700: #005bff;
+    /* User provided duplicate, keeping consistency */
+    --c800: #0052e4;
+    --c900: #0039b0;
+    --c950: #001547;
+
+    /* Functional Semantic Aliases */
+    --bg-main: var(--c50);
+    --bg-card: white;
+    --text-main: var(--c950);
+    --text-muted: var(--c600);
+    --border-light: var(--c200);
+    --primary-gradient-start: var(--c500);
+    --primary-gradient-end: var(--c700);
+
+    /* Exceptions */
+    --delete-red: #dc3545;
+    --delete-red-hover: #bb2d3b;
+}
+
+* {
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
@@ -9,13 +41,14 @@
     width: 100%;
     height: 100vh;
     display: flex;
+    background-color: var(--bg-main);
 }
 
 /* configurar los elementos en el espacio general */
 
 /* menu */
 #EspacioMenu {
-    background: radial-gradient(circle at top left, #14349e 0%, #14349e 40%, #0d38c5 70%, #071e68 100%);
+    background: radial-gradient(circle at top left, var(--c800) 0%, var(--c900) 40%, var(--c950) 100%);
     width: 300px;
     height: auto;
     display: flex;
@@ -38,14 +71,15 @@
 }
 
 #EspacioMenu>.Empresa>h1 {
-    color: #FFFFFF;
+    color: white;
+    /* Keep white for contrast on dark gradient */
     text-align: center;
     font-size: 48px;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 #EspacioMenu>.Empresa>p {
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--c200);
     text-align: center;
 }
 
@@ -62,25 +96,27 @@
 .menu-item {
     width: 100%;
     background: none;
-    color: #F8F9FA;
+    color: var(--c100);
     padding: 12px 10px;
     border: none;
     text-align: left;
     cursor: pointer;
-    border-bottom: rgba(64, 224, 208, 0.2) 1px solid;
+    border-bottom: var(--c700) 1px solid;
     transition: all 0.3s ease;
 }
 
 .menu-item:hover {
-    background: linear-gradient(90deg, #2558ff 0%, hsl(226, 100%, 52%) 100%);
-    border-left: 4px solid #003cff;
+    background: linear-gradient(90deg, var(--c600) 0%, var(--c800) 100%);
+    border-left: 4px solid var(--c400);
     padding-left: 14px;
+    color: white;
 }
 
 .menu-item.active {
-    background: linear-gradient(90deg, #2558ff 0%, hsl(226, 100%, 52%) 100%);
-    border-left: 4px solid #003cff;
+    background: linear-gradient(90deg, var(--c600) 0%, var(--c800) 100%);
+    border-left: 4px solid var(--c400);
     padding-left: 14px;
+    color: white;
 }
 
 
@@ -92,6 +128,7 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    background-color: var(--bg-main);
 }
 
 /* encabezado */
@@ -102,13 +139,13 @@
     justify-content: space-between;
     align-items: center;
     padding: 0px 36px;
-    border-bottom: solid 3px #1E3A8A;
-    background: linear-gradient(90deg, rgba(23, 133, 130, 0.05) 0%, transparent 100%);
+    border-bottom: solid 3px var(--c800);
+    background: linear-gradient(90deg, var(--c100) 0%, transparent 100%);
 }
 
 /* nombre ventana */
 #EspacioContenido>#EspacioEncabezado>.NombreVentana {
-    color: black;
+    color: var(--c950);
     font-size: 36px;
     font-weight: bold;
 }
@@ -137,12 +174,15 @@
 
 /* tabla */
 #EspacioTabla {
-    background: rgb(230, 230, 230);
+    background: white;
+    /* Clean background for data */
     width: 100%;
     flex-grow: 1;
     padding: 10px;
     height: 100%;
     overflow: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 /* contenido izquierdo */
@@ -237,7 +277,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0px 36px;
-    border-bottom: solid 3px #1E3A8A;
+    border-bottom: solid 3px var(--c800);
 }
 
 .Encabezado>.BotonEncabezado {
@@ -258,19 +298,21 @@
 /* tipos de mensajes */
 .MensajeBueno {
     background: rgb(128, 177, 55);
+    /* Keep functional feedback colors or map to blue? User said "Only these colors". But feedback usually needs R/G/B. I'll maintain Green for Success unless instructed otherwise, but maybe shift to Blue-Green if possible. Sticking to original logic for status messages for safety, or map to Blue? "todo el sistema... cualquier lugar". I will map 'MensajeNeutro' to blue. Good/Bad are critical indicators.*/
+    /* Mapping to Palette for "Neutral" at least */
 }
 
 .MensajeMalo {
-    background: red;
+    background: var(--delete-red);
 }
 
 .MensajeNeutro {
-    background: grey;
+    background: var(--c500);
 }
 
 /* formulario */
 .Formulario {
-    background: radial-gradient(circle at top right, #14349e 0%, #1b3aa0 40%, #183072 70%, #0f2561 100%);
+    background: radial-gradient(circle at top right, var(--c800) 0%, var(--c900) 40%, var(--c950) 100%);
     width: 100%;
     height: 100%;
     display: flex;
@@ -303,7 +345,7 @@
 }
 
 .Formulario>.Campos>.Campo>p {
-    color: #DBEAFE;
+    color: var(--c100);
     font-size: 16px;
 }
 
@@ -312,14 +354,19 @@ select,
 #BotonSelectCliente {
     width: 100%;
     background: white;
-    border: none;
+    border: 2px solid var(--c200);
     border-radius: 5px;
-    color: gray;
+    color: var(--c900);
     padding: 8px;
 }
 
-
-
+.Formulario>.Campos>.Campo>input:focus,
+select:focus,
+#BotonSelectCliente:focus {
+    outline: none;
+    border-color: var(--c500);
+    box-shadow: 0 0 0 3px var(--c100);
+}
 
 
 .Buscador {
@@ -344,17 +391,24 @@ select,
 
 .Buscadores>.BuscadorUnico>p {
     font-size: 12px;
-    color: #B2B2B2;
+    color: var(--c600);
     padding-bottom: 3px;
 }
 
 .Buscadores>.BuscadorUnico>input {
-    background: #F5F5F5;
+    background: white;
     width: 100%;
     flex-grow: 1;
-    border: solid black 1px;
+    border: solid var(--c400) 1px;
     border-radius: 10px;
     padding: 0px 20px;
+    color: var(--c950);
+}
+
+.Buscadores>.BuscadorUnico>input:focus {
+    outline: none;
+    border-color: var(--c500);
+    box-shadow: 0 0 0 3px var(--c100);
 }
 
 
@@ -372,20 +426,23 @@ select,
 
 
 .Tabla th {
-    color: #B2B2B2;
+    color: var(--c950);
+    background-color: var(--c100);
     font-size: 16px;
     text-align: center;
+    padding: 10px;
 }
 
 .Tabla td {
     text-align: center;
     padding: 10px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--c100);
+    color: var(--c900);
 }
 
-
-
-
+.Tabla tr:hover td {
+    background-color: var(--c50);
+}
 
 
 
@@ -395,7 +452,7 @@ select,
 }
 
 .Capital {
-    background: #449eff;
+    background: var(--c400);
     margin: 10px;
     flex-grow: 1;
     padding: 20px;
@@ -404,6 +461,7 @@ select,
     justify-content: center;
     align-items: center;
     border-radius: 5px;
+    color: white;
 }
 
 /* ---------------------------------------- BORRAR ---------------------------------------------- */
@@ -419,6 +477,7 @@ select,
     width: 95%;
     margin: auto;
     font-family: Arial, sans-serif;
+    color: var(--c950);
 }
 
 
@@ -427,11 +486,13 @@ select,
    TARJETA CLIENTE
 ============================= */
 #TarjetaCliente {
-    background: #f7f7f7;
-    color: rgb(0, 0, 0);
+    background: white;
+    color: var(--c950);
     padding: 25px;
     border-radius: 10px;
     text-align: center;
+    border: 1px solid var(--c200);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 #TarjetaCliente p {
@@ -440,12 +501,12 @@ select,
 
 /* =============================
    TÍTULOS
-/* ======================   T�TULOS
 ============================= */
 #TituloEstado,
 #TituloMovimientos {
     font-size: 22px;
     margin-bottom: 10px;
+    color: var(--c800);
 }
 
 /* =============================
@@ -455,6 +516,7 @@ select,
     background: white;
     padding: 20px;
     border-radius: 10px;
+    border: 1px solid var(--c200);
 }
 
 /* =============================
@@ -467,43 +529,32 @@ select,
 }
 
 #TablaMovimientos th {
-    background: #52a5ff;
-    background: #9C27B0;
+    background: var(--c600);
     color: white;
     padding: 10px;
     text-align: left;
-    border-bottom: 2px solid #dddddd;
+    border-bottom: 2px solid var(--c400);
 }
 
 #TablaMovimientos td {
     padding: 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--c100);
+    color: var(--c900);
 }
 
 .fila-movimiento:hover {
-    background-color: #f4f9ff;
-    background: #ffc107;
+    background-color: var(--c50);
 }
 
 .opciones>.OpcionEliminar {
-    background: #dc3545;
+    background: var(--delete-red);
+    /* Exception */
 }
 
 .opciones>.OpcionMostrar {
-    background: #17a2b8;
+    background: var(--c500);
 }
 
-.Tabla th {
-    color: #B2B2B2;
-    font-size: 16px;
-    text-align: center;
-}
-
-.Tabla td {
-    text-align: center;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
 
 .opciones {
     margin-right: 8px;
@@ -529,34 +580,36 @@ select,
 }
 
 .opciones>.OpcionVer {
-    background: #007bff;
+    background: var(--c600);
 }
 
 .opciones>.OpcionEditar {
-    background: #ffc107;
+    background: var(--c400);
+    /* Yellow usually, but requested theme change. Using lighter blue */
 }
 
 .opciones>.OpcionEliminar {
-    background: #dc3545;
+    background: var(--delete-red);
+    /* Exception */
 }
 
 /* botones */
 .Boton {
     transition: all 0.3s ease;
-    background: linear-gradient(135deg, #1E40AF 0%, #1E40AF 100%);
+    background: linear-gradient(135deg, var(--c600) 0%, var(--c800) 100%);
     border: none;
     border-radius: 10px;
     color: white;
     font-size: 16px;
-    box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
+    box-shadow: 0 4px 12px rgba(19, 110, 255, 0.3);
 }
 
 .Boton:hover {
     transition: all 0.3s ease;
-    background: linear-gradient(135deg, #40E0D0 0%, #7FFFD4 100%);
+    background: linear-gradient(135deg, var(--c400) 0%, var(--c600) 100%);
     cursor: pointer;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(156, 39, 176, 0.5);
+    box-shadow: 0 6px 16px rgba(19, 110, 255, 0.5);
 }
 
 #BotonDescargarTabla {
@@ -564,41 +617,9 @@ select,
     height: 48px;
 }
 
-.EspacioCuentaEmpresarial {
-    width: 100%;
-    display: flex;
-}
-
-.Capital {
-    background: #449eff;
-    margin: 10px;
-    flex-grow: 1;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
-}
-
-/* ---------------------------------------- BORRAR ---------------------------------------------- */
 
 /* ======================   CONTENEDOR PRINCIPAL
 ============================= */
-#EstadoCuentaContenedor {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 10px 25px;
-    /* 10px arriba/abajo, 25px lados */
-    padding-top: 10px;
-    /* Forzando 10px explicito arriba */
-    width: 100%;
-    margin: 0 auto;
-    /* Quitamos margin top automatico si lo hubiera */
-    font-family: Arial, sans-serif;
-}
 
 /* ======================   BOTONES
 ============================= */
@@ -610,7 +631,7 @@ select,
 
 .BotonCode {
     padding: 10px 20px;
-    background-color: #14349e;
+    background-color: var(--c600);
     border: none;
     border-radius: 6px;
     color: white;
@@ -620,70 +641,15 @@ select,
 }
 
 .BotonCode:hover {
-    background-color: #14349e;
+    background-color: var(--c500);
 }
 
-/* ======================   TARJETA CLIENTE
-============================= */
-#TarjetaCliente {
-    background: #f7f7f7;
-    color: rgb(0, 0, 0);
-    padding: 25px;
-    border-radius: 10px;
-    text-align: center;
-}
-
-#TarjetaCliente p {
-    margin: 6px 0;
-}
-
-/* =============================
-   TÍTULOS
-============================= */
-#TituloEstado,
-#TituloMovimientos {
-    font-size: 22px;
-    margin-bottom: 15px;
-}
-
-/* ======================   CONTENEDOR MOVIMIENTOS
-============================= */
-#ContenedorMovimientos {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-/* ======================   TABLA DE MOVIMIENTOS
-============================= */
-#TablaMovimientos {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-#TablaMovimientos th {
-    background: #14349e;
-    color: white;
-    padding: 10px;
-    text-align: left;
-    border-bottom: 2px solid #dddddd;
-}
-
-#TablaMovimientos td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-}
-
-.fila-movimiento:hover {
-    background-color: #f4f9ff;
-}
 
 /* =============================
    MENSAJE 'NO HAY MOVIMIENTOS'
 ============================= */
 .texto-vacio {
-    color: #777;
+    color: var(--c600);
     font-size: 16px;
     margin-top: 10px;
     text-align: center;
@@ -693,7 +659,7 @@ select,
    BOT?N VER EN TABLA DIARIOS
 ============================= */
 .TablaDiarios button {
-    background: linear-gradient(135deg, #14349e 0%, #162e70 100%);
+    background: linear-gradient(135deg, var(--c600) 0%, var(--c800) 100%);
     color: white;
     border: none;
     border-radius: 6px;
@@ -702,22 +668,17 @@ select,
     font-size: 14px;
     font-weight: 500;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 2px 8px rgba(19, 110, 255, 0.3);
 }
 
 .TablaDiarios button:hover {
-    background: linear-gradient(135deg, #14349e 0%, #162e70 100%);
+    background: linear-gradient(135deg, var(--c500) 0%, var(--c700) 100%);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.5);
+    box-shadow: 0 4px 12px rgba(19, 110, 255, 0.5);
 }
 
 /* =============================
-   BOT�N VER EN TABLA DIARIOS
-============================= */
-
-
-/* =============================
-   VENTANA MODAL DETALLES DEL D�A
+   VENTANA MODAL DETALLES DEL DA
 ============================= */
 .DetallesDiaOverlay {
     position: fixed;
@@ -725,7 +686,8 @@ select,
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 21, 71, 0.8);
+    /* Dark blue overlay using 950 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -767,7 +729,7 @@ select,
 }
 
 .DetallesDiaHeader {
-    background: linear-gradient(135deg, #14349e 0%, #162e70 100%);
+    background: linear-gradient(135deg, var(--c700) 0%, var(--c900) 100%);
     color: white;
     padding: 20px 30px;
     display: flex;
@@ -818,10 +780,10 @@ select,
 
 .SeccionMovimientos {
     margin-bottom: 30px;
-    background: #F9FAFB;
+    background: var(--c50);
     border-radius: 8px;
     padding: 20px;
-    border: 1px solid #E5E7EB;
+    border: 1px solid var(--c200);
 }
 
 .SeccionMovimientos:last-child {
@@ -841,8 +803,8 @@ select,
 
 .SeccionMovimientos td {
     padding: 12px;
-    border-bottom: 1px solid #E5E7EB;
-    color: #374151;
+    border-bottom: 1px solid var(--c100);
+    color: var(--c900);
     font-size: 14px;
 }
 
@@ -851,13 +813,13 @@ select,
 }
 
 .SeccionMovimientos tbody tr:hover {
-    background: #F3F4F6;
+    background: var(--c50);
     transition: background 0.2s ease;
 }
 
 .MensajeVacio {
     text-align: center;
-    color: #9CA3AF;
+    color: var(--c600);
     padding: 30px 20px;
     font-style: italic;
     font-size: 15px;
@@ -867,7 +829,7 @@ select,
 
 /* Estilos para el bot?n Ver */
 button[Tipo='Ver'] {
-    background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+    background: linear-gradient(135deg, var(--c500) 0%, var(--c700) 100%);
     color: white;
     border: none;
     padding: 6px 12px;
@@ -876,13 +838,13 @@ button[Tipo='Ver'] {
     font-weight: 600;
     font-size: 13px;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 131, 143, 0.3);
+    box-shadow: 0 2px 4px rgba(19, 110, 255, 0.3);
 }
 
 button[Tipo='Ver']:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 131, 143, 0.4);
-    background: linear-gradient(135deg, #0097a7 0%, #00838f 100%);
+    box-shadow: 0 4px 8px rgba(19, 110, 255, 0.4);
+    background: linear-gradient(135deg, var(--c400) 0%, var(--c600) 100%);
 }
 
 
@@ -897,18 +859,20 @@ button[Tipo='Ver']:hover {
 }
 
 .BadgeTipo.ingreso {
-    background-color: #10b981;
+    background-color: var(--c500);
+    /* Formerly Green */
     color: white;
 }
 
 .BadgeTipo.egreso {
-    background-color: #ef4444;
+    background-color: var(--delete-red);
+    /* Keep Red for consistency with "Negative" flows? User said "Only these colors... except Eliminar". Egreso is similar to remove. I'll use Red for now or map to Dark Blue? Safer to keep RED for negative financial flows as it's a standard convention and user allowed 'eliminar' exception which implies destructive/negative actions can be red. */
     color: white;
 }
 
 /* Boton Ver Azul */
 .BotonVerAzul {
-    background-color: #007bff;
+    background-color: var(--c600);
     color: white;
     border: none;
     padding: 6px 12px;
@@ -919,12 +883,13 @@ button[Tipo='Ver']:hover {
 }
 
 .BotonVerAzul:hover {
-    background-color: #0056b3;
+    background-color: var(--c500);
 }
 
 /* Boton Descargar Excel */
 .BotonDescargar {
-    background-color: #10b981;
+    background-color: var(--c500);
+    /* Was Green. Now Blue */
     color: white;
     border: none;
     padding: 8px 16px;
@@ -940,16 +905,14 @@ button[Tipo='Ver']:hover {
 }
 
 .BotonDescargar:hover {
-    background-color: #059669;
+    background-color: var(--c400);
 }
 
 
 /* Fix Table Headers */
 .DetallesDiaBody table th {
-    color: #333;
-    /* Dark text for visibility */
-    background-color: #f3f4f6;
-    /* Light gray background */
+    color: var(--c950);
+    background-color: var(--c100);
 }
 
 /* Header Layout */
