@@ -175,6 +175,18 @@ function ObtenerTablaMovimientos(FechaInicial, FechaFinal) {
         let ListaConRegistro = Respuesta.ListaMovimientosEconomicos.map(m => {
             return { ...m, Registro: "Economico" };
         });
+
+        // Ordenar Descendente (Más reciente primero)
+        ListaConRegistro.sort((a, b) => {
+            let fechaA = new Date(a.Fecha);
+            let fechaB = new Date(b.Fecha);
+            if (fechaA > fechaB) return -1;
+            if (fechaA < fechaB) return 1;
+            if (a.Hora > b.Hora) return -1;
+            if (a.Hora < b.Hora) return 1;
+            return 0;
+        });
+
         return ({ "error": false, "ListaMovimentosEconomicos": ListaConRegistro })
     }
 
@@ -202,6 +214,18 @@ function AplicarFiltros(Cliente, FechaInicial, FechaFinal) {
                     let ListaConRegistroTodos = ListaMovimentosEconomicos.map(m => {
                         return { ...m, Registro: "Economico" };
                     });
+
+                    // Ordenar Descendente
+                    ListaConRegistroTodos.sort((a, b) => {
+                        let fechaA = new Date(a.Fecha);
+                        let fechaB = new Date(b.Fecha);
+                        if (fechaA > fechaB) return -1;
+                        if (fechaA < fechaB) return 1;
+                        if (a.Hora > b.Hora) return -1;
+                        if (a.Hora < b.Hora) return 1;
+                        return 0;
+                    });
+
                     return ({ "error": false, "ListaMovimientosEconomicos": ListaConRegistroTodos })
                 default:
                     let ListaFiltrada = ListaMovimentosEconomicos.filter(Movimiento => Movimiento.ClienteID == Cliente)
@@ -209,6 +233,18 @@ function AplicarFiltros(Cliente, FechaInicial, FechaFinal) {
                     let ListaConRegistro = ListaFiltrada.map(m => {
                         return { ...m, Registro: "Economico" };
                     });
+
+                    // Ordenar Descendente
+                    ListaConRegistro.sort((a, b) => {
+                        let fechaA = new Date(a.Fecha);
+                        let fechaB = new Date(b.Fecha);
+                        if (fechaA > fechaB) return -1;
+                        if (fechaA < fechaB) return 1;
+                        if (a.Hora > b.Hora) return -1;
+                        if (a.Hora < b.Hora) return 1;
+                        return 0;
+                    });
+
                     return ({ "error": false, "ListaMovimientosEconomicos": ListaConRegistro })
             }
 
@@ -242,7 +278,19 @@ function TablaCV(fechaInicial, fechaFinal) {
     if (respuesta.error == true) {
         return ({ "error": true })
     } else {
-        return ({ "error": false, "listaCV": respuesta.ListaFiltrada })
+        let lista = respuesta.ListaFiltrada;
+        // Ordenar Descendente
+        lista.sort((a, b) => {
+            let fechaA = new Date(a.Fecha);
+            let fechaB = new Date(b.Fecha);
+            if (fechaA > fechaB) return -1;
+            if (fechaA < fechaB) return 1;
+            if (a.Hora > b.Hora) return -1;
+            if (a.Hora < b.Hora) return 1;
+            return 0;
+        });
+
+        return ({ "error": false, "listaCV": lista })
     }
 
 }
@@ -297,6 +345,18 @@ function ObtenerTablaMovimientosMateriales(FechaInicial, FechaFinal) {
         let ListaConRegistro = Respuesta.ListaMovimientosMateriales.map(m => {
             return { ...m, Registro: "Material" };
         });
+
+        // Ordenar Descendente
+        ListaConRegistro.sort((a, b) => {
+            let fechaA = new Date(a.Fecha);
+            let fechaB = new Date(b.Fecha);
+            if (fechaA > fechaB) return -1;
+            if (fechaA < fechaB) return 1;
+            if (a.Hora > b.Hora) return -1;
+            if (a.Hora < b.Hora) return 1;
+            return 0;
+        });
+
         return ({ "error": false, "ListaMovimientosMateriales": ListaConRegistro })
     }
 
@@ -339,10 +399,21 @@ function FiltrarMovimientosMateriales(Cliente, FechaInicial, FechaFinal) {
             // Paso -> aplicar el filtro de clientes
             switch (Cliente) {
                 case "todos":
-                    // Agregar "Registro":"Material" a cada elemento
                     let ListaConRegistroTodos = ListaMovimientosMateriales.map(m => {
                         return { ...m, Registro: "Material" };
                     });
+
+                    // Ordenar Descendente
+                    ListaConRegistroTodos.sort((a, b) => {
+                        let fechaA = new Date(a.Fecha);
+                        let fechaB = new Date(b.Fecha);
+                        if (fechaA > fechaB) return -1;
+                        if (fechaA < fechaB) return 1;
+                        if (a.Hora > b.Hora) return -1;
+                        if (a.Hora < b.Hora) return 1;
+                        return 0;
+                    });
+
                     return ({ "error": false, "ListaMovimientosMateriales": ListaConRegistroTodos })
                 default:
                     let ListaFiltrada = ListaMovimientosMateriales.filter(Movimiento => Movimiento.ClienteID == Cliente)
@@ -350,6 +421,18 @@ function FiltrarMovimientosMateriales(Cliente, FechaInicial, FechaFinal) {
                     let ListaConRegistro = ListaFiltrada.map(m => {
                         return { ...m, Registro: "Material" };
                     });
+
+                    // Ordenar Descendente
+                    ListaConRegistro.sort((a, b) => {
+                        let fechaA = new Date(a.Fecha);
+                        let fechaB = new Date(b.Fecha);
+                        if (fechaA > fechaB) return -1;
+                        if (fechaA < fechaB) return 1;
+                        if (a.Hora > b.Hora) return -1;
+                        if (a.Hora < b.Hora) return 1;
+                        return 0;
+                    });
+
                     return ({ "error": false, "ListaMovimientosMateriales": ListaConRegistro })
             }
 
@@ -510,12 +593,12 @@ function ObtenerMovimientoMaterialEconomico(FechaInicial, FechaFinal, IdCliente)
         let fechaA = new Date(a.Fecha);
         let fechaB = new Date(b.Fecha);
 
-        if (fechaA < fechaB) return -1;
-        if (fechaA > fechaB) return 1;
+        if (fechaA > fechaB) return -1;
+        if (fechaA < fechaB) return 1;
 
         // si la fecha es igual, comparar horas
-        if (a.Hora < b.Hora) return -1;
-        if (a.Hora > b.Hora) return 1;
+        if (a.Hora > b.Hora) return -1;
+        if (a.Hora < b.Hora) return 1;
 
         return 0;
     });
