@@ -109,7 +109,18 @@ function CargarTablaCV(ListaCV) {
                         let CVObjeto = JSON.parse(datosCV);
 
                         if (typeof ipcRenderer !== "undefined") {
-                            ipcRenderer.send("EEliminarCV", CVObjeto);
+                            // Obtener fechas del filtro
+                            let fechaInicio = document.getElementById("CampoTextoFechaInicial") ? document.getElementById("CampoTextoFechaInicial").value : "";
+                            let fechaFinal = document.getElementById("CampoTextoFechaFinal") ? document.getElementById("CampoTextoFechaFinal").value : "";
+
+                            let datosEnvio = {
+                                movimiento: CVObjeto,
+                                filtro: {
+                                    fechaInicio: fechaInicio,
+                                    fechaFinal: fechaFinal
+                                }
+                            };
+                            ipcRenderer.send("EEliminarCV", datosEnvio);
                         } else {
                             console.error("ERROR: ipcRenderer no está disponible.");
                         }

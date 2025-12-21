@@ -205,6 +205,7 @@ ipcMain.on("ECerrarSesion", (event) => {
         type: "question",
         buttons: ["Cancelar", "Aceptar"],
         defaultId: 0,
+        cancelId: 0,
         title: "Confirmación",
         message: `¿Estás seguro de cerrar la sesion?`,
     };
@@ -262,11 +263,20 @@ ipcMain.on("EQuiereGuardarNuevoCompraVenta", (event, datosCompraVenta) => {
     console.log("MENSAJE: guardando nuevo compra venta, estos son los datos:")
     console.log(datosCompraVenta)
 
-    // Paso -> agregar la hora a la compra venta
-    datosCompraVenta.Hora = ObtenerHora()
-
     // Paso -> guardar en la base de datos el nuevo cliente
-    respuesta = BDrespaldo.GuardarCompraVenta(datosCompraVenta)
+    let datosAGuardar = datosCompraVenta;
+    let filtro = null;
+
+    if (datosCompraVenta.filtro) {
+        datosAGuardar = datosCompraVenta.movimiento;
+        filtro = datosCompraVenta.filtro;
+        // Asignar hora también al objeto interno si viene anidado
+        datosAGuardar.Hora = ObtenerHora();
+    } else {
+        datosAGuardar.Hora = ObtenerHora();
+    }
+
+    respuesta = BDrespaldo.GuardarCompraVenta(datosAGuardar)
 
     // Paso -> mostrar mensaje al usuario
     if (respuesta.error == false) {// se guardo sin errores
@@ -281,12 +291,18 @@ ipcMain.on("EQuiereGuardarNuevoCompraVenta", (event, datosCompraVenta) => {
         });
 
         // Paso -> obtener la lista de compra venta
-        let fecha = ObtenerFecha(); // Obtener la fecha actual
-        let respuesta = BDrespaldo.TablaCV(fecha, fecha)
+        let fechaInicio = ObtenerFecha();
+        let fechaFinal = ObtenerFecha();
+
+        if (filtro) {
+            fechaInicio = filtro.fechaInicio;
+            fechaFinal = filtro.fechaFinal;
+        }
+
+        let respuesta = BDrespaldo.TablaCV(fechaInicio, fechaFinal)
         if (respuesta.error == false) {
             // paso -> cargar el componente compra venta
-            console.log("asdfasfdsdasfdfasdfasdfasdfasdfsdafdsafasdfsdafasd")
-            console.log(respuesta.listaCV)
+            console.log("Actualizando tabla CV con filtro:", fechaInicio, fechaFinal)
             event.sender.send("EActualizarTablaCompraVenta", respuesta.listaCV)
         }
 
@@ -330,8 +346,32 @@ ipcMain.on("EEliminarCV", (event, datosCompraVenta) => {
     console.log("MENSAJE: eliminando compra venta, estos son los datos:")
     console.log(datosCompraVenta)
 
+    // Mostrar una ventana de confirmación
+    const opciones = {
+        type: "question",
+        buttons: ["Cancelar", "Aceptar"],
+        defaultId: 0,
+        cancelId: 0,
+        title: "Confirmación",
+        message: `¿Estás seguro de eliminar este registro?`,
+    };
+    const respuestaConfirm = dialog.showMessageBoxSync(null, opciones);
+
+    if (respuestaConfirm !== 1) {
+        console.log("Main: Eliminación de compra venta cancelada");
+        return;
+    }
+
     // Paso -> eliminar en la base de datos el cliente
-    respuesta = BDrespaldo.EliminarCompraVenta(datosCompraVenta)
+    let datosAEliminar = datosCompraVenta;
+    let filtro = null;
+
+    if (datosCompraVenta.filtro) {
+        datosAEliminar = datosCompraVenta.movimiento;
+        filtro = datosCompraVenta.filtro;
+    }
+
+    respuesta = BDrespaldo.EliminarCompraVenta(datosAEliminar)
 
     if (respuesta.error == true) {
         console.log("Main: no se pudo eliminar la compra venta")
@@ -347,8 +387,23 @@ ipcMain.on("EEliminarCV", (event, datosCompraVenta) => {
             tipo: "MensajeBueno",
             texto: "La compra venta se elimino correctamente"
         });
-        // Enviar la lista filtrada al frontend
-        event.sender.send("EActualizarTablaCompraVenta", respuesta.listaCV);
+
+        // Enviar la lista filtrada al frontend manualmente para asegurar persistencia
+        let fechaInicio = ObtenerFecha();
+        let fechaFinal = ObtenerFecha();
+
+        if (filtro) {
+            fechaInicio = filtro.fechaInicio;
+            fechaFinal = filtro.fechaFinal;
+        }
+
+        let resTabla = BDrespaldo.TablaCV(fechaInicio, fechaFinal);
+        if (resTabla.error == false) {
+            event.sender.send("EActualizarTablaCompraVenta", resTabla.listaCV);
+        } else {
+            // Fallback si falla la recarga manual (aunque improbable si TablaCV funciona)
+            event.sender.send("EActualizarTablaCompraVenta", respuesta.listaCV);
+        }
     }
 })
 
@@ -980,6 +1035,7 @@ ipcMain.on("EEliminarCliente", (event, Cliente) => {
         type: "question",
         buttons: ["Cancelar", "Aceptar"],
         defaultId: 0,
+        cancelId: 0,
         title: "Confirmación",
         message: `¿Estás seguro de que deseas eliminar al cliente ${Cliente.Nombres} ${Cliente.Apellidos}?`,
     };
@@ -1189,11 +1245,19 @@ ipcMain.on("EGuardarNuevoMovimiento", (event, Movimiento) => {
     console.log("Main: guardando un nuevo movimiento, estos son los datos:")
     console.log(Movimiento)
 
+    let datosAGuardar = Movimiento;
+    let filtro = null;
+
+    if (Movimiento.filtro) {
+        datosAGuardar = Movimiento.movimiento;
+        filtro = Movimiento.filtro;
+    }
+
     // Paso -> asignar la hora
-    Movimiento.Hora = ObtenerHora()
+    datosAGuardar.Hora = ObtenerHora()
 
     // Paso -> guarda en la base de datos el movimiento
-    let Respuesta = BDrespaldo.GuardarMovimientoRespaldo(Movimiento)
+    let Respuesta = BDrespaldo.GuardarMovimientoRespaldo(datosAGuardar)
 
     // Paso -> mostrar mensaje al usuario
     if (Respuesta.error == false) {// se guardo sin errores
@@ -1208,11 +1272,19 @@ ipcMain.on("EGuardarNuevoMovimiento", (event, Movimiento) => {
         });
 
         // Paso -> actualizar la tabla de clientes en la ventana
-        let fecha = ObtenerFecha()
-        let Respuesta = BDrespaldo.ObtenerTablaMovimientos(fecha, fecha)
+        let Respuesta;
+        if (filtro) {
+            Respuesta = BDrespaldo.AplicarFiltros(filtro.cliente, filtro.fechaInicio, filtro.fechaFinal)
+        } else {
+            let fecha = ObtenerFecha()
+            Respuesta = BDrespaldo.ObtenerTablaMovimientos(fecha, fecha)
+        }
+
         if (Respuesta.error == false) {
             // Paso -> actualizar tabla
-            event.sender.send("ActualizarTablaMovimientos", Respuesta.ListaMovimentosEconomicos)
+            // Manejar posible inconsistencia de nombres en BDrespaldo
+            let lista = Respuesta.ListaMovimientosEconomicos || Respuesta.ListaMovimentosEconomicos;
+            event.sender.send("ActualizarTablaMovimientos", lista)
         }
 
     } else {// no se pudo guardar
@@ -1239,11 +1311,20 @@ ipcMain.on("EEliminarMovimiento", (event, Movimiento) => {
     console.log("Main: eliminando un movimiento, este es el movimiento:")
     console.log(Movimiento)
 
+    let datosAEliminar = Movimiento;
+    let filtro = null;
+
+    if (Movimiento.filtro) {
+        datosAEliminar = Movimiento.movimiento;
+        filtro = Movimiento.filtro;
+    }
+
     // Paso -> mostrar la ventana de confirmacion
     const opciones = {
         type: "question",
         buttons: ["Cancelar", "Aceptar"],
         defaultId: 0,
+        cancelId: 0,
         title: "Confirmación",
         message: `¿Estás seguro de que deseas eliminar el movimiento?`,
     };
@@ -1252,7 +1333,7 @@ ipcMain.on("EEliminarMovimiento", (event, Movimiento) => {
     if (respuesta === 1) {
         console.log("Main: la decision fue confirmada");
 
-        let Respuesta = BDrespaldo.EliminarMovimiento(Movimiento.ID)
+        let Respuesta = BDrespaldo.EliminarMovimiento(datosAEliminar.ID)
         if (Respuesta.error == true) {
             // Paso -> actualizar el mensaje
             event.sender.send("ModificarMensaje", {
@@ -1266,11 +1347,18 @@ ipcMain.on("EEliminarMovimiento", (event, Movimiento) => {
                 texto: "El movimiento si se pudo eliminar"
             });
             // Paso -> actualizar la tabla de clientes en la ventana
-            let fecha = ObtenerFecha()
-            let Respuesta = BDrespaldo.ObtenerTablaMovimientos(fecha, fecha)
+            let Respuesta;
+            if (filtro) {
+                Respuesta = BDrespaldo.AplicarFiltros(filtro.cliente, filtro.fechaInicio, filtro.fechaFinal)
+            } else {
+                let fecha = ObtenerFecha()
+                Respuesta = BDrespaldo.ObtenerTablaMovimientos(fecha, fecha)
+            }
+
             if (Respuesta.error == false) {
                 // Paso -> actualizar tabla
-                event.sender.send("ActualizarTablaMovimientos", Respuesta.ListaMovimentosEconomicos)
+                let lista = Respuesta.ListaMovimientosEconomicos || Respuesta.ListaMovimentosEconomicos;
+                event.sender.send("ActualizarTablaMovimientos", lista)
             }
         }
     } else {
@@ -1295,6 +1383,7 @@ ipcMain.on("EQuiereImprimirCV", (event, Movimiento) => {
         type: "question",
         buttons: ["Cancelar", "Aceptar"],
         defaultId: 0,
+        cancelId: 0,
         title: "Confirmación",
         message: `¿Estás seguro de que deseas imprimir este movimiento?`,
     };
@@ -1330,6 +1419,7 @@ ipcMain.on("EImprimirMovimiento", (event, Movimiento) => {
         type: "question",
         buttons: ["Cancelar", "Aceptar"],
         defaultId: 0,
+        cancelId: 0,
         title: "Confirmación",
         message: `¿Estás seguro de que deseas imprimir este movimiento?`,
     };
@@ -1366,6 +1456,7 @@ ipcMain.on("EImprimirMovimientoMaterial", (event, Movimiento) => {
         type: "question",
         buttons: ["Cancelar", "Aceptar"],
         defaultId: 0,
+        cancelId: 0,
         title: "Confirmación",
         message: `¿Estás seguro de que deseas imprimir este movimiento?`,
     };
@@ -1641,6 +1732,7 @@ ipcMain.on("EEliminarUsuario", (event, Usuario) => {
         type: "question",
         buttons: ["Cancelar", "Aceptar"],
         defaultId: 0,
+        cancelId: 0,
         title: "Confirmación",
         message: `¿Estás seguro de que deseas eliminar al usuario ${Usuario.Nombres} ${Usuario.Apellidos}?`,
     };
@@ -1814,13 +1906,19 @@ ipcMain.on("EGuardarNuevoMovimientoMaterial", (event, Movimiento) => {
     console.log("Main: guardando un nuevo movimiento material, estos son los datos:")
     console.log(Movimiento)
 
+    let datosAGuardar = Movimiento;
+    let filtro = null;
+
+    if (Movimiento.filtro) {
+        datosAGuardar = Movimiento.movimiento;
+        filtro = Movimiento.filtro;
+    }
+
     // Paso -> asignar la hora
-    Movimiento.Hora = ObtenerHora()
-
-
+    datosAGuardar.Hora = ObtenerHora()
 
     // Paso -> guarda en la base de datos el movimiento
-    let Respuesta = BDrespaldo.GuardarMovimientoMaterial(Movimiento)
+    let Respuesta = BDrespaldo.GuardarMovimientoMaterial(datosAGuardar)
 
     // Paso -> mostrar mensaje al usuario
     if (Respuesta.error == false) {// se guardo sin errores
@@ -1835,8 +1933,14 @@ ipcMain.on("EGuardarNuevoMovimientoMaterial", (event, Movimiento) => {
         });
 
         // Paso -> actualizar la tabla de clientes en la ventana
-        let fecha = ObtenerFecha()
-        let Respuesta = BDrespaldo.ObtenerTablaMovimientosMateriales(fecha, fecha)
+        let Respuesta;
+        if (filtro) {
+            Respuesta = BDrespaldo.FiltrarMovimientosMateriales(filtro.cliente, filtro.fechaInicio, filtro.fechaFinal)
+        } else {
+            let fecha = ObtenerFecha()
+            Respuesta = BDrespaldo.ObtenerTablaMovimientosMateriales(fecha, fecha)
+        }
+
         if (Respuesta.error == false) {
             // Paso -> actualizar tabla
             event.sender.send("ActualizarTablaMovimientosMateriales", Respuesta.ListaMovimientosMateriales)
@@ -1887,11 +1991,20 @@ ipcMain.on("EEliminarMovimientoMaterial", (event, Movimiento) => {
     console.log("Main: eliminando un movimiento material, este es el movimiento:")
     console.log(Movimiento)
 
+    let datosAEliminar = Movimiento;
+    let filtro = null;
+
+    if (Movimiento.filtro) {
+        datosAEliminar = Movimiento.movimiento;
+        filtro = Movimiento.filtro;
+    }
+
     // Paso -> mostrar la ventana de confirmacion
     const opciones = {
         type: "question",
         buttons: ["Cancelar", "Aceptar"],
         defaultId: 0,
+        cancelId: 0,
         title: "Confirmación",
         message: `¿Estás seguro de que deseas eliminar el movimiento?`,
     };
@@ -1900,7 +2013,7 @@ ipcMain.on("EEliminarMovimientoMaterial", (event, Movimiento) => {
     if (respuesta === 1) {
         console.log("Main: la decision fue confirmada");
 
-        let Respuesta = BDrespaldo.EliminarMovimientoMaterial(Movimiento.ID)
+        let Respuesta = BDrespaldo.EliminarMovimientoMaterial(datosAEliminar.ID)
         if (Respuesta.error == true) {
             // Paso -> actualizar el mensaje
             event.sender.send("ModificarMensaje", {
@@ -1914,8 +2027,14 @@ ipcMain.on("EEliminarMovimientoMaterial", (event, Movimiento) => {
                 texto: "El movimiento si se pudo eliminar"
             });
             // Paso -> actualizar la tabla de clientes en la ventana
-            let fecha = ObtenerFecha()
-            let Respuesta = BDrespaldo.ObtenerTablaMovimientosMateriales(fecha, fecha)
+            let Respuesta;
+            if (filtro) {
+                Respuesta = BDrespaldo.FiltrarMovimientosMateriales(filtro.cliente, filtro.fechaInicio, filtro.fechaFinal)
+            } else {
+                let fecha = ObtenerFecha()
+                Respuesta = BDrespaldo.ObtenerTablaMovimientosMateriales(fecha, fecha)
+            }
+
             if (Respuesta.error == false) {
                 // Paso -> actualizar tabla
                 event.sender.send("ActualizarTablaMovimientosMateriales", Respuesta.ListaMovimientosMateriales)
