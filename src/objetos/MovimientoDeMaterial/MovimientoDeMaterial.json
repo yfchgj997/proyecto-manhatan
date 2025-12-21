@@ -1,5 +1,5 @@
 {
-    "Contador": 42,
+    "Contador": 43,
     "Elementos": [
         {
             "Tipo": "Retiro",
@@ -175,14 +175,14 @@
             "Fecha": "2025-12-20",
             "UsuarioID": 1,
             "UsuarioNombres": "Admin",
-            "ClienteID": "2",
-            "ClienteNombres": "VVSD",
-            "ClienteApellidos": "RVSDV",
-            "Importe": "300.00",
+            "ClienteID": "3",
+            "ClienteNombres": "GEFVD",
+            "ClienteApellidos": "VCDCV",
+            "Importe": "500.00",
             "Observacion": "",
-            "Hora": "22:05:56",
-            "ID": 40,
-            "CapturaSaldo": "300.00"
+            "Hora": "23:10:20",
+            "ID": 43,
+            "CapturaSaldo": "500.00"
         }
     ]
 }

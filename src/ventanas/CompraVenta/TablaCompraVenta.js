@@ -20,7 +20,6 @@ function CargarTablaCV(ListaCV) {
                             <th>#</th>
                             <th>Tipo</th>
                             <th>Fecha</th>
-                            <th>Hora</th>
                             <th>Cliente</th>
                             <th>Monto Material</th>
                             <th>Precio Cambio</th>
@@ -44,7 +43,6 @@ function CargarTablaCV(ListaCV) {
                         <td>${numeroFila}</td>
                         <td>${item.Tipo}</td>
                         <td>${item.Fecha}</td>
-                        <td>${item.Hora}</td>
                         <td>${item.Cliente || 'N/A'}</td>
                         <td>${item.MontoMaterial}</td>
                         <td>${item.PrecioCambio}</td>

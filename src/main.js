@@ -2062,6 +2062,13 @@ ipcMain.on('EQuiereVerDetallesDia', (event, datos) => {
     if (RespuestaEmpresariales.error === false) {
         // Filtrar por fecha (asumiendo que tienen propiedad Fecha)
         movimientosEmpresarialesFiltrados = RespuestaEmpresariales.Elementos.filter(m => m.Fecha === datos.fecha);
+
+        // Ordenar por Hora Descendente (ya que la fecha es la misma)
+        movimientosEmpresarialesFiltrados.sort((a, b) => {
+            if (a.Hora > b.Hora) return -1;
+            if (a.Hora < b.Hora) return 1;
+            return 0;
+        });
     }
 
     if (Respuesta.error === false) {
