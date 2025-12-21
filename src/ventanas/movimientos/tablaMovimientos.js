@@ -126,7 +126,19 @@ function CargarTablaMovimientos(movimientos) {
                         let movimientoObjeto = JSON.parse(datosMovimiento);
 
                         if (typeof ipcRenderer !== "undefined") {
-                            ipcRenderer.send("EEliminarMovimiento", movimientoObjeto);
+                            // Obtener fechas del filtro
+                            let fechaInicio = document.getElementById("CampoTextoFechaInicial") ? document.getElementById("CampoTextoFechaInicial").value : "";
+                            let fechaFinal = document.getElementById("CampoTextoFechaFinal") ? document.getElementById("CampoTextoFechaFinal").value : "";
+
+                            let datosEnvio = {
+                                movimiento: movimientoObjeto,
+                                filtro: {
+                                    fechaInicio: fechaInicio,
+                                    fechaFinal: fechaFinal,
+                                    cliente: document.getElementById("CampoClienteMovimientoBuscador") ? document.getElementById("CampoClienteMovimientoBuscador").value : "todos"
+                                }
+                            };
+                            ipcRenderer.send("EEliminarMovimiento", datosEnvio);
                         } else {
                             console.error("ERROR: ipcRenderer no está disponible.");
                         }
