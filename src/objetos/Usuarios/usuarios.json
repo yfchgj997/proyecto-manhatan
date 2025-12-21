@@ -1,5 +1,5 @@
 {
-    "Contador": 24,
+    "Contador": 25,
     "Elementos": [
         {
             "Nombres": "Admin",
@@ -32,14 +32,6 @@
             "Rol": "Cajero",
             "Estado": "Activo",
             "ID": 4
-        },
-        {
-            "Nombres": "wef",
-            "Apellidos": "wefw",
-            "Contrasena": "1234",
-            "Rol": "Administrador",
-            "Estado": "Inactivo",
-            "ID": 19
         },
         {
             "Nombres": "hjhffhggug",

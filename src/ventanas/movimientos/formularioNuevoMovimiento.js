@@ -106,8 +106,21 @@ function GuardarNuevoMovimiento(usuario) {
     console.log("MENSAJE: estos son los datos del movimiento:");
     console.log(NuevoMovimiento);
 
+    // Obtener fechas del filtro
+    let fechaInicio = document.getElementById("CampoTextoFechaInicial") ? document.getElementById("CampoTextoFechaInicial").value : "";
+    let fechaFinal = document.getElementById("CampoTextoFechaFinal") ? document.getElementById("CampoTextoFechaFinal").value : "";
+
+    let datosEnvio = {
+        movimiento: NuevoMovimiento,
+        filtro: {
+            fechaInicio: fechaInicio,
+            fechaFinal: fechaFinal,
+            cliente: document.getElementById("CampoClienteMovimientoBuscador") ? document.getElementById("CampoClienteMovimientoBuscador").value : "todos"
+        }
+    };
+
     // Enviar los datos del cliente al proceso principal
-    ipcRenderer.send("EGuardarNuevoMovimiento", NuevoMovimiento);
+    ipcRenderer.send("EGuardarNuevoMovimiento", datosEnvio);
 }
 
 // Funcion -> mostrar el formulario nuevo cliente y actualizar el mensaje
