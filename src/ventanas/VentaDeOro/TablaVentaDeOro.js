@@ -20,7 +20,6 @@ function CargarTablaCV(ListaCV) {
                             <th>#</th>
                             <th>Tipo</th>
                             <th>Fecha</th>
-                            <th>Hora</th>
                             <th>Cliente</th>
                             <th>Monto Material</th>
                             <th>Precio Cambio</th>
@@ -44,7 +43,6 @@ function CargarTablaCV(ListaCV) {
                         <td>${numeroFila}</td>
                         <td>${item.Tipo}</td>
                         <td>${item.Fecha}</td>
-                        <td>${item.Hora}</td>
                         <td>${item.Cliente || 'N/A'}</td>
                         <td>${item.MontoMaterial}</td>
                         <td>${item.PrecioCambio}</td>
@@ -109,7 +107,19 @@ function CargarTablaCV(ListaCV) {
                         let CVObjeto = JSON.parse(datosCV);
 
                         if (typeof ipcRenderer !== "undefined") {
-                            ipcRenderer.send("EEliminarCV", CVObjeto);
+                            // Obtener fechas del filtro
+                            let fechaInicio = document.getElementById("CampoTextoFechaInicial") ? document.getElementById("CampoTextoFechaInicial").value : "";
+                            let fechaFinal = document.getElementById("CampoTextoFechaFinal") ? document.getElementById("CampoTextoFechaFinal").value : "";
+
+                            let datosEnvio = {
+                                movimiento: CVObjeto,
+                                filtro: {
+                                    fechaInicio: fechaInicio,
+                                    fechaFinal: fechaFinal
+                                }
+                            };
+
+                            ipcRenderer.send("EEliminarCV", datosEnvio);
                         } else {
                             console.error("ERROR: ipcRenderer no está disponible.");
                         }

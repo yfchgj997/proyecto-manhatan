@@ -477,8 +477,14 @@ ipcMain.on("EQuiereGuardarNuevoVentaDeOro", (event, datosVentaDeOro) => {
         });
 
         // Paso -> obtener la lista de venta de oro
-        let fecha = ObtenerFecha(); // Obtener la fecha actual
-        let respuesta = BDrespaldo.TablaCV(fecha, fecha)
+        let fechaInicio = ObtenerFecha(); // Obtener la fecha actual
+        let fechaFinal = ObtenerFecha();
+
+        if (filtro) {
+            fechaInicio = filtro.fechaInicio;
+            fechaFinal = filtro.fechaFinal;
+        }
+        let respuesta = BDrespaldo.TablaCV(fechaInicio, fechaFinal)
         if (respuesta.error == false) {
             // Paso -> filtrar solo las ventas
             let listaVentas = respuesta.listaCV.filter(item => item.Tipo === 'venta');
@@ -500,7 +506,23 @@ ipcMain.on("EQuiereGuardarNuevoVentaDeOro", (event, datosVentaDeOro) => {
         });
     }
 })
+// Evento -> filtrar la lista tabla clientes
+ipcMain.on("EFiltrarListaCV", (event, datos) => {
 
+    console.log("---------- Filtrando lista de CV ----------");
+    console.log("Fechas recibidas:", datos);
+
+    // Obtener la lista completa
+    let respuesta = BDrespaldo.TablaCV(datos.fechaInicio, datos.fechaFinal);
+
+    console.log(respuesta)
+
+    // Paso -> filtrar solo las compras
+    let listaVentas = respuesta.listaCV.filter(item => item.Tipo === 'venta');
+
+    // Enviar la lista filtrada al frontend
+    event.sender.send("EActualizarTablaVentaDeOro", listaVentas);
+});
 // ------------------------------------- EVENTOS CON EL USUARIO --------------------------------------
 
 // Evento -> guardar usuario
