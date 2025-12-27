@@ -1,5 +1,5 @@
 {
-    "Contador": 8,
+    "Contador": 10,
     "Elementos": [
         {
             "Tipo": "Capital",
@@ -66,6 +66,28 @@
             "Hora": "22:13:58",
             "CapturaSaldo": "3121.93",
             "ID": 7
+        },
+        {
+            "Tipo": "Capital",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-26",
+            "Usuario": "Berning",
+            "Importe": "77.00",
+            "Detalle": "",
+            "Hora": "23:51:48",
+            "CapturaSaldo": "2798.93",
+            "ID": 9
+        },
+        {
+            "Tipo": "Capital",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-27",
+            "Usuario": "Berning",
+            "Importe": "323.00",
+            "Detalle": "se aumenta el monto de 323 al capital económico",
+            "Hora": "00:04:33",
+            "CapturaSaldo": "3121.93",
+            "ID": 10
         }
     ]
 }

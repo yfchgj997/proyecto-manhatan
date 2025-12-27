@@ -1076,6 +1076,27 @@ ipcMain.on("EMontoIngresado", (event, datos) => {
             tipo: "MensajeBueno",
             texto: mensajeExito
         })
+        // Paso -> obtener lista de capturas
+        let RespuestaCapturas = BDrespaldo.ObtenerListaCapturas()
+        let ListaCapturas = []
+        if (RespuestaCapturas.error == false) {
+            ListaCapturas = RespuestaCapturas.ListaCapturas
+            // Ordenar por fecha de más reciente a más antigua
+            ListaCapturas.sort((a, b) => {
+                let fechaA = new Date(a.Fecha);
+                let fechaB = new Date(b.Fecha);
+                return fechaA - fechaB;
+            });
+        }
+
+        // Paso -> enviar evento para actualizar tabla diaria
+        mainWindow.webContents.send("EActualizarTablaDiaria", {
+            "diarios": ListaCapturas,
+            "CapitalEconomico": BDrespaldo.ObtenerCapitalEconomicoEmpresarial().CapitalEconomico,
+            "CapitalMaterial": BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial,
+            "fecha": ObtenerFecha()
+        })
+
         mainWindow.webContents.send("EActualizarCapitales", {
             CapitalEconomico: BDrespaldo.ObtenerCapitalEconomicoEmpresarial().CapitalEconomico,
             CapitalMaterial: BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial,

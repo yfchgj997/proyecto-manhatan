@@ -1,5 +1,5 @@
 {
-    "Contador": 23,
+    "Contador": 28,
     "Elementos": [
         {
             "Tipo": "Material",
@@ -187,6 +187,61 @@
             "Hora": "23:04:00",
             "CapturaSaldo": "2900.00",
             "ID": 23
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Disminuir",
+            "Fecha": "2025-12-26",
+            "Usuario": "Berning",
+            "Importe": "400.00",
+            "Detalle": "jkbkjb",
+            "Hora": "23:49:46",
+            "CapturaSaldo": "2500.00",
+            "ID": 24
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-26",
+            "Usuario": "Berning",
+            "Importe": "300.00",
+            "Detalle": "hjbkj",
+            "Hora": "23:51:07",
+            "CapturaSaldo": "2800.00",
+            "ID": 25
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-26",
+            "Usuario": "Berning",
+            "Importe": "200.00",
+            "Detalle": "rtgeg",
+            "Hora": "23:52:26",
+            "CapturaSaldo": "3000.00",
+            "ID": 26
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Disminuir",
+            "Fecha": "2025-12-27",
+            "Usuario": "Berning",
+            "Importe": "200.00",
+            "Detalle": "se disminuye 200 del monto material",
+            "Hora": "00:03:47",
+            "CapturaSaldo": "2800.00",
+            "ID": 27
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-27",
+            "Usuario": "Berning",
+            "Importe": "3000.00",
+            "Detalle": "se ganó mucho este mes",
+            "Hora": "00:05:52",
+            "CapturaSaldo": "5800.00",
+            "ID": 28
         }
     ]
 }
