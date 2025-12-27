@@ -2,20 +2,11 @@
     "Contador": 2,
     "Elementos": [
         {
-            "Nombres": "ASD",
-            "Apellidos": "ASDF",
-            "DNI": "32",
-            "SaldoEconomico": "403.00",
-            "SaldoMaterial": "509.00",
-            "FechaIngreso": "2025-11-30",
-            "ID": 1
-        },
-        {
             "Nombres": "VVSD",
             "Apellidos": "RVSDV",
             "DNI": "",
-            "SaldoEconomico": 0,
-            "SaldoMaterial": "200.00",
+            "SaldoEconomico": "0.00",
+            "SaldoMaterial": "500.00",
             "FechaIngreso": "2025-12-18",
             "ID": 2
         }

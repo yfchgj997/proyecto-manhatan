@@ -2,14 +2,6 @@
     "Contador": 24,
     "Elementos": [
         {
-            "Nombres": "Admin",
-            "Apellidos": "Principal",
-            "Contrasena": "admin123",
-            "Rol": "Administrador",
-            "Estado": "Activo",
-            "ID": 1
-        },
-        {
             "Nombres": "Usuario Cajero",
             "Apellidos": "Normal",
             "Contrasena": "user123",
@@ -24,14 +16,6 @@
             "Rol": "Administrador",
             "Estado": "Activo",
             "ID": 3
-        },
-        {
-            "Nombres": "cambio echo por una IA",
-            "Apellidos": "no se",
-            "Contrasena": "321",
-            "Rol": "Cajero",
-            "Estado": "Activo",
-            "ID": 4
         },
         {
             "Nombres": "wef",

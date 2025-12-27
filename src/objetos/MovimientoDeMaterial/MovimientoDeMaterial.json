@@ -1,5 +1,5 @@
 {
-    "Contador": 39,
+    "Contador": 44,
     "Elementos": [
         {
             "Tipo": "Retiro",
@@ -197,6 +197,62 @@
             "Hora": "23:51:52",
             "ID": 39,
             "CapturaSaldo": "200.00"
+        },
+        {
+            "Tipo": "Retiro",
+            "Fecha": "2025-12-20",
+            "UsuarioID": 1,
+            "UsuarioNombres": "Admin",
+            "ClienteID": "2",
+            "ClienteNombres": "VVSD",
+            "ClienteApellidos": "RVSDV",
+            "Importe": "100.00",
+            "Observacion": "JJ",
+            "Hora": "11:39:15",
+            "ID": 40,
+            "CapturaSaldo": "100.00"
+        },
+        {
+            "Tipo": "Ingreso",
+            "Fecha": "2025-12-20",
+            "UsuarioID": 1,
+            "UsuarioNombres": "Admin",
+            "ClienteID": "1",
+            "ClienteNombres": "ASD",
+            "ClienteApellidos": "ASDF",
+            "Importe": "100.00",
+            "Observacion": "",
+            "Hora": "18:58:30",
+            "ID": 41,
+            "CapturaSaldo": "609.00"
+        },
+        {
+            "Tipo": "Ingreso",
+            "Fecha": "2025-12-20",
+            "UsuarioID": 1,
+            "UsuarioNombres": "Admin",
+            "ClienteID": "2",
+            "ClienteNombres": "VVSD",
+            "ClienteApellidos": "RVSDV",
+            "Importe": "200.00",
+            "Observacion": "",
+            "Hora": "18:59:09",
+            "ID": 42,
+            "CapturaSaldo": "300.00"
+        },
+        {
+            "Tipo": "Ingreso",
+            "Fecha": "2025-12-20",
+            "UsuarioID": 1,
+            "UsuarioNombres": "Admin",
+            "ClienteID": "2",
+            "ClienteNombres": "VVSD",
+            "ClienteApellidos": "RVSDV",
+            "Importe": "200.00",
+            "Observacion": "",
+            "Hora": "18:59:46",
+            "ID": 43,
+            "CapturaSaldo": "500.00"
         }
     ]
 }

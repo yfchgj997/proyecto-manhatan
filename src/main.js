@@ -442,10 +442,21 @@ ipcMain.on("EQuiereGestionarCuentaEmpresarial", (event) => {
         CapitalMaterial = Respuesta.CapitalMaterial
     }
 
+    console.log("------ enconrranfo error –-----------------------")
+    console.log("Capital Economico: " + CapitalEconomico)
+    console.log("Capital Material: " + CapitalMaterial)
+
     // Paso -> obtener todos los clientes en la base de datos 
     Respuesta = BDrespaldo.ObtenerListaCapturas()
     if (Respuesta.error == false) {
         ListaCapturas = Respuesta.ListaCapturas
+
+        // Ordenar por fecha de más reciente a más antigua
+        ListaCapturas.sort((a, b) => {
+            let fechaA = new Date(a.Fecha);
+            let fechaB = new Date(b.Fecha);
+            return fechaA - fechaB; // Más reciente primero
+        });
     }
 
     // Paso -> obtener usuario actual
@@ -474,11 +485,11 @@ ipcMain.on("EQuiereVerDetallesMovimientosEmpresariales", (event) => {
     if (respuesta.error == false) {
         movimientos = respuesta.Elementos
 
-        // Ordenar movimientos por fecha y hora (antiguo a reciente)
+        // Ordenar movimientos por fecha y hora (reciente a antiguo)
         movimientos.sort((a, b) => {
             let fechaA = new Date(`${a.Fecha}T${a.Hora}`);
             let fechaB = new Date(`${b.Fecha}T${b.Hora}`);
-            return fechaA - fechaB;
+            return fechaB - fechaA;
         });
     }
 
@@ -514,21 +525,23 @@ ipcMain.on("EQuiereExportarMovimientosEmpresariales", async (event) => {
     const worksheet = workbook.addWorksheet('Movimientos');
 
     // Definir columnas
-    // Fecha | Hora | Cliente (omitir) | Usuario | Observación (Detalle) | I.DINERO | E.DINERO | S.DINERO | I.MATERIAL | E.MATERIAL | S.MATERIAL
+    // Fecha | Hora | Usuario | Detalle | DineroInicial | I.DINERO | E.DINERO | S.DINERO | MaterialInicial | I.MATERIAL | E.MATERIAL | S.MATERIAL
     worksheet.columns = [
         { header: 'Fecha', key: 'Fecha', width: 15 },
         { header: 'Hora', key: 'Hora', width: 15 },
         { header: 'Usuario', key: 'Usuario', width: 20 },
         { header: 'Detalle', key: 'Detalle', width: 40 },
+        { header: 'DineroInicial', key: 'DineroInicial', width: 15 },
         { header: 'I.DINERO', key: 'IDinero', width: 15 },
         { header: 'E.DINERO', key: 'EDinero', width: 15 },
         { header: 'S.DINERO', key: 'SDinero', width: 15 },
+        { header: 'MaterialInicial', key: 'MaterialInicial', width: 15 },
         { header: 'I.MATERIAL', key: 'IMaterial', width: 15 },
         { header: 'E.MATERIAL', key: 'EMaterial', width: 15 },
         { header: 'S.MATERIAL', key: 'SMaterial', width: 15 }
     ];
 
-    // Estilo de cabecera (Amarillo)
+    // Estilo de cabecera (Amarillo con bordes)
     worksheet.getRow(1).eachCell((cell) => {
         cell.fill = {
             type: 'pattern',
@@ -537,6 +550,12 @@ ipcMain.on("EQuiereExportarMovimientosEmpresariales", async (event) => {
         };
         cell.font = { bold: true };
         cell.alignment = { horizontal: 'center' };
+        cell.border = {
+            top: { style: 'thin', color: { argb: '000000' } },
+            left: { style: 'thin', color: { argb: '000000' } },
+            bottom: { style: 'thin', color: { argb: '000000' } },
+            right: { style: 'thin', color: { argb: '000000' } }
+        };
     });
 
     // Agregar filas
@@ -546,31 +565,97 @@ ipcMain.on("EQuiereExportarMovimientosEmpresariales", async (event) => {
             Hora: mov.Hora,
             Usuario: mov.Usuario,
             Detalle: mov.Detalle,
+            DineroInicial: '',
             IDinero: '',
             EDinero: '',
             SDinero: '',
+            MaterialInicial: '',
             IMaterial: '',
             EMaterial: '',
             SMaterial: ''
         };
 
         if (mov.Tipo === "Capital") {
+            let saldoFinal = parseFloat(mov.CapturaSaldo);
+            let importe = parseFloat(mov.Importe);
+            let saldoInicial = 0;
+
             if (mov.Operacion === "Aumentar") {
-                row.IDinero = parseFloat(mov.Importe);
+                saldoInicial = saldoFinal - importe;
+                row.IDinero = importe;
             } else if (mov.Operacion === "Disminuir") {
-                row.EDinero = parseFloat(mov.Importe);
+                saldoInicial = saldoFinal + importe;
+                row.EDinero = importe;
             }
-            row.SDinero = parseFloat(mov.CapturaSaldo);
+
+            row.DineroInicial = saldoInicial;
+            row.SDinero = saldoFinal;
         } else if (mov.Tipo === "Material") {
+            let saldoFinal = parseFloat(mov.CapturaSaldo);
+            let importe = parseFloat(mov.Importe);
+            let saldoInicial = 0;
+
             if (mov.Operacion === "Aumentar") {
-                row.IMaterial = parseFloat(mov.Importe);
+                saldoInicial = saldoFinal - importe;
+                row.IMaterial = importe;
             } else if (mov.Operacion === "Disminuir") {
-                row.EMaterial = parseFloat(mov.Importe);
+                saldoInicial = saldoFinal + importe;
+                row.EMaterial = importe;
             }
-            row.SMaterial = parseFloat(mov.CapturaSaldo);
+
+            row.MaterialInicial = saldoInicial;
+            row.SMaterial = saldoFinal;
         }
 
         worksheet.addRow(row);
+    });
+
+    // Aplicar estilos a las filas de datos
+    worksheet.eachRow((row, rowNumber) => {
+        if (rowNumber > 1) { // Saltar la fila de encabezado
+            row.eachCell((cell, colNumber) => {
+                // Aplicar bordes a todas las celdas
+                cell.border = {
+                    top: { style: 'thin', color: { argb: '000000' } },
+                    left: { style: 'thin', color: { argb: '000000' } },
+                    bottom: { style: 'thin', color: { argb: '000000' } },
+                    right: { style: 'thin', color: { argb: '000000' } }
+                };
+
+                // Columna I.DINERO (columna 6) - Azul
+                if (colNumber === 6 && cell.value) {
+                    cell.font = { color: { argb: '0000FF' } };
+                }
+                // Columna E.DINERO (columna 7) - Rojo
+                if (colNumber === 7 && cell.value) {
+                    cell.font = { color: { argb: 'FF0000' } };
+                }
+                // Columna S.DINERO (columna 8) - Fondo gris
+                if (colNumber === 8) {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'D3D3D3' }
+                    };
+                }
+                // Columna I.MATERIAL (columna 10) - Azul
+                if (colNumber === 10 && cell.value) {
+                    cell.font = { color: { argb: '0000FF' } };
+                }
+                // Columna E.MATERIAL (columna 11) - Rojo
+                if (colNumber === 11 && cell.value) {
+                    cell.font = { color: { argb: 'FF0000' } };
+                }
+                // Columna S.MATERIAL (columna 12) - Fondo gris
+                if (colNumber === 12) {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'D3D3D3' }
+                    };
+                }
+            });
+        }
     });
 
     // Guardar archivo
@@ -622,6 +707,28 @@ ipcMain.on("EAumentarCapitalEconomico", (event, monto) => {
         if (RespuestaCapital.error == false) {
             // Paso -> obtener usuario actual
             let usuarioActual = GestorSesion.obtenerUsuarioActual()
+
+            // Paso -> obtener lista de capturas
+            let RespuestaCapturas = BDrespaldo.ObtenerListaCapturas()
+            let ListaCapturas = []
+            if (RespuestaCapturas.error == false) {
+                ListaCapturas = RespuestaCapturas.ListaCapturas
+                // Ordenar por fecha de más reciente a más antigua
+                ListaCapturas.sort((a, b) => {
+                    let fechaA = new Date(a.Fecha);
+                    let fechaB = new Date(b.Fecha);
+                    return fechaA - fechaB;
+                });
+            }
+
+            // Paso -> enviar evento para actualizar tabla diaria
+            event.sender.send("EActualizarTablaDiaria", {
+                "diarios": ListaCapturas,
+                "CapitalEconomico": RespuestaCapital.CapitalEconomico,
+                "CapitalMaterial": BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial,
+                "fecha": ObtenerFecha()
+            })
+
             // Paso -> enviar mensaje de exito
             event.sender.send("ModificarMensaje", {
                 tipo: "MensajeBueno",
@@ -657,6 +764,28 @@ ipcMain.on("EDisminuirCapitalEconomico", (event, monto) => {
         if (RespuestaCapital.error == false) {
             // Paso -> obtener usuario actual
             let usuarioActual = GestorSesion.obtenerUsuarioActual()
+
+            // Paso -> obtener lista de capturas
+            let RespuestaCapturas = BDrespaldo.ObtenerListaCapturas()
+            let ListaCapturas = []
+            if (RespuestaCapturas.error == false) {
+                ListaCapturas = RespuestaCapturas.ListaCapturas
+                // Ordenar por fecha de más reciente a más antigua
+                ListaCapturas.sort((a, b) => {
+                    let fechaA = new Date(a.Fecha);
+                    let fechaB = new Date(b.Fecha);
+                    return fechaA - fechaB;
+                });
+            }
+
+            // Paso -> enviar evento para actualizar tabla diaria
+            event.sender.send("EActualizarTablaDiaria", {
+                "diarios": ListaCapturas,
+                "CapitalEconomico": RespuestaCapital.CapitalEconomico,
+                "CapitalMaterial": BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial,
+                "fecha": ObtenerFecha()
+            })
+
             // Paso -> enviar mensaje de exito
             event.sender.send("ModificarMensaje", {
                 tipo: "MensajeBueno",
@@ -692,6 +821,28 @@ ipcMain.on("EAumentarCapitalMaterial", (event, monto) => {
         if (RespuestaCapital.error == false) {
             // Paso -> obtener usuario actual
             let usuarioActual = GestorSesion.obtenerUsuarioActual()
+
+            // Paso -> obtener lista de capturas
+            let RespuestaCapturas = BDrespaldo.ObtenerListaCapturas()
+            let ListaCapturas = []
+            if (RespuestaCapturas.error == false) {
+                ListaCapturas = RespuestaCapturas.ListaCapturas
+                // Ordenar por fecha de más reciente a más antigua
+                ListaCapturas.sort((a, b) => {
+                    let fechaA = new Date(a.Fecha);
+                    let fechaB = new Date(b.Fecha);
+                    return fechaA - fechaB;
+                });
+            }
+
+            // Paso -> enviar evento para actualizar tabla diaria
+            event.sender.send("EActualizarTablaDiaria", {
+                "diarios": ListaCapturas,
+                "CapitalEconomico": BDrespaldo.ObtenerCapitalEconomicoEmpresarial().CapitalEconomico,
+                "CapitalMaterial": RespuestaCapital.CapitalMaterial,
+                "fecha": ObtenerFecha()
+            })
+
             // Paso -> enviar mensaje de exito
             event.sender.send("ModificarMensaje", {
                 tipo: "MensajeBueno",
@@ -727,6 +878,28 @@ ipcMain.on("EDisminuirCapitalMaterial", (event, monto) => {
         if (RespuestaCapital.error == false) {
             // Paso -> obtener usuario actual
             let usuarioActual = GestorSesion.obtenerUsuarioActual()
+
+            // Paso -> obtener lista de capturas
+            let RespuestaCapturas = BDrespaldo.ObtenerListaCapturas()
+            let ListaCapturas = []
+            if (RespuestaCapturas.error == false) {
+                ListaCapturas = RespuestaCapturas.ListaCapturas
+                // Ordenar por fecha de más reciente a más antigua
+                ListaCapturas.sort((a, b) => {
+                    let fechaA = new Date(a.Fecha);
+                    let fechaB = new Date(b.Fecha);
+                    return fechaA - fechaB;
+                });
+            }
+
+            // Paso -> enviar evento para actualizar tabla diaria
+            event.sender.send("EActualizarTablaDiaria", {
+                "diarios": ListaCapturas,
+                "CapitalEconomico": BDrespaldo.ObtenerCapitalEconomicoEmpresarial().CapitalEconomico,
+                "CapitalMaterial": RespuestaCapital.CapitalMaterial,
+                "fecha": ObtenerFecha()
+            })
+
             // Paso -> enviar mensaje de exito
             event.sender.send("ModificarMensaje", {
                 tipo: "MensajeBueno",
