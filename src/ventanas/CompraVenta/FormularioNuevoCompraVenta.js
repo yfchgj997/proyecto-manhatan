@@ -146,8 +146,20 @@ function GuardarCompraVenta(usuarioAutenticado) {
     console.log("MENSAJE: Estos son los datos de compra venta:");
     console.log(NuevoCompraVenta);
 
+    // Obtener fechas del filtro
+    let fechaInicio = document.getElementById("CampoTextoFechaInicial") ? document.getElementById("CampoTextoFechaInicial").value : "";
+    let fechaFinal = document.getElementById("CampoTextoFechaFinal") ? document.getElementById("CampoTextoFechaFinal").value : "";
+
+    let datosEnvio = {
+        movimiento: NuevoCompraVenta,
+        filtro: {
+            fechaInicio: fechaInicio,
+            fechaFinal: fechaFinal
+        }
+    };
+
     // Enviar los datos del movimiento al proceso principal
-    ipcRenderer.send("EQuiereGuardarNuevoCompraVenta", NuevoCompraVenta);
+    ipcRenderer.send("EQuiereGuardarNuevoCompraVenta", datosEnvio);
 }
 
 function FormatearDecimales(input) {

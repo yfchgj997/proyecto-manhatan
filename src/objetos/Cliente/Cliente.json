@@ -9,6 +9,15 @@
             "SaldoMaterial": "500.00",
             "FechaIngreso": "2025-12-18",
             "ID": 2
+        },
+        {
+            "Nombres": "GEFVD",
+            "Apellidos": "VCDCV",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": "500.00",
+            "FechaIngreso": "2025-12-20",
+            "ID": 3
         }
     ]
 }
