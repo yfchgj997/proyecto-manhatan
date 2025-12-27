@@ -6,6 +6,9 @@ function GenerarCodigo(datosFiltrados, fechaSeleccionada, CapitalEconomicoEmpres
 
     // mensaje de flujo 
     console.log("TablaDiarios: Generando el código para el componente TablaDiarios");
+    console.log("eeeeeeeeeeee3eeeeeeeeeeeeeeee")
+    console.log("Capital Economico: " + CapitalEconomicoEmpresarial)
+    console.log("Capital Material: " + CapitalMaterialEmpresarial)
 
     // Validar que haya datos después del filtrado
     if (datosFiltrados.length === 0) {
@@ -26,12 +29,29 @@ function GenerarCodigo(datosFiltrados, fechaSeleccionada, CapitalEconomicoEmpres
         let siguienteCapitalMaterial = array[index + 1] ? array[index + 1].CapitalMaterialInicial : CapitalMaterialEmpresarial;
         let siguienteCapitalEconomico = array[index + 1] ? array[index + 1].CapitalEconomicoInicial : CapitalEconomicoEmpresarial;
 
+        // Calcular totales (diferencia entre final e inicial)
+        let totalEconomico = (siguienteCapitalEconomico - dato.CapitalEconomicoInicial).toFixed(2);
+        let totalMaterial = (siguienteCapitalMaterial - dato.CapitalMaterialInicial).toFixed(2);
+
+        console.log("========== FILA " + index + " ==========")
+        console.log("Es última fila: " + (index === array.length - 1))
+        console.log("CapitalEconomicoEmpresarial (parámetro): " + CapitalEconomicoEmpresarial)
+        console.log("CapitalMaterialEmpresarial (parámetro): " + CapitalMaterialEmpresarial)
+        console.log("siguienteCapitalEconomico (calculado): " + siguienteCapitalEconomico)
+        console.log("siguienteCapitalMaterial (calculado): " + siguienteCapitalMaterial)
+        console.log("dato.CapitalEconomicoInicial: " + dato.CapitalEconomicoInicial)
+        console.log("dato.CapitalMaterialInicial: " + dato.CapitalMaterialInicial)
+        console.log("totalEconomico: " + totalEconomico)
+        console.log("totalMaterial: " + totalMaterial)
+
         return `
             <tr>
                 <td>${dato.Fecha}</td>
                 <td>${dato.CapitalEconomicoInicial} S/.</td>
+                <td>${totalEconomico} S/.</td>
                 <td>${siguienteCapitalEconomico} S/.</td>
                 <td>${dato.CapitalMaterialInicial} g.</td>
+                <td>${totalMaterial} g.</td>
                 <td>${siguienteCapitalMaterial}</td>
                 <td><button class="BotonVerAzul" IDMovimiento="${dato.IDMovimiento}" Tipo="${dato.Tipo}" title="Ver"><i class="bi bi-eye"></i></button></td>
             </tr>
@@ -47,8 +67,10 @@ function GenerarCodigo(datosFiltrados, fechaSeleccionada, CapitalEconomicoEmpres
                     <tr>
                         <th>Fecha</th>
                         <th>Capital Económico Inicial</th>
+                        <th>Total Económico</th>
                         <th>Capital Económico Final</th>
                         <th>Capital Material Inicial</th>
+                        <th>Total Material</th>
                         <th>Capital Material Final</th>
                         <th>Opciones</th>
                     </tr>
@@ -67,6 +89,9 @@ function CargarTablaDiarios(datos, fecha, CapitalEconomicoEmpresarial, CapitalMa
 
     // mensaje de flujo
     console.log("TablaDiarios: Cargando el componente TablaDiarios");
+    console.log("ddddddddddddddddddddddddddddddddddd")
+    console.log("Capital Economico: " + CapitalEconomicoEmpresarial)
+    console.log("Capital Material: " + CapitalMaterialEmpresarial)
 
     // Guardar los datos en una variable global
     DatosGlobales = datos;
@@ -105,6 +130,15 @@ function CargarTablaDiarios(datos, fecha, CapitalEconomicoEmpresarial, CapitalMa
         console.error("ERROR: No se encontró el espacio para cargar TablaDiarios");
     }
 }
+
+// Evento -> actualizar tabla diaria
+ipcRenderer.on("EActualizarTablaDiaria", (event, datos) => {
+    console.log(" ----------MENSAJE: actualizando tabla diaria")
+    console.log("Capital Economico: " + datos.CapitalEconomico)
+    console.log("Capital Material: " + datos.CapitalMaterial)
+    // Paso -> cargar tabla diarios
+    CargarTablaDiarios(datos.diarios, datos.fecha, datos.CapitalEconomico, datos.CapitalMaterial)
+})
 
 // Exportar función para su uso en otros archivos
 module.exports = { CargarTablaDiarios };

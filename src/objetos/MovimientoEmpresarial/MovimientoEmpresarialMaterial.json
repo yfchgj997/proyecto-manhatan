@@ -1,5 +1,5 @@
 {
-    "Contador": 9,
+    "Contador": 23,
     "Elementos": [
         {
             "Tipo": "Material",
@@ -30,9 +30,163 @@
             "Usuario": "Admin",
             "Importe": "100.00",
             "Detalle": "",
-            "Hora": "22:56:39",
-            "CapturaSaldo": "500.00",
+            "Hora": "10:57:59",
+            "CapturaSaldo": "900.00",
             "ID": 9
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-20",
+            "Usuario": "Admin",
+            "Importe": "100.00",
+            "Detalle": "",
+            "Hora": "18:56:43",
+            "CapturaSaldo": "900.00",
+            "ID": 10
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-20",
+            "Usuario": "Admin",
+            "Importe": "100.00",
+            "Detalle": "",
+            "Hora": "19:59:39",
+            "CapturaSaldo": "1700.00",
+            "ID": 11
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-20",
+            "Usuario": "Admin",
+            "Importe": "100.00",
+            "Detalle": "",
+            "Hora": "20:09:47",
+            "CapturaSaldo": "1800.00",
+            "ID": 12
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-20",
+            "Usuario": "Admin",
+            "Importe": "100.00",
+            "Detalle": "",
+            "Hora": "20:11:20",
+            "CapturaSaldo": "1900.00",
+            "ID": 13
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-20",
+            "Usuario": "wef",
+            "Importe": "100.00",
+            "Detalle": "",
+            "Hora": "21:52:13",
+            "CapturaSaldo": "2000.00",
+            "ID": 14
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-20",
+            "Usuario": "wef",
+            "Importe": "100.00",
+            "Detalle": "",
+            "Hora": "21:54:14",
+            "CapturaSaldo": "2100.00",
+            "ID": 15
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-20",
+            "Usuario": "wef",
+            "Importe": "100.00",
+            "Detalle": "",
+            "Hora": "22:10:33",
+            "CapturaSaldo": "2200.00",
+            "ID": 16
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-20",
+            "Usuario": "wef",
+            "Importe": "100.00",
+            "Detalle": "",
+            "Hora": "22:10:54",
+            "CapturaSaldo": "2300.00",
+            "ID": 17
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-20",
+            "Usuario": "wef",
+            "Importe": "100.00",
+            "Detalle": "",
+            "Hora": "22:13:57",
+            "CapturaSaldo": "2400.00",
+            "ID": 18
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-20",
+            "Usuario": "wef",
+            "Importe": "100.00",
+            "Detalle": "",
+            "Hora": "22:22:44",
+            "CapturaSaldo": "2500.00",
+            "ID": 19
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-20",
+            "Usuario": "wef",
+            "Importe": "100.00",
+            "Detalle": "",
+            "Hora": "22:27:39",
+            "CapturaSaldo": "2600.00",
+            "ID": 20
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-20",
+            "Usuario": "wef",
+            "Importe": "100.00",
+            "Detalle": "",
+            "Hora": "22:37:55",
+            "CapturaSaldo": "2700.00",
+            "ID": 21
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-20",
+            "Usuario": "wef",
+            "Importe": "100.00",
+            "Detalle": "",
+            "Hora": "22:42:30",
+            "CapturaSaldo": "2800.00",
+            "ID": 22
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-20",
+            "Usuario": "wef",
+            "Importe": "100.00",
+            "Detalle": "",
+            "Hora": "23:04:00",
+            "CapturaSaldo": "2900.00",
+            "ID": 23
         }
     ]
 }

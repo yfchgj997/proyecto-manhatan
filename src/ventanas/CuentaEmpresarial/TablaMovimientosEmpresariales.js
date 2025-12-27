@@ -8,7 +8,7 @@ function GenerarHTML(movimientos) {
             <p id="SinMovimientos" class="texto-vacio">No hay movimientos registrados</p>
         `;
     } else {
-        let filas = movimientos.map(m => {
+        let filas = movimientos.map((m, index) => {
             let ecoInicial = "-", ecoFinal = "-", matInicial = "-", matFinal = "-";
             let saldo = parseFloat(m.CapturaSaldo);
             let importe = parseFloat(m.Importe);
@@ -28,11 +28,14 @@ function GenerarHTML(movimientos) {
                 matFinal = saldo.toFixed(2);
             }
 
+            // Convertir "Capital" a "Economico" para mostrar
+            let tipoMostrar = m.Tipo === "Capital" ? "Economico" : m.Tipo;
+
             return `
                 <tr class="fila-movimiento">
-                    <td>${m.ID}</td>
+                    <td>${index + 1}</td>
                     <td>${m.Fecha}</td>
-                    <td>${m.Tipo}</td>
+                    <td>${tipoMostrar}</td>
                     <td>${m.Operacion || ""}</td>
                     <td>${m.Importe}</td>
                     <td>${ecoInicial}</td>
@@ -47,7 +50,7 @@ function GenerarHTML(movimientos) {
             <table id="TablaMovimientos" class="tabla-movimientos" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
                 <thead>
                     <tr style="background-color: #f2f2f2; text-align: left;">
-                        <th style="padding: 12px;">ID</th>
+                        <th style="padding: 12px;">N°</th>
                         <th style="padding: 12px;">Fecha</th>
                         <th style="padding: 12px;">Tipo</th>
                         <th style="padding: 12px;">Operación</th>

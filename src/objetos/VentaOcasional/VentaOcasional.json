@@ -108,6 +108,18 @@
             "PrecioCambio": 234,
             "Hora": "09:09:50",
             "ID": 16
+        },
+        {
+            "Tipo": "compra",
+            "Fecha": "2025-12-20",
+            "EmpleadoNombre": "Admin",
+            "EmpleadoID": 1,
+            "Cliente": "JJJJ",
+            "MontoMaterial": 100,
+            "MontoEconomico": 400,
+            "PrecioCambio": 4,
+            "Hora": "19:00:55",
+            "ID": 17
         }
     ]
 }

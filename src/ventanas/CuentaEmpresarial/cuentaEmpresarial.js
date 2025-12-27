@@ -44,6 +44,8 @@ function CargarEstructuraInicial() {
 ipcRenderer.on("EInicializarVentanaCuentaEmpresarial", (event, datos) => {
     // mensaje de flujo
     console.log("MENSAJE: quiere gestionar cuenta empresarial")
+    console.log("Capital Economico: " + datos.CapitalEconomico)
+    console.log("Capital Material: " + datos.CapitalMaterial)
     // Paso -> cargar el codigo o estructura incial
     CargarEstructuraInicial()
     // Paso -> cargar encabezado
@@ -59,3 +61,4 @@ ipcRenderer.on("ECargarTablaMovimientosEmpresariales", (event, movimientos) => {
     console.log("MENSAJE: cargando tabla de movimientos empresariales")
     CargarTablaMovimientosEmpresariales(movimientos)
 })
+
