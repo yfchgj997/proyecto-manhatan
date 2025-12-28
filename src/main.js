@@ -406,10 +406,21 @@ ipcMain.on("EEliminarCV", async (event, datosCompraVenta) => {
 
         let resTabla = BDrespaldo.TablaCV(fechaInicio, fechaFinal);
         if (resTabla.error == false) {
-            event.sender.send("EActualizarTablaCompraVenta", resTabla.listaCV);
+            // Paso -> filtrar según el tipo del movimiento eliminado
+            if (datosAEliminar.Tipo === 'compra') {
+                let listaCompras = resTabla.listaCV.filter(item => item.Tipo === 'compra');
+                event.sender.send("EActualizarTablaCompraVenta", listaCompras);
+            } else if (datosAEliminar.Tipo === 'venta') {
+                let listaVentas = resTabla.listaCV.filter(item => item.Tipo === 'venta');
+                event.sender.send("EActualizarTablaVentaDeOro", listaVentas);
+            }
         } else {
-            // Fallback si falla la recarga manual (aunque improbable si TablaCV funciona)
-            event.sender.send("EActualizarTablaCompraVenta", respuesta.listaCV);
+            // Fallback si falla la recarga manual
+            if (datosAEliminar.Tipo === 'compra') {
+                event.sender.send("EActualizarTablaCompraVenta", respuesta.listaCV);
+            } else if (datosAEliminar.Tipo === 'venta') {
+                event.sender.send("EActualizarTablaVentaDeOro", respuesta.listaCV);
+            }
         }
     }
 })
@@ -458,11 +469,20 @@ ipcMain.on("EQuiereGuardarNuevoVentaDeOro", (event, datosVentaDeOro) => {
     console.log("MENSAJE: guardando nuevo venta de oro, estos son los datos:")
     console.log(datosVentaDeOro)
 
-    // Paso -> agregar la hora a la venta de oro
-    datosVentaDeOro.Hora = ObtenerHora()
-
     // Paso -> guardar en la base de datos el nuevo registro
-    respuesta = BDrespaldo.GuardarCompraVenta(datosVentaDeOro)
+    let datosAGuardar = datosVentaDeOro;
+    let filtro = null;
+
+    if (datosVentaDeOro.filtro) {
+        datosAGuardar = datosVentaDeOro.movimiento;
+        filtro = datosVentaDeOro.filtro;
+        // Asignar hora también al objeto interno si viene anidado
+        datosAGuardar.Hora = ObtenerHora();
+    } else {
+        datosAGuardar.Hora = ObtenerHora();
+    }
+
+    respuesta = BDrespaldo.GuardarCompraVenta(datosAGuardar)
 
     // Paso -> mostrar mensaje al usuario
     if (respuesta.error == false) {// se guardo sin errores
@@ -484,6 +504,7 @@ ipcMain.on("EQuiereGuardarNuevoVentaDeOro", (event, datosVentaDeOro) => {
             fechaInicio = filtro.fechaInicio;
             fechaFinal = filtro.fechaFinal;
         }
+
         let respuesta = BDrespaldo.TablaCV(fechaInicio, fechaFinal)
         if (respuesta.error == false) {
             // Paso -> filtrar solo las ventas
