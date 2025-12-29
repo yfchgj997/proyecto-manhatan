@@ -106,7 +106,15 @@ function CargarTablaClientes(clientes) {
                         let clienteObjeto = JSON.parse(datosCliente);
 
                         if (typeof ipcRenderer !== "undefined") {
-                            ipcRenderer.send("EEliminarCliente", clienteObjeto);
+                            // Obtener el término de búsqueda actual
+                            let terminoBusqueda = document.getElementById("CampoTextoCliente") ?
+                                document.getElementById("CampoTextoCliente").value : "";
+
+                            // Enviar cliente y término de búsqueda
+                            ipcRenderer.send("EEliminarCliente", {
+                                cliente: clienteObjeto,
+                                busqueda: terminoBusqueda
+                            });
                         } else {
                             console.error("ERROR: ipcRenderer no está disponible.");
                         }

@@ -1156,8 +1156,8 @@ ipcMain.on("EGuardarNuevoCliente", (event, Cliente) => {
         });
 
         // Paso -> actualizar la tabla de clientes en la ventana
-        let res = BDrespaldo.ObtenerTablaClientes()
-        event.sender.send("ActualizarTablaClientes", res.ListaDeClientes)
+        // Enviar solo el cliente guardado en un array
+        event.sender.send("ActualizarTablaClientes", [Cliente])
 
     } else {// no se pudo guardar
 
@@ -1173,16 +1173,30 @@ ipcMain.on("EGuardarNuevoCliente", (event, Cliente) => {
 })
 
 // Evento -> eliminar un cliente
-ipcMain.on("EEliminarCliente", async (event, Cliente) => {
+ipcMain.on("EEliminarCliente", async (event, datos) => {
 
     // Paso -> Validar privilegio
     if (!validarPrivilegio("clientes", "eliminar", event)) {
         return; // Detener ejecución si no tiene privilegio
     }
 
+    // Paso -> Extraer cliente y término de búsqueda
+    let Cliente, terminoBusqueda;
+
+    // Compatibilidad: si datos es un objeto con 'cliente' y 'busqueda', usarlos
+    // Si no, asumir que datos es el cliente directamente (retrocompatibilidad)
+    if (datos && datos.cliente) {
+        Cliente = datos.cliente;
+        terminoBusqueda = datos.busqueda || "";
+    } else {
+        Cliente = datos;
+        terminoBusqueda = "";
+    }
+
     // Mensaje de flujo
     console.log("Main: Se eliminara el siguiente cliente:");
     console.log(Cliente);
+    console.log(`Main: Término de búsqueda activo: "${terminoBusqueda}"`);
 
     // Paso -> solicitar código de seguridad
     let codigoCorrecto = await SolicitarCodigo();
@@ -1212,9 +1226,21 @@ ipcMain.on("EEliminarCliente", async (event, Cliente) => {
             texto: "El cliente se elimino correctamente"
         });
 
-        // Paso -> actualizar la tabla de clientes en la ventana
-        let res = BDrespaldo.ObtenerTablaClientes()
-        event.sender.send("ActualizarTablaClientes", res.ListaDeClientes)
+        // Paso -> obtener clientes restantes y aplicar filtro de búsqueda
+        let res = BDrespaldo.ObtenerTablaClientes();
+        let clientesFiltrados = res.ListaDeClientes;
+
+        // Si hay un término de búsqueda, filtrar los clientes
+        if (terminoBusqueda && terminoBusqueda.trim() !== "") {
+            let regex = new RegExp(terminoBusqueda, "i");
+            clientesFiltrados = res.ListaDeClientes.filter(cliente =>
+                regex.test(cliente.Nombres) || regex.test(cliente.Apellidos)
+            );
+            console.log(`Main: Aplicando filtro "${terminoBusqueda}", ${clientesFiltrados.length} clientes encontrados`);
+        }
+
+        // Enviar la lista filtrada
+        event.sender.send("ActualizarTablaClientes", clientesFiltrados)
 
     } else {// no se pudo guardar
 
@@ -1229,16 +1255,30 @@ ipcMain.on("EEliminarCliente", async (event, Cliente) => {
     }
 });
 
-ipcMain.on("EEditarCliente", async (event, cliente) => {
+ipcMain.on("EEditarCliente", async (event, datos) => {
 
     // Paso -> Validar privilegio
     if (!validarPrivilegio("clientes", "editar", event)) {
         return; // Detener ejecución si no tiene privilegio
     }
 
+    // Paso -> Extraer cliente y término de búsqueda
+    let cliente, terminoBusqueda;
+
+    // Compatibilidad: si datos es un objeto con 'cliente' y 'busqueda', usarlos
+    // Si no, asumir que datos es el cliente directamente (retrocompatibilidad)
+    if (datos && datos.cliente) {
+        cliente = datos.cliente;
+        terminoBusqueda = datos.busqueda || "";
+    } else {
+        cliente = datos;
+        terminoBusqueda = "";
+    }
+
     // mensaje de flujo
     console.log("Main: editando los datos de este cliente: ")
     console.log(cliente)
+    console.log(`Main: Término de búsqueda activo: "${terminoBusqueda}"`);
 
     // Paso -> solicitar código de seguridad
     let codigoCorrecto = await SolicitarCodigo();
@@ -1266,9 +1306,21 @@ ipcMain.on("EEditarCliente", async (event, cliente) => {
             texto: "El cliente se edito correctamente"
         });
 
-        // Paso -> actualizar la tabla de clientes en la ventana
-        let res = BDrespaldo.ObtenerTablaClientes()
-        event.sender.send("ActualizarTablaClientes", res.ListaDeClientes)
+        // Paso -> obtener clientes y aplicar filtro de búsqueda
+        let res = BDrespaldo.ObtenerTablaClientes();
+        let clientesFiltrados = res.ListaDeClientes;
+
+        // Si hay un término de búsqueda, filtrar los clientes
+        if (terminoBusqueda && terminoBusqueda.trim() !== "") {
+            let regex = new RegExp(terminoBusqueda, "i");
+            clientesFiltrados = res.ListaDeClientes.filter(c =>
+                regex.test(c.Nombres) || regex.test(c.Apellidos)
+            );
+            console.log(`Main: Aplicando filtro "${terminoBusqueda}", ${clientesFiltrados.length} clientes encontrados`);
+        }
+
+        // Enviar la lista filtrada
+        event.sender.send("ActualizarTablaClientes", clientesFiltrados)
 
     } else {// no se pudo guardar
 
@@ -1319,6 +1371,13 @@ ipcMain.on("EBuscarCliente", (event, dato) => {
     console.log("Main: evento buscar cliente activado");
     console.log(`Main: el cliente que se buscará es: ${dato}`);
 
+    // Si el término de búsqueda está vacío, enviar array vacío
+    if (!dato || dato.trim() === "") {
+        console.log("Main: término de búsqueda vacío, enviando array vacío");
+        event.sender.send("ActualizarTablaClientes", []);
+        return;
+    }
+
     // Obtener la lista de clientes
     let Respuesta = BDrespaldo.ObtenerTablaClientes()
     // Expresión regular para buscar en cualquier parte del nombre o apellido (sin distinguir mayúsculas/minúsculas)
@@ -1327,6 +1386,8 @@ ipcMain.on("EBuscarCliente", (event, dato) => {
     let clientesFiltrados = Respuesta.ListaDeClientes.filter(cliente =>
         regex.test(cliente.Nombres) || regex.test(cliente.Apellidos)
     );
+
+    console.log(`Main: ${clientesFiltrados.length} clientes encontrados con el término "${dato}"`);
 
     // Enviar el resultado al frontend
     event.sender.send("ActualizarTablaClientes", clientesFiltrados)
