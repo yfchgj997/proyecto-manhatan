@@ -1,5 +1,5 @@
 {
-    "Contador": 9,
+    "Contador": 10,
     "Elementos": [
         {
             "Tipo": "Material",
@@ -33,6 +33,17 @@
             "Hora": "22:56:39",
             "CapturaSaldo": "500.00",
             "ID": 9
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-28",
+            "Usuario": "BERNARDO ",
+            "Importe": "12.00",
+            "Detalle": "erfw",
+            "Hora": "23:04:05",
+            "CapturaSaldo": "310.00",
+            "ID": 10
         }
     ]
 }
