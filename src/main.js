@@ -1031,6 +1031,7 @@ ipcMain.on("EMontoIngresado", async (event, datos) => {
     }
 
     if (respuestaOperacion.error == false) {
+
         // Actualizar UI
         mainWindow.webContents.send("ModificarMensaje", {
             tipo: "MensajeBueno",
@@ -1041,6 +1042,17 @@ ipcMain.on("EMontoIngresado", async (event, datos) => {
             CapitalMaterial: BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial,
             rolUsuario: usuarioActual ? usuarioActual.Rol : "Cajero"
         })
+
+        // Actualizar tabla de diarios
+        let respuestaCapturas = BDrespaldo.ObtenerListaCapturas()
+        if (!respuestaCapturas.error) {
+            mainWindow.webContents.send("EActualizarTablaDiarios", {
+                diarios: respuestaCapturas.ListaCapturas,
+                fecha: ObtenerFecha(),
+                CapitalEconomico: BDrespaldo.ObtenerCapitalEconomicoEmpresarial().CapitalEconomico,
+                CapitalMaterial: BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial
+            })
+        }
 
         // Registrar movimiento empresarial
         let movimiento = {

@@ -59,3 +59,9 @@ ipcRenderer.on("ECargarTablaMovimientosEmpresariales", (event, movimientos) => {
     console.log("MENSAJE: cargando tabla de movimientos empresariales")
     CargarTablaMovimientosEmpresariales(movimientos)
 })
+
+// Evento -> actualizar tabla diarios
+ipcRenderer.on("EActualizarTablaDiarios", (event, datos) => {
+    console.log("MENSAJE: actualizando tabla diarios")
+    CargarTablaDiarios(datos.diarios, datos.fecha, datos.CapitalEconomico, datos.CapitalMaterial)
+})

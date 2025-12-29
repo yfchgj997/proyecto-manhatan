@@ -26,12 +26,22 @@ function GenerarCodigo(datosFiltrados, fechaSeleccionada, CapitalEconomicoEmpres
         let siguienteCapitalMaterial = array[index + 1] ? array[index + 1].CapitalMaterialInicial : CapitalMaterialEmpresarial;
         let siguienteCapitalEconomico = array[index + 1] ? array[index + 1].CapitalEconomicoInicial : CapitalEconomicoEmpresarial;
 
+        // Calcular diferencias
+        let diferenciaEconomico = parseFloat(siguienteCapitalEconomico) - parseFloat(dato.CapitalEconomicoInicial);
+        let diferenciaMaterial = parseFloat(siguienteCapitalMaterial) - parseFloat(dato.CapitalMaterialInicial);
+
+        // Formatear diferencias
+        let difEconomicoStr = diferenciaEconomico.toFixed(2) + " S/.";
+        let difMaterialStr = diferenciaMaterial.toFixed(2) + " g.";
+
         return `
             <tr>
                 <td>${dato.Fecha}</td>
                 <td>${dato.CapitalEconomicoInicial} S/.</td>
+                <td style="font-weight: bold; color: ${diferenciaEconomico >= 0 ? 'green' : 'red'};">${difEconomicoStr}</td>
                 <td>${siguienteCapitalEconomico} S/.</td>
                 <td>${dato.CapitalMaterialInicial} g.</td>
+                <td style="font-weight: bold; color: ${diferenciaMaterial >= 0 ? 'green' : 'red'};">${difMaterialStr}</td>
                 <td>${siguienteCapitalMaterial}</td>
                 <td><button class="BotonVerAzul" IDMovimiento="${dato.IDMovimiento}" Tipo="${dato.Tipo}">Ver</button></td>
             </tr>
@@ -45,10 +55,12 @@ function GenerarCodigo(datosFiltrados, fechaSeleccionada, CapitalEconomicoEmpres
                 <thead>
                     <tr>
                         <th>Fecha</th>
-                        <th>Capital Económico Inicial</th>
-                        <th>Capital Económico Final</th>
-                        <th>Capital Material Inicial</th>
-                        <th>Capital Material Final</th>
+                        <th>Cap. Eco. Inicial</th>
+                        <th>Diferencia</th>
+                        <th>Cap. Eco. Final</th>
+                        <th>Cap. Mat. Inicial</th>
+                        <th>Diferencia</th>
+                        <th>Cap. Mat. Final</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
