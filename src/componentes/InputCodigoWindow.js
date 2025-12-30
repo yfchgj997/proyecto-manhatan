@@ -26,7 +26,19 @@ function ValidarYEnviarCodigo() {
 
     // Validar que no esté vacío
     if (codigo === "") {
-        alert("Por favor ingrese un código");
+        // Obtener el elemento del mensaje
+        let mensajeElement = document.getElementById("MensajeVerificacion")
+
+        // Mostrar error inline
+        mensajeElement.className = "error"
+        mensajeElement.textContent = "Por favor ingrese un codigo"
+
+        // Ocultar después de 3 segundos
+        setTimeout(() => {
+            mensajeElement.className = ""
+            mensajeElement.textContent = ""
+        }, 3000)
+
         campoCodigo.focus();
         return;
     }

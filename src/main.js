@@ -948,8 +948,8 @@ ipcMain.on("EQuiereIngresarMonto", (event, datos) => {
 
     // Paso -> crear ventana popup
     InputMontoWindow = new BrowserWindow({
-        width: 450,
-        height: 450,
+        width: 400,
+        height: 480,
         resizable: false,
         modal: true,
         parent: mainWindow,
@@ -2265,8 +2265,8 @@ function SolicitarCodigo() {
 
         // Paso -> crear ventana popup
         InputCodigoWindow = new BrowserWindow({
-            width: 360,
-            height: 380,
+            width: 340,
+            height: 360,
             resizable: false,
             modal: true,
             parent: mainWindow,
