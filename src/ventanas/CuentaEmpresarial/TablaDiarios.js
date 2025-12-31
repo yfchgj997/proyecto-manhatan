@@ -19,12 +19,17 @@ function GenerarCodigo(datosFiltrados, fechaSeleccionada, CapitalEconomicoEmpres
         `;
     }
 
+    // Ordenar datosFiltrados en orden descendente por fecha (más reciente a más antiguo)
+    datosFiltrados.sort((a, b) => new Date(b.Fecha) - new Date(a.Fecha));
+
     // Generar filas de la tabla con los datos filtrados
     let filas = datosFiltrados.map((dato, index, array) => {
 
-        // Obtener el siguiente elemento si existe, de lo contrario, usar 0
-        let siguienteCapitalMaterial = array[index + 1] ? array[index + 1].CapitalMaterialInicial : CapitalMaterialEmpresarial;
-        let siguienteCapitalEconomico = array[index + 1] ? array[index + 1].CapitalEconomicoInicial : CapitalEconomicoEmpresarial;
+        // Obtener el siguiente elemento cronológico (el más reciente)
+        // Si estamos en el más reciente (índice 0), comparamos con el capital actual.
+        // Si no, tomamos el capital inicial del día "siguiente" (que en la lista descendente está en index - 1).
+        let siguienteCapitalMaterial = (index === 0) ? CapitalMaterialEmpresarial : array[index - 1].CapitalMaterialInicial;
+        let siguienteCapitalEconomico = (index === 0) ? CapitalEconomicoEmpresarial : array[index - 1].CapitalEconomicoInicial;
 
         // Calcular diferencias
         let diferenciaEconomico = parseFloat(siguienteCapitalEconomico) - parseFloat(dato.CapitalEconomicoInicial);
@@ -38,10 +43,10 @@ function GenerarCodigo(datosFiltrados, fechaSeleccionada, CapitalEconomicoEmpres
             <tr>
                 <td>${dato.Fecha}</td>
                 <td>${dato.CapitalEconomicoInicial} S/.</td>
-                <td style="font-weight: bold; color: ${diferenciaEconomico >= 0 ? 'green' : 'red'};">${difEconomicoStr}</td>
+                <td>${difEconomicoStr}</td>
                 <td>${siguienteCapitalEconomico} S/.</td>
                 <td>${dato.CapitalMaterialInicial} g.</td>
-                <td style="font-weight: bold; color: ${diferenciaMaterial >= 0 ? 'green' : 'red'};">${difMaterialStr}</td>
+                <td>${difMaterialStr}</td>
                 <td>${siguienteCapitalMaterial}</td>
                 <td><button class="BotonVerAzul" IDMovimiento="${dato.IDMovimiento}" Tipo="${dato.Tipo}">Ver</button></td>
             </tr>
@@ -51,23 +56,34 @@ function GenerarCodigo(datosFiltrados, fechaSeleccionada, CapitalEconomicoEmpres
 
     // Generar código HTML de la tabla
     let NuevoCodigo = `
-            <table class="Tabla tabla-cv">
-                <thead>
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Cap. Eco. Inicial</th>
-                        <th>Diferencia</th>
-                        <th>Cap. Eco. Final</th>
-                        <th>Cap. Mat. Inicial</th>
-                        <th>Diferencia</th>
-                        <th>Cap. Mat. Final</th>
-                        <th>Opciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${filas}
-                </tbody>
-            </table>
+            <style>
+                .contenedor-tabla-diarios {
+                    max-height: 500px;
+                    overflow-y: auto;
+                    border: 1px solid #e0e0e0;
+                    border-radius: 8px;
+                }
+
+            </style>
+            <div class="contenedor-tabla-diarios">
+                <table class="Tabla tabla-cv">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Cap. Eco. Inicial</th>
+                            <th>Total Economico</th>
+                            <th>Cap. Eco. Final</th>
+                            <th>Cap. Mat. Inicial</th>
+                            <th>Total Material</th>
+                            <th>Cap. Mat. Final</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${filas}
+                    </tbody>
+                </table>
+            </div>
     `;
 
     return NuevoCodigo;
