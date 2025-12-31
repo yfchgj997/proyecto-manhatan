@@ -78,8 +78,15 @@ function EditarCliente(cliente) {
     console.log("MENSAJE: estos son los datos:")
     console.log(NuevoCliente)
 
-    // Paso -> enviar los datos del cliente al main
-    ipcRenderer.send("EEditarCliente", NuevoCliente)
+    // Paso -> obtener el término de búsqueda actual
+    let terminoBusqueda = document.getElementById("CampoTextoCliente") ?
+        document.getElementById("CampoTextoCliente").value : "";
+
+    // Paso -> enviar los datos del cliente y el término de búsqueda al main
+    ipcRenderer.send("EEditarCliente", {
+        cliente: NuevoCliente,
+        busqueda: terminoBusqueda
+    })
 
 }
 

@@ -1,5 +1,5 @@
 {
-    "Contador": 15,
+    "Contador": 14,
     "Elementos": [
         {
             "Tipo": "Capital",
@@ -124,25 +124,14 @@
         },
         {
             "Tipo": "Capital",
-            "Operacion": "Disminuir",
-            "Fecha": "2025-12-28",
-            "Usuario": "BERNARDO ",
-            "Importe": "2.00",
-            "Detalle": "dfvd",
-            "Hora": "23:25:19",
-            "CapturaSaldo": "1031.00",
-            "ID": 14
-        },
-        {
-            "Tipo": "Capital",
             "Operacion": "Aumentar",
             "Fecha": "2025-12-29",
             "Usuario": "BERNARDO ",
-            "Importe": "100.00",
-            "Detalle": "eedfve",
-            "Hora": "22:32:59",
-            "CapturaSaldo": "1131.00",
-            "ID": 15
+            "Importe": "66.00",
+            "Detalle": "",
+            "Hora": "21:39:47",
+            "CapturaSaldo": "1284.00",
+            "ID": 14
         }
     ]
 }

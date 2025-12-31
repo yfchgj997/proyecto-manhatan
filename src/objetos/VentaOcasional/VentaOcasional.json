@@ -1,5 +1,5 @@
 {
-    "Contador": 27,
+    "Contador": 31,
     "Elementos": [
         {
             "Tipo": "venta",
@@ -198,12 +198,12 @@
             "Fecha": "2025-12-28",
             "EmpleadoNombre": "BERNARDO ",
             "EmpleadoID": 22,
-            "Cliente": "DSFF",
-            "MontoMaterial": 22,
-            "MontoEconomico": 22,
-            "PrecioCambio": 22,
-            "Hora": "23:05:50",
-            "ID": 27
+            "Cliente": "GG",
+            "MontoMaterial": 7,
+            "MontoEconomico": 7,
+            "PrecioCambio": 7,
+            "Hora": "21:40:22",
+            "ID": 31
         }
     ]
 }

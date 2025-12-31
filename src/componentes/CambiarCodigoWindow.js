@@ -11,7 +11,18 @@ function ConfirmarCambioDeCodigo() {
 
     // Paso -> validar que no este vacio
     if (NuevoCodigo.trim() === "") {
-        alert("Por favor ingrese un codigo")
+        // Obtener el elemento del mensaje
+        let mensajeElement = document.getElementById("MensajeCambio")
+
+        // Mostrar error inline
+        mensajeElement.className = "error"
+        mensajeElement.textContent = "Por favor ingrese un codigo"
+
+        // Ocultar después de 3 segundos
+        setTimeout(() => {
+            mensajeElement.className = ""
+            mensajeElement.textContent = ""
+        }, 3000)
         return
     }
 

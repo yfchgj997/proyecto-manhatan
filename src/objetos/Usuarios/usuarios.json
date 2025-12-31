@@ -2,20 +2,20 @@
     "Contador": 25,
     "Elementos": [
         {
-            "Nombres": "BERNARDO ",
-            "Apellidos": "",
-            "Contrasena": "123456",
-            "Rol": "Administrador",
-            "Estado": "Activo",
-            "ID": 22
-        },
-        {
             "Nombres": "PROBANDO FUNCIONALIDAD NUEVA",
             "Apellidos": "HOLA",
             "Contrasena": "1234",
             "Rol": "Cajero",
             "Estado": "Activo",
             "ID": 24
+        },
+        {
+            "Nombres": "BERNING",
+            "Apellidos": "HOLA",
+            "Contrasena": "123",
+            "Rol": "Administrador",
+            "Estado": "Activo",
+            "ID": 25
         }
     ]
 }
