@@ -400,6 +400,7 @@ select,
     width: 100%;
     height: 100%;
     overflow: auto;
+    margin: 4px auto;
 }
 
 .Yabla {
@@ -609,7 +610,7 @@ select,
 }
 
 #TablaMovimientos th {
-    background: #9C27B0;
+    background: #6112c2ff;
     color: white;
     padding: 10px;
     text-align: left;
@@ -635,9 +636,11 @@ select,
 }
 
 .Tabla th {
-    color: #B2B2B2;
+    color: #ffffff;
     font-size: 16px;
     text-align: center;
+    background-color: #6112c2ff;
+    padding: 10px;
 }
 
 .Tabla td {
@@ -802,7 +805,7 @@ select,
 }
 
 #TablaMovimientos th {
-    background: #9C27B0;
+    background: #6112c2ff;
     color: white;
     padding: 10px;
     text-align: left;

@@ -1,5 +1,5 @@
 {
-    "Contador": 9,
+    "Contador": 13,
     "Elementos": [
         {
             "Tipo": "Material",
@@ -33,6 +33,50 @@
             "Hora": "22:56:39",
             "CapturaSaldo": "500.00",
             "ID": 9
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-28",
+            "Usuario": "BERNARDO ",
+            "Importe": "12.00",
+            "Detalle": "erfw",
+            "Hora": "23:04:05",
+            "CapturaSaldo": "310.00",
+            "ID": 10
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-28",
+            "Usuario": "BERNARDO ",
+            "Importe": "10.00",
+            "Detalle": "erhre",
+            "Hora": "23:25:37",
+            "CapturaSaldo": "298.00",
+            "ID": 11
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-29",
+            "Usuario": "BERNARDO ",
+            "Importe": "2.00",
+            "Detalle": "ergf",
+            "Hora": "22:33:14",
+            "CapturaSaldo": "300.00",
+            "ID": 12
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2025-12-30",
+            "Usuario": "BERNING",
+            "Importe": "9.00",
+            "Detalle": "jhvhjg",
+            "Hora": "22:14:40",
+            "CapturaSaldo": "2300.00",
+            "ID": 13
         }
     ]
 }

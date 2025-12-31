@@ -1052,6 +1052,7 @@ ipcMain.on("EMontoIngresado", async (event, datos) => {
     }
 
     if (respuestaOperacion.error == false) {
+
         // Actualizar UI
         mainWindow.webContents.send("ModificarMensaje", {
             tipo: "MensajeBueno",
@@ -1062,6 +1063,17 @@ ipcMain.on("EMontoIngresado", async (event, datos) => {
             CapitalMaterial: BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial,
             rolUsuario: usuarioActual ? usuarioActual.Rol : "Cajero"
         })
+
+        // Actualizar tabla de diarios
+        let respuestaCapturas = BDrespaldo.ObtenerListaCapturas()
+        if (!respuestaCapturas.error) {
+            mainWindow.webContents.send("EActualizarTablaDiarios", {
+                diarios: respuestaCapturas.ListaCapturas,
+                fecha: ObtenerFecha(),
+                CapitalEconomico: BDrespaldo.ObtenerCapitalEconomicoEmpresarial().CapitalEconomico,
+                CapitalMaterial: BDrespaldo.ObtenerCapitalMaterialEmpresarial().CapitalMaterial
+            })
+        }
 
         // Registrar movimiento empresarial
         let movimiento = {
@@ -1529,9 +1541,12 @@ ipcMain.on("EEliminarMovimiento", async (event, Movimiento) => {
         return; // Detener ejecución si no tiene privilegio
     }
 
+    let movimiento = Movimiento.movimiento;
+    let filtro = Movimiento.filtro;
+
     // mensaje de flujo
     console.log("Main: eliminando un movimiento, este es el movimiento:")
-    console.log(Movimiento)
+    console.log(movimiento)
 
     // Paso -> solicitar código de seguridad
     let codigoCorrecto = await SolicitarCodigo();
@@ -1545,7 +1560,7 @@ ipcMain.on("EEliminarMovimiento", async (event, Movimiento) => {
         return; // Detener la ejecución
     }
 
-    let Respuesta = BDrespaldo.EliminarMovimiento(datosAEliminar.ID)
+    let Respuesta = BDrespaldo.EliminarMovimiento(movimiento.ID)
     if (Respuesta.error == true) {
         // Paso -> actualizar el mensaje
         event.sender.send("ModificarMensaje", {
@@ -2204,9 +2219,12 @@ ipcMain.on("EEliminarMovimientoMaterial", async (event, Movimiento) => {
         return; // Detener ejecución si no tiene privilegio
     }
 
+    let movimiento = Movimiento.movimiento;
+    let filtro = Movimiento.filtro;
+
     // mensaje de flujo
     console.log("Main: eliminando un movimiento material, este es el movimiento:")
-    console.log(Movimiento)
+    console.log(movimiento)
 
     // Paso -> solicitar código de seguridad
     let codigoCorrecto = await SolicitarCodigo();
@@ -2220,7 +2238,7 @@ ipcMain.on("EEliminarMovimientoMaterial", async (event, Movimiento) => {
         return; // Detener la ejecución
     }
 
-    let Respuesta = BDrespaldo.EliminarMovimientoMaterial(datosAEliminar.ID)
+    let Respuesta = BDrespaldo.EliminarMovimientoMaterial(movimiento.ID)
     if (Respuesta.error == true) {
         // Paso -> actualizar el mensaje
         event.sender.send("ModificarMensaje", {
