@@ -3,7 +3,6 @@
 
 <head>
     <title>Ingresar Monto</title>
-    <link rel="stylesheet" href="../index.css">
     <script defer src="./InputMontoWindow.js"></script>
     <style>
         body {
@@ -16,7 +15,7 @@
         }
 
         #InputMontoWindow {
-            padding: 40px;
+            padding: 20px;
             height: 100vh;
             box-sizing: border-box;
             display: flex;
@@ -27,9 +26,16 @@
         #TituloOperacion {
             text-align: center;
             margin-bottom: 20px;
-            color: #1E2550;
-            font-size: 22px;
+            color: #703399;
+            font-size: 14px;
             font-weight: 600;
+            background-color: rgba(157, 78, 221, 0.2);
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .input-container {
@@ -40,14 +46,14 @@
             display: block;
             margin-bottom: 10px;
             font-weight: 600;
-            color: #1E2550;
+            color: #000000;
             font-size: 14px;
         }
 
         #CampoMonto {
             width: 100%;
             padding: 14px 18px;
-            font-size: 18px;
+            font-size: 14px;
             box-sizing: border-box;
             border: 2px solid #e1e8ed;
             border-radius: 8px;
@@ -57,37 +63,55 @@
         }
 
         #CampoMonto:focus {
-            border-color: #FF9500;
-            box-shadow: 0 0 0 3px rgba(255, 149, 0, 0.1);
+            border-color: #9D4EDD;
+            box-shadow: 0 0 0 3px rgba(157, 78, 221, 0.1);
+        }
+
+        #CampoDetalle {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 14px;
+            box-sizing: border-box;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: white;
+            font-family: inherit;
+        }
+
+        #CampoDetalle:focus {
+            border-color: #9D4EDD;
+            box-shadow: 0 0 0 3px rgba(157, 78, 221, 0.1);
         }
 
         .buttons-container {
             display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-bottom: 20px;
+            justify-content: space-between;
+            margin-bottom: 10px;
         }
 
         .btn-popup {
-            padding: 12px 36px;
+            width: 160px;
+            padding: 12px 24px;
             border: none;
             border-radius: 8px;
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 100;
             cursor: pointer;
             transition: all 0.2s ease;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         #BtnConfirmar {
-            background: linear-gradient(135deg, #FF9500 0%, #FF7A00 100%);
+            background: linear-gradient(135deg, #7B2CBF 0%, #9D4EDD 100%);
             color: white;
         }
 
         #BtnConfirmar:hover {
-            background: linear-gradient(135deg, #FF7A00 0%, #FF6600 100%);
+            background: linear-gradient(135deg, #9D4EDD 0%, #C77dFF 100%);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 149, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
         }
 
         #BtnCancelar {
@@ -104,25 +128,56 @@
         .btn-popup:active {
             transform: translateY(0);
         }
+
+        #MensajeVerificacion {
+            margin-top: 5px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            display: none;
+            transition: all 0.3s ease;
+        }
+
+        #MensajeVerificacion.exito {
+            background-color: #4caf50;
+            color: white;
+            display: block;
+        }
+
+        #MensajeVerificacion.error {
+            background-color: #f44336;
+            color: white;
+            display: block;
+        }
     </style>
 </head>
 
 <body>
     <div id="InputMontoWindow">
-        <h2 id="TituloOperacion">Ingresar Monto</h2>
+        <h2 id="TituloOperacion">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="#703399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            Ingresar Monto
+        </h2>
         <div class="input-container">
             <label for="CampoMonto">Monto:</label>
             <input id="CampoMonto" type="number" step="0.01" min="0.01" placeholder="0.00" autofocus>
         </div>
         <div class="input-container">
             <label for="CampoDetalle">Detalle:</label>
-            <textarea id="CampoDetalle" rows="3" placeholder="Ingrese un detalle..."
-                style="width: 100%; padding: 10px; border: 2px solid #e1e8ed; border-radius: 8px; font-family: inherit; resize: none; box-sizing: border-box;"></textarea>
+            <textarea id="CampoDetalle" rows="3" placeholder="Ingrese un detalle..."></textarea>
         </div>
         <div class="buttons-container">
             <button id="BtnConfirmar" class="btn-popup">Confirmar</button>
             <button id="BtnCancelar" class="btn-popup">Cancelar</button>
         </div>
+        <div id="MensajeVerificacion"></div>
     </div>
 </body>
 

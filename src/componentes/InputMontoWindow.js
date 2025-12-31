@@ -41,10 +41,20 @@ ipcRenderer.on("EInicializarInputMontoWindow", (event, datos) => {
 function ValidarYEnviarMonto() {
     let campoMonto = document.getElementById("CampoMonto");
     let monto = campoMonto.value.trim();
+    let mensajeElement = document.getElementById("MensajeVerificacion");
 
     // Validar que no esté vacío
     if (monto === "") {
-        alert("Por favor ingrese un monto");
+        // Mostrar error inline
+        mensajeElement.className = "error";
+        mensajeElement.textContent = "Por favor ingrese un monto";
+
+        // Ocultar después de 3 segundos
+        setTimeout(() => {
+            mensajeElement.className = "";
+            mensajeElement.textContent = "";
+        }, 3000);
+
         campoMonto.focus();
         return;
     }
@@ -52,14 +62,32 @@ function ValidarYEnviarMonto() {
     // Validar que sea un número válido
     let montoNumerico = parseFloat(monto);
     if (isNaN(montoNumerico)) {
-        alert("Por favor ingrese un monto válido");
+        // Mostrar error inline
+        mensajeElement.className = "error";
+        mensajeElement.textContent = "Por favor ingrese un monto válido";
+
+        // Ocultar después de 3 segundos
+        setTimeout(() => {
+            mensajeElement.className = "";
+            mensajeElement.textContent = "";
+        }, 3000);
+
         campoMonto.focus();
         return;
     }
 
     // Validar que sea mayor a 0
     if (montoNumerico <= 0) {
-        alert("El monto debe ser mayor a 0");
+        // Mostrar error inline
+        mensajeElement.className = "error";
+        mensajeElement.textContent = "El monto debe ser mayor a 0";
+
+        // Ocultar después de 3 segundos
+        setTimeout(() => {
+            mensajeElement.className = "";
+            mensajeElement.textContent = "";
+        }, 3000);
+
         campoMonto.focus();
         return;
     }

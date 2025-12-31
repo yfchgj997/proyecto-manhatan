@@ -1,14 +1,15 @@
 {
-    "Contador": 4,
+    "Contador": 12,
     "Elementos": [
         {
             "Nombres": "ASD",
-            "Apellidos": "ASDF",
+            "Apellidos": "A",
             "DNI": "32",
             "SaldoEconomico": "400.00",
             "SaldoMaterial": "2000.00",
             "FechaIngreso": "2025-11-30",
-            "ID": 1
+            "ID": 1,
+            "Fecha": "2025-11-30"
         },
         {
             "Nombres": "K",
@@ -36,6 +37,24 @@
             "SaldoMaterial": 0,
             "FechaIngreso": "2025-12-02",
             "ID": 4
+        },
+        {
+            "Nombres": "JHER",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2025-12-28",
+            "ID": 10
+        },
+        {
+            "Nombres": "GGG",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2025-12-28",
+            "ID": 12
         }
     ]
 }
