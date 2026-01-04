@@ -1,5 +1,5 @@
 {
-    "Contador": 14,
+    "Contador": 10,
     "Elementos": [
         {
             "Tipo": "Capital",
@@ -88,50 +88,6 @@
             "Hora": "00:04:33",
             "CapturaSaldo": "3121.93",
             "ID": 10
-        },
-        {
-            "Tipo": "Capital",
-            "Operacion": "Aumentar",
-            "Fecha": "2025-12-29",
-            "Usuario": "Berning",
-            "Importe": "1.00",
-            "Detalle": "",
-            "Hora": "20:58:52",
-            "CapturaSaldo": "3122.93",
-            "ID": 11
-        },
-        {
-            "Tipo": "Capital",
-            "Operacion": "Disminuir",
-            "Fecha": "2025-12-29",
-            "Usuario": "Berning",
-            "Importe": "1.00",
-            "Detalle": "",
-            "Hora": "20:59:01",
-            "CapturaSaldo": "3121.93",
-            "ID": 12
-        },
-        {
-            "Tipo": "Capital",
-            "Operacion": "Aumentar",
-            "Fecha": "2025-12-29",
-            "Usuario": "Berning",
-            "Importe": "1.00",
-            "Detalle": "",
-            "Hora": "21:00:52",
-            "CapturaSaldo": "3122.93",
-            "ID": 13
-        },
-        {
-            "Tipo": "Capital",
-            "Operacion": "Aumentar",
-            "Fecha": "2025-12-29",
-            "Usuario": "Berning",
-            "Importe": "2.00",
-            "Detalle": "",
-            "Hora": "21:02:29",
-            "CapturaSaldo": "3124.93",
-            "ID": 14
         }
     ]
 }

@@ -21,7 +21,6 @@
     "escpos-usb": "^3.0.0-alpha.4",
     "exceljs": "^4.4.0",
     "pdfkit": "^0.16.0",
-    "sweetalert2": "^11.26.17",
     "xlsx": "^0.18.5"
   },
   "build": {

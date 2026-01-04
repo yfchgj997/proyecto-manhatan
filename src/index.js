@@ -1,6 +1,5 @@
 const { ipcRenderer } = require("electron");
 const { MostrarMenu } = require('./componentes/menu.js');
-const Swal = require('sweetalert2');
 
 require("./ventanas/clientes/clientes.js")
 require("./ventanas/movimientos/movimientos.js")
@@ -40,7 +39,6 @@ function ModificarContenido(opcion) {
             break;
         case "MovimientoMaterial":
             ipcRenderer.send("EQuiereGestionarMovimientosMateriales", opcion.usuarioIngresado)
-            break;
         default:
             contenido.innerHTML = "<p>ERROR!</p><p>no se puede mostrar el contenido principal</p>";
     }
@@ -57,31 +55,4 @@ ipcRenderer.on("actualizar-contenido", (event, datos) => {
     console.log("MENSAJE: usuario ingresado: ")
     console.log(datos.usuarioIngresado)
     ModificarContenido(datos);
-});
-
-// Evento -> modificar mensaje (Alerta global)
-ipcRenderer.on("ModificarMensaje", (event, datos) => {
-    console.log("MENSAJE: recibiendo solicitud de alerta global", datos);
-
-    let iconType = 'info';
-    let title = 'Información';
-
-    if (datos.tipo === 'MensajeBueno' || datos.tipo === 'success') {
-        iconType = 'success';
-        title = '¡Éxito!';
-    } else if (datos.tipo === 'MensajeMalo' || datos.tipo === 'error') {
-        iconType = 'error';
-        title = 'Error';
-    } else if (datos.tipo === 'warning') {
-        iconType = 'warning';
-        title = 'Advertencia';
-    }
-
-    Swal.fire({
-        title: title,
-        text: datos.texto,
-        icon: iconType,
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#3085d6'
-    });
 });

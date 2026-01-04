@@ -129,12 +129,10 @@ function GenerarTablaMovimientosEmpresariales(movimientos) {
         return '<p class="MensajeVacio">No hay movimientos empresariales para esta fecha</p>';
     }
 
-    let filas = movimientos.map((mov, index) => {
-        // Formatear el índice para que tenga 2 dígitos (ej: 01, 02)
-        let numeroFila = String(index + 1).padStart(2, '0');
+    let filas = movimientos.map(mov => {
         return `
             <tr>
-                <td>${numeroFila}</td>
+                <td>${mov.ID}</td>
                 <td>${mov.Fecha}</td>
                 <td>${mov.Hora}</td>
                 <td>${mov.Usuario}</td>
@@ -151,7 +149,7 @@ function GenerarTablaMovimientosEmpresariales(movimientos) {
         <table>
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th>ID</th>
                     <th>Fecha</th>
                     <th>Hora</th>
                     <th>Usuario</th>
