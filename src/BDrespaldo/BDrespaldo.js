@@ -616,14 +616,25 @@ function ObtenerMovimientoMaterialEconomico(FechaInicial, FechaFinal, IdCliente)
         ListaCombinadaResultante
     };
 }
+// Función auxiliar para obtener la fecha actual (YYYY-MM-DD)
+function ObtenerFecha() {
+    let hoy = new Date();
+    let anio = hoy.getFullYear();
+    let mes = String(hoy.getMonth() + 1).padStart(2, '0');
+    let dia = String(hoy.getDate()).padStart(2, '0');
+    return `${anio}-${mes}-${dia}`;
+}
+
 // Funcion -> aumentar capital economico
 function AumentarCapitalEconomico(monto) {
 
     // mensaje de flujo
     console.log("BD: aumentando capital economico con monto: ", monto)
 
-    // Paso -> modificar capital
-    let Respuesta = CuentaEmpresarial.ModificarCapitalEconomico("aumentar", monto)
+    // Paso -> modificar capital usando CapturaCuenta para asegurar registro diario
+    let fecha = ObtenerFecha();
+    let Respuesta = CapturaCuenta.ModificarCuentaEmpresarial("economico", "aumentar", monto, fecha)
+
     if (Respuesta.error == true) {
         console.log("BD: no se pudo aumentar el capital economico")
         return ({ "error": true })
@@ -640,8 +651,10 @@ function DisminuirCapitalEconomico(monto) {
     // mensaje de flujo
     console.log("BD: disminuyendo capital economico con monto: ", monto)
 
-    // Paso -> modificar capital
-    let Respuesta = CuentaEmpresarial.ModificarCapitalEconomico("disminuir", monto)
+    // Paso -> modificar capital usando CapturaCuenta para asegurar registro diario
+    let fecha = ObtenerFecha();
+    let Respuesta = CapturaCuenta.ModificarCuentaEmpresarial("economico", "disminuir", monto, fecha)
+
     if (Respuesta.error == true) {
         console.log("BD: no se pudo disminuir el capital economico")
         return ({ "error": true })
@@ -658,8 +671,10 @@ function AumentarCapitalMaterial(monto) {
     // mensaje de flujo
     console.log("BD: aumentando capital material con monto: ", monto)
 
-    // Paso -> modificar capital
-    let Respuesta = CuentaEmpresarial.ModificarCapitalMaterial("aumentar", monto)
+    // Paso -> modificar capital usando CapturaCuenta para asegurar registro diario
+    let fecha = ObtenerFecha();
+    let Respuesta = CapturaCuenta.ModificarCuentaEmpresarial("material", "aumentar", monto, fecha)
+
     if (Respuesta.error == true) {
         console.log("BD: no se pudo aumentar el capital material")
         return ({ "error": true })
@@ -676,8 +691,10 @@ function DisminuirCapitalMaterial(monto) {
     // mensaje de flujo
     console.log("BD: disminuyendo capital material con monto: ", monto)
 
-    // Paso -> modificar capital
-    let Respuesta = CuentaEmpresarial.ModificarCapitalMaterial("disminuir", monto)
+    // Paso -> modificar capital usando CapturaCuenta para asegurar registro diario
+    let fecha = ObtenerFecha();
+    let Respuesta = CapturaCuenta.ModificarCuentaEmpresarial("material", "disminuir", monto, fecha)
+
     if (Respuesta.error == true) {
         console.log("BD: no se pudo disminuir el capital material")
         return ({ "error": true })

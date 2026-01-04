@@ -48,5 +48,10 @@
         "Fecha": "2025-12-30",
         "CapitalEconomicoInicial": "1300.00",
         "CapitalMaterialInicial": "2300.00"
+    },
+    {
+        "Fecha": "2026-01-05",
+        "CapitalEconomicoInicial": "1300.00",
+        "CapitalMaterialInicial": "2300.00"
     }
 ]
