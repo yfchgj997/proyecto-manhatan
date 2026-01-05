@@ -1405,7 +1405,7 @@ ipcMain.on("EQuiereSeleccionarCliente", (event) => {
         }
     });
     SelectUserWindow.loadFile("./src/componentes/SelectUserWindow.html")
-    //SelectUserWindow.removeMenu();
+    SelectUserWindow.removeMenu();
     // obtener los empleados
     let Respuesta = BDrespaldo.ObtenerTablaClientes()
     SelectUserWindow.webContents.send("EInicializarSelectUserWindow", Respuesta.ListaDeClientes) // cargar por default 
