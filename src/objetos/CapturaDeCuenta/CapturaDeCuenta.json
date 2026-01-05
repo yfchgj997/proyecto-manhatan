@@ -35,8 +35,13 @@
         "CapitalMaterialInicial": "900.00"
     },
     {
-        "Fecha": "2026-01-04",
-        "CapitalEconomicoInicial": "3145.93",
+        "Fecha": "2026-01-03",
+        "CapitalEconomicoInicial": "3121.93",
         "CapitalMaterialInicial": "5800.00"
+    },
+    {
+        "Fecha": "2026-01-04",
+        "CapitalEconomicoInicial": "3159.93",
+        "CapitalMaterialInicial": "6000.00"
     }
 ]
