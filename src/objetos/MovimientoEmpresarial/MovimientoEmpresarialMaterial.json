@@ -1,5 +1,5 @@
 {
-    "Contador": 28,
+    "Contador": 29,
     "Elementos": [
         {
             "Tipo": "Material",
@@ -242,6 +242,17 @@
             "Hora": "00:05:52",
             "CapturaSaldo": "5800.00",
             "ID": 28
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2026-01-04",
+            "Usuario": "BERNARDO ",
+            "Importe": "12.00",
+            "Detalle": "",
+            "Hora": "22:23:04",
+            "CapturaSaldo": "5812.00",
+            "ID": 29
         }
     ]
 }

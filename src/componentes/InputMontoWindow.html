@@ -154,7 +154,36 @@
             <button id="BtnConfirmar" class="btn-popup">Confirmar</button>
             <button id="BtnCancelar" class="btn-popup">Cancelar</button>
         </div>
+        <div id="EspacioMensajeResultado" style="height: 60px; margin-top: 10px;"></div>
     </div>
+    <style>
+        .Mensaje {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            padding: 10px 20px;
+            box-sizing: border-box;
+        }
+
+        .MensajeBueno {
+            background: rgb(128, 177, 55);
+        }
+
+        .MensajeMalo {
+            background: #f44336;
+        }
+
+        .MensajeNeutro {
+            background: var(--c500);
+        }
+    </style>
 </body>
 
 </html>
