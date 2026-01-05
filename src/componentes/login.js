@@ -25,13 +25,23 @@ ipcRenderer.on("InicializarLogin", (event, empleados) => {
 });
 
 // Evento -> escuchar error de login
+// Evento -> escuchar error de login
 ipcRenderer.on("LoginFallido", (event, mensaje) => {
-    alert(mensaje);
+    let mensajeError = document.getElementById("mensaje-error");
+    if (mensajeError) {
+        mensajeError.textContent = mensaje;
+    }
 });
 
 // Capturar el formulario y procesar el inicio de sesión
 document.querySelector(".login-form").addEventListener("submit", (event) => {
     event.preventDefault(); // Evita el envío del formulario
+
+    // Limpiar mensaje de error previo
+    let mensajeError = document.getElementById("mensaje-error");
+    if (mensajeError) {
+        mensajeError.textContent = "";
+    }
 
     // Obtener los valores seleccionados
     let empleadoSeleccionado = document.getElementById("cargo").value;

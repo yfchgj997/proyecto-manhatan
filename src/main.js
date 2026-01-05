@@ -194,7 +194,7 @@ ipcMain.on("EAutenticarUsuario", (event, datos) => {
         mainWindow.webContents.send("actualizar-contenido", datos) // cargar por default 
     } else {
         console.log("Error: Usuario o contraseña incorrectos");
-        event.sender.send("LoginFallido", "Credenciales inválidas");
+        event.sender.send("LoginFallido", "Contraseña incorrecta");
     }
 });
 

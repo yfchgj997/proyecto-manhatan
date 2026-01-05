@@ -5,7 +5,7 @@
             "Nombres": "VVSD",
             "Apellidos": "RVSDV",
             "DNI": "",
-            "SaldoEconomico": "0.00",
+            "SaldoEconomico": "900.00",
             "SaldoMaterial": "500.00",
             "FechaIngreso": "2025-12-18",
             "ID": 2
@@ -15,7 +15,7 @@
             "Apellidos": "VCDCV",
             "DNI": "",
             "SaldoEconomico": "19.00",
-            "SaldoMaterial": "500.00",
+            "SaldoMaterial": "200.00",
             "FechaIngreso": "2025-12-20",
             "ID": 3
         }
