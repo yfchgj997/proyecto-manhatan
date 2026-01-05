@@ -37,14 +37,35 @@ ipcRenderer.on("EInicializarInputMontoWindow", (event, datos) => {
     document.getElementById("CampoMonto").focus();
 });
 
+// Función -> mostrar mensaje
+function MostrarMensaje(mensaje) {
+    let espacio = document.getElementById("EspacioMensajeResultado");
+    if (espacio) {
+        let codigo = `
+            <div class="Mensaje ${mensaje.tipo}">
+                <p class="mensaje">${mensaje.texto}</p>
+            </div>
+        `;
+        espacio.innerHTML = codigo;
+    }
+}
+
 // Función -> validar y enviar monto
 function ValidarYEnviarMonto() {
     let campoMonto = document.getElementById("CampoMonto");
     let monto = campoMonto.value.trim();
 
+    const limpiarMensaje = () => {
+        setTimeout(() => {
+            let espacio = document.getElementById("EspacioMensajeResultado");
+            if (espacio) espacio.innerHTML = "";
+        }, 3000);
+    };
+
     // Validar que no esté vacío
     if (monto === "") {
-        alert("Por favor ingrese un monto");
+        MostrarMensaje({ tipo: "MensajeMalo", texto: "Por favor ingrese un monto" });
+        limpiarMensaje();
         campoMonto.focus();
         return;
     }
@@ -52,14 +73,16 @@ function ValidarYEnviarMonto() {
     // Validar que sea un número válido
     let montoNumerico = parseFloat(monto);
     if (isNaN(montoNumerico)) {
-        alert("Por favor ingrese un monto válido");
+        MostrarMensaje({ tipo: "MensajeMalo", texto: "Por favor ingrese un monto válido" });
+        limpiarMensaje();
         campoMonto.focus();
         return;
     }
 
     // Validar que sea mayor a 0
     if (montoNumerico <= 0) {
-        alert("El monto debe ser mayor a 0");
+        MostrarMensaje({ tipo: "MensajeMalo", texto: "El monto debe ser mayor a 0" });
+        limpiarMensaje();
         campoMonto.focus();
         return;
     }
@@ -82,6 +105,32 @@ function ValidarYEnviarMonto() {
         tipo: tipoOperacion
     });
 }
+
+// Evento -> recibir resultado de la operación
+ipcRenderer.on("EMensajeResultado", (event, mensaje) => {
+    console.log("InputMontoWindow: resultado recibido:", mensaje);
+    MostrarMensaje(mensaje);
+
+    if (mensaje.tipo === "MensajeBueno") {
+        // Desactivar botones para evitar doble clic
+        document.getElementById("BtnConfirmar").disabled = true;
+        document.getElementById("BtnCancelar").disabled = true;
+
+        // Cerrar la ventana después de un momento
+        setTimeout(() => {
+            ipcRenderer.send("ECerrarIngresoMontoManual"); // Nuevo evento específico para cerrar tras éxito
+        }, 1500);
+    } else {
+        // Si es un error o mensaje neutro, desaparecer el mensaje después de 3 segundos
+        // pero NO cerrar la ventana
+        setTimeout(() => {
+            let espacio = document.getElementById("EspacioMensajeResultado");
+            if (espacio) {
+                espacio.innerHTML = "";
+            }
+        }, 3000);
+    }
+});
 
 // Función -> cancelar operación
 function CancelarOperacion() {

@@ -1012,11 +1012,13 @@ ipcMain.on("EMontoIngresado", (event, datos) => {
     console.log("Main: detalle:", datos.detalle)
     console.log("Main: tipo:", datos.tipo)
 
-    // Paso -> cerrar popup
+    // Paso -> ya no cerrar popup inmediatamente para permitir mostrar mensaje en el mismo
+    /*
     if (InputMontoWindow) {
         InputMontoWindow.close()
         InputMontoWindow = null
     }
+    */
 
     let usuarioActual = GestorSesion.obtenerUsuarioActual()
     let nombreUsuario = usuarioActual ? usuarioActual.Nombres : "Desconocido"
@@ -1071,7 +1073,13 @@ ipcMain.on("EMontoIngresado", (event, datos) => {
     }
 
     if (respuestaOperacion.error == false) {
-        // Actualizar UI
+        // Enviar mensaje al popup (esto es lo que el usuario pidió ver primero)
+        event.sender.send("EMensajeResultado", {
+            tipo: "MensajeBueno",
+            texto: mensajeExito
+        })
+
+        // Actualizar UI principal también
         mainWindow.webContents.send("ModificarMensaje", {
             tipo: "MensajeBueno",
             texto: mensajeExito
@@ -1118,10 +1126,25 @@ ipcMain.on("EMontoIngresado", (event, datos) => {
         console.log("Main: Movimiento empresarial registrado:", movimiento)
 
     } else {
+        // Enviar error al popup
+        event.sender.send("EMensajeResultado", {
+            tipo: "MensajeMalo",
+            texto: "No se pudo realizar la operación"
+        })
+
         mainWindow.webContents.send("ModificarMensaje", {
             tipo: "MensajeMalo",
             texto: "No se pudo realizar la operación"
         })
+    }
+})
+
+// Evento -> cerrar popup despues de exito (llamado desde el timeout del popup)
+ipcMain.on("ECerrarIngresoMontoManual", (event) => {
+    console.log("Main: cerrando popup tras exito")
+    if (InputMontoWindow) {
+        InputMontoWindow.close()
+        InputMontoWindow = null
     }
 })
 
