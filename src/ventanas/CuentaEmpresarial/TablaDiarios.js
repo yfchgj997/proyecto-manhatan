@@ -10,6 +10,9 @@ function GenerarCodigo(datosFiltrados, fechaSeleccionada, CapitalEconomicoEmpres
     console.log("Capital Economico: " + CapitalEconomicoEmpresarial)
     console.log("Capital Material: " + CapitalMaterialEmpresarial)
 
+    // Ordenar por fecha (De mas reciente a mas antiguo)
+    datosFiltrados.sort((a, b) => new Date(b.Fecha) - new Date(a.Fecha));
+
     // Validar que haya datos después del filtrado
     if (datosFiltrados.length === 0) {
         console.warn("ADVERTENCIA: No hay diarios para la fecha seleccionada.");
