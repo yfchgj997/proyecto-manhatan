@@ -464,6 +464,13 @@ select:focus,
     color: white;
 }
 
+#EspacioDiario {
+    flex-grow: 1;
+    overflow-y: auto;
+    min-height: 0;
+    width: 100%;
+}
+
 /* ---------------------------------------- BORRAR ---------------------------------------------- */
 
 /* =============================
