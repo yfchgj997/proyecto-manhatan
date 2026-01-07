@@ -1389,6 +1389,7 @@ ipcMain.on("EBuscarCliente", (event, dato) => {
 });
 
 // Evento -> seleccionar cliente
+// Evento -> seleccionar cliente
 ipcMain.on("EQuiereSeleccionarCliente", (event) => {
 
     // mensaje de flujo
@@ -1396,7 +1397,7 @@ ipcMain.on("EQuiereSeleccionarCliente", (event) => {
 
     // Paso -> mostrar la ventana
     SelectUserWindow = new BrowserWindow({
-        width: 500,
+        width: 600, // Increased width for better fit
         height: 700,
         resizable: false, // Opcional: evita que el usuario cambie el tamaño
         webPreferences: {
@@ -1406,9 +1407,18 @@ ipcMain.on("EQuiereSeleccionarCliente", (event) => {
     });
     SelectUserWindow.loadFile("./src/componentes/SelectUserWindow.html")
     SelectUserWindow.removeMenu();
+
+    // Convertir ruta relativa a absoluta para evitar problemas (opcional pero recomendado)
+    // const path = require("path");
+    // SelectUserWindow.loadFile(path.join(__dirname, "componentes/SelectUserWindow.html"));
+
     // obtener los empleados
     let Respuesta = BDrespaldo.ObtenerTablaClientes()
-    SelectUserWindow.webContents.send("EInicializarSelectUserWindow", Respuesta.ListaDeClientes) // cargar por default 
+
+    // Esperar a que cargue para enviar datos
+    SelectUserWindow.webContents.on('did-finish-load', () => {
+        SelectUserWindow.webContents.send("EInicializarSelectUserWindow", Respuesta.ListaDeClientes)
+    });
 
 })
 
