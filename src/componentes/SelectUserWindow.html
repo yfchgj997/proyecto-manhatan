@@ -3,124 +3,179 @@
 
 <head>
     <title>Seleccionar Cliente</title>
-    <link rel="stylesheet" href="../index.css">
+    <!-- <link rel="stylesheet" href="../index.css"> -->
     <script defer src="./SelectUserWindow.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
+
         body {
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #ffffff;
+            font-family: 'Roboto', sans-serif;
+            background: #f0f2f5;
             height: 100vh;
             overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         #SelecUserWindow {
             width: 100%;
-            height: 100vh;
+            height: 100%;
             display: flex;
             flex-direction: column;
+            background: #ffffff;
+            /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); */
+            position: relative;
         }
 
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+            margin-bottom: 25px;
+            margin-top: 10px;
+        }
+
+        .header-logo {
+            width: 50px;
+            /* Adjusted size */
+            height: auto;
+            margin-right: 15px;
+        }
+
+        .header-title {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 26px;
+            color: #1a2b4b;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        /* Search */
         .search-container {
             width: 100%;
-            padding: 20px;
-            background: linear-gradient(135deg, rgba(60, 9, 108) 0%, #541470 100%);
+            padding: 0 30px;
             box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            width: 100%;
         }
 
         #BuscarInput {
             width: 100%;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
+            padding: 12px 15px;
+            padding-right: 40px;
+            border: 1px solid #7ea1d8;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #555;
             outline: none;
-            transition: all 0.3s ease;
-            background: white;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            background-color: white;
+            transition: border-color 0.2s;
         }
 
         #BuscarInput:focus {
-            box-shadow: 0 4px 12px rgba(30, 37, 80, 0.3);
+            border-color: #4299e1;
         }
 
         #BuscarInput::placeholder {
-            color: #aab8c2;
+            color: #b0b0b0;
         }
 
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7ea1d8;
+            pointer-events: none;
+            font-size: 16px;
+        }
+
+        /* Table */
         #TablaContainer {
             flex: 1;
             overflow: auto;
-            background: white;
+            padding: 0 30px;
         }
 
         .Tabla {
             width: 100%;
-            border-collapse: collapse;
-        }
-
-        .Tabla thead {
-            position: sticky;
-            top: 0;
-            background: #f8f9fa;
-            z-index: 10;
-            border-bottom: 2px solid #e8eaed;
+            border-collapse: separate;
+            border-spacing: 0 4px;
         }
 
         .Tabla th {
-            color: #f7f7f8;
-            font-size: 13px;
-            font-weight: 600;
+            color: #8898aa;
+            font-size: 12px;
+            font-weight: 500;
             text-align: left;
-            padding: 14px 20px;
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .Tabla th:first-child {
-            text-align: center;
-            width: 80px;
+            /* Match screenshot somewhat */
         }
 
         .Tabla tbody tr {
-            transition: all 0.15s ease;
-            cursor: pointer;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .Tabla tbody tr:nth-child(odd) {
-            background-color: #fafafa;
-        }
-
-        .Tabla tbody tr:nth-child(even) {
-            background-color: #ffffff;
+            background-color: #f8f9fa;
+            transition: all 0.2s ease;
         }
 
         .Tabla tbody tr:hover {
-            background-color: #d9a3f0 !important;
-            transform: translateX(4px);
+            background-color: #e2e6ea;
+            transform: translateY(-1px);
         }
 
         .Tabla td {
-            padding: 14px 20px;
-            color: #333;
-            font-size: 14px;
+            padding: 12px 15px;
+            font-size: 13px;
+            color: #32325d;
+            vertical-align: middle;
+            border-top: 1px solid #f8f9fa;
+            /* Slight separator */
         }
 
         .Tabla td:first-child {
-            text-align: center;
-            font-weight: 600;
-            color: #1E2550;
+            /* # number column */
+            color: #333;
+            font-weight: bold;
+            width: 40px;
         }
 
-        .Tabla tbody tr:last-child {
-            border-bottom: none;
+        .Tabla td:last-child {
+            text-align: right;
         }
 
-        /* Scrollbar personalizado */
+        /* Buttons */
+        .btn-elegir {
+            background-color: #4299e1;
+            /* Blue like in screenshot */
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            outline: none;
+            font-weight: 500;
+        }
+
+        .btn-elegir:hover {
+            background-color: #3182ce;
+        }
+
+        /* Scrollbar */
         #TablaContainer::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
         }
 
         #TablaContainer::-webkit-scrollbar-track {
@@ -128,30 +183,74 @@
         }
 
         #TablaContainer::-webkit-scrollbar-thumb {
-            background: rgba(60, 9, 108);
-            border-radius: 5px;
+            background: #cbd5e0;
+            border-radius: 4px;
         }
 
         #TablaContainer::-webkit-scrollbar-thumb:hover {
-            background: rgba(60, 9, 108);
+            background: #a0aec0;
         }
 
+        /* Notification */
+        #NotificationArea {
+            padding: 15px 30px;
+            margin-bottom: 10px;
+            display: none;
+            /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            min-height: 50px;
+            /* Prevent layout jump */
+        }
+
+        .notification {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .notification.success {
+            background-color: #9ae6b4;
+            /* Light green */
+            color: #22543d;
+            border: 1px solid #68d391;
+        }
+
+        .notification.error {
+            background-color: #feb2b2;
+            /* Light red */
+            color: #742a2a;
+            border: 1px solid #fc8181;
+        }
+
+        /* Empty State */
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
-            color: #aab8c2;
+            padding: 40px;
+            color: #a0aec0;
         }
 
         .empty-state-icon {
-            font-size: 48px;
-            margin-bottom: 16px;
+            font-size: 40px;
+            margin-bottom: 10px;
+            display: block;
+            opacity: 0.5;
         }
     </style>
 </head>
 
 <body>
     <div id="SelecUserWindow">
-        <div id="TablaClientes" class="TablaClientes"></div>
+        <!-- Contenido inyectado dinámicamente por JS -->
+        <div id="TablaClientes" class="TablaClientes" style="height: 100%; display: flex; flex-direction: column;">
+        </div>
     </div>
 </body>
 
