@@ -28,9 +28,10 @@ function GenerarCodigo(datosFiltrados, fechaSeleccionada, CapitalEconomicoEmpres
     // Generar filas de la tabla con los datos filtrados
     let filas = datosFiltrados.map((dato, index, array) => {
 
-        // Obtener el siguiente elemento si existe, de lo contrario, usar 0
-        let siguienteCapitalMaterial = array[index + 1] ? array[index + 1].CapitalMaterialInicial : CapitalMaterialEmpresarial;
-        let siguienteCapitalEconomico = array[index + 1] ? array[index + 1].CapitalEconomicoInicial : CapitalEconomicoEmpresarial;
+        // Obtener el siguiente elemento (el más reciente, index - 1) para obtener el capital final del día actual
+        // Si es el primer elemento (el más reciente), el final es el actual global
+        let siguienteCapitalMaterial = index === 0 ? CapitalMaterialEmpresarial : array[index - 1].CapitalMaterialInicial;
+        let siguienteCapitalEconomico = index === 0 ? CapitalEconomicoEmpresarial : array[index - 1].CapitalEconomicoInicial;
 
         // Calcular totales (diferencia entre final e inicial)
         let totalEconomico = (siguienteCapitalEconomico - dato.CapitalEconomicoInicial).toFixed(2);
