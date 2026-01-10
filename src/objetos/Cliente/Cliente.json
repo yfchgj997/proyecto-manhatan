@@ -13,12 +13,13 @@
         },
         {
             "Nombres": "K",
-            "Apellidos": "",
-            "DNI": "",
+            "Apellidos": "TR",
+            "DNI": "HH",
             "SaldoEconomico": "0.00",
-            "SaldoMaterial": "0.00",
+            "SaldoMaterial": "3800.00",
             "FechaIngreso": "2025-12-02",
-            "ID": 2
+            "ID": 2,
+            "Fecha": "2025-12-02"
         },
         {
             "Nombres": "O",

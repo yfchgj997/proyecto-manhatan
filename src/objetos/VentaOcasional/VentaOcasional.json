@@ -1,5 +1,5 @@
 {
-    "Contador": 31,
+    "Contador": 33,
     "Elementos": [
         {
             "Tipo": "venta",
@@ -204,6 +204,30 @@
             "PrecioCambio": 7,
             "Hora": "21:40:22",
             "ID": 31
+        },
+        {
+            "Tipo": "venta",
+            "Fecha": "2026-01-09",
+            "EmpleadoNombre": "BERNING",
+            "EmpleadoID": 25,
+            "Cliente": "NUMERO 1",
+            "MontoMaterial": 10,
+            "MontoEconomico": 40,
+            "PrecioCambio": 400,
+            "Hora": "01:16:13",
+            "ID": 32
+        },
+        {
+            "Tipo": "compra",
+            "Fecha": "2026-01-09",
+            "EmpleadoNombre": "BERNING",
+            "EmpleadoID": 25,
+            "Cliente": "NUMERO 2",
+            "MontoMaterial": 20,
+            "MontoEconomico": 100,
+            "PrecioCambio": 2000,
+            "Hora": "01:16:59",
+            "ID": 33
         }
     ]
 }
