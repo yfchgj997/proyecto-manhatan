@@ -1,5 +1,5 @@
 {
-    "Contador": 13,
+    "Contador": 15,
     "Elementos": [
         {
             "Tipo": "Material",
@@ -77,6 +77,28 @@
             "Hora": "22:14:40",
             "CapturaSaldo": "2300.00",
             "ID": 13
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Disminuir",
+            "Fecha": "2026-01-09",
+            "Usuario": "BERNING",
+            "Importe": "110.00",
+            "Detalle": "",
+            "Hora": "01:17:15",
+            "CapturaSaldo": "2000.00",
+            "ID": 14
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Disminuir",
+            "Fecha": "2026-01-09",
+            "Usuario": "BERNING",
+            "Importe": "1000.00",
+            "Detalle": "kjb",
+            "Hora": "19:55:19",
+            "CapturaSaldo": "5000.00",
+            "ID": 15
         }
     ]
 }
