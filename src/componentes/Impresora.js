@@ -492,10 +492,30 @@ function ExportarDetallesDiaPDF(datos) {
         return listaUnificada;
     }
 
-    // Procesar movimientos
+    // Procesar movimientos - SEPARAR EN DOS LISTAS INDEPENDIENTES
     const lista = ProcesarMovimientos(datos);
     const saldoEcoInicial = parseFloat(datos.capitalEconomicoInicial || 0);
     const saldoMatInicial = parseFloat(datos.capitalMaterialInicial || 0);
+
+    // SEPARAR MOVIMIENTOS EN DOS LISTAS INDEPENDIENTES (igual que UI)
+    let movimientosEconomicos = [];
+    let movimientosMateriales = [];
+
+    lista.forEach((item) => {
+        const tieneMovEconomico = item.EcoIngreso !== 0 || item.EcoEgreso !== 0;
+        const tieneMovMaterial = item.MatIngreso !== 0 || item.MatEgreso !== 0;
+
+        if (tieneMovEconomico || item.EsVenta) {
+            movimientosEconomicos.push(item);
+        }
+
+        if (tieneMovMaterial || item.EsVenta) {
+            movimientosMateriales.push(item);
+        }
+    });
+
+    // Determinar número máximo de filas
+    const maxFilas = Math.max(movimientosEconomicos.length, movimientosMateriales.length);
 
     // Crear documento PDF en formato horizontal (landscape)
     DocumentoPDF = new PDFDocument({
@@ -602,10 +622,10 @@ function ExportarDetallesDiaPDF(datos) {
 
     currentY += subHeaderHeight;
 
-    // DATOS (LÓGICA IGUAL A LA UI)
+    // DATOS (LÓGICA DE COLUMNAS INDEPENDIENTES)
     const rowHeight = 25;
 
-    lista.forEach((item, index) => {
+    for (let i = 0; i < maxFilas; i++) {
         // Verificar si necesitamos nueva página
         if (currentY + rowHeight > 555) {
             DocumentoPDF.addPage({ size: 'A4', layout: 'landscape', margins: { top: 30, left: 30, right: 30, bottom: 30 } });
@@ -620,119 +640,127 @@ function ExportarDetallesDiaPDF(datos) {
             currentY += headerHeight;
 
             xPos = margin;
-            headers.forEach((header, i) => {
-                dibujarCelda(xPos, currentY, scaledWidths[i], subHeaderHeight, header,
+            headers.forEach((header, j) => {
+                dibujarCelda(xPos, currentY, scaledWidths[j], subHeaderHeight, header,
                     { bgColor: '#eeeeee', fontSize: 8, bold: true });
-                xPos += scaledWidths[i];
+                xPos += scaledWidths[j];
             });
             xPos = margin + halfWidth;
-            headers.forEach((header, i) => {
-                dibujarCelda(xPos, currentY, scaledWidths[i], subHeaderHeight, header,
+            headers.forEach((header, j) => {
+                dibujarCelda(xPos, currentY, scaledWidths[j], subHeaderHeight, header,
                     { bgColor: '#eeeeee', fontSize: 8, bold: true });
-                xPos += scaledWidths[i];
+                xPos += scaledWidths[j];
             });
             currentY += subHeaderHeight;
         }
 
-        const num = String(index + 1).padStart(2, '0');
-        const tieneMovEconomico = item.EcoIngreso !== 0 || item.EcoEgreso !== 0;
-        const tieneMovMaterial = item.MatIngreso !== 0 || item.MatEgreso !== 0;
-
-        // Determinar clases de color
-        let claseLadoEco = colores.sinMov;
-        let claseLadoMat = colores.sinMov;
-
-        if (item.EsEmpresarial) {
-            if (item.TipoEmpresarial === "Capital") claseLadoEco = colores.empresaEco;
-            if (item.TipoEmpresarial === "Material") claseLadoMat = colores.empresaMat;
-        }
-        else if (item.EsVenta) {
-            claseLadoEco = colores.venta;
-            claseLadoMat = colores.venta;
-        }
-        else {
-            if (item.Registro === "Economico") claseLadoEco = colores.clienteEco;
-            if (item.Registro === "Material") claseLadoMat = colores.clienteMat;
-        }
-
-        if (!tieneMovEconomico) claseLadoEco = colores.sinMov;
-        if (!tieneMovMaterial) claseLadoMat = colores.sinMov;
-
-        // Preparar contenido
-        const totalEcoStr = `S/. ${Number(item.SaldoEco).toFixed(2)}`;
-        const totalMatStr = `${Number(item.SaldoMat).toFixed(0)} g`;
-        const horaStr = item.Hora.substring(0, 5);
-        const clienteStr = item.Cliente;
-
-        // Descripción de tipo (IGUAL A LA UI)
-        let tipoDescripcion = "-";
-        if (item.EsEmpresarial) {
-            if (item.TipoEmpresarial === "Capital") tipoDescripcion = "MOV. EMPRESARIAL ECONÓMICO";
-            if (item.TipoEmpresarial === "Material") tipoDescripcion = "MOV. EMPRESARIAL MATERIAL";
-        }
-        else if (item.EsVenta) {
-            if (item.TipoOriginal.toLowerCase() === "venta") tipoDescripcion = "VENTA DE ORO";
-            else if (item.TipoOriginal.toLowerCase() === "compra") tipoDescripcion = "COMPRA DE ORO";
-            else tipoDescripcion = "VENTA OCASIONAL";
-        }
-        else {
-            if (item.Registro === "Economico") tipoDescripcion = "MOVIMIENTO ECONÓMICO";
-            if (item.Registro === "Material") tipoDescripcion = "MOVIMIENTO MATERIAL";
-        }
+        const movEco = movimientosEconomicos[i];
+        const movMat = movimientosMateriales[i];
 
         // LADO ECONÓMICO
         xPos = margin;
-        if (tieneMovEconomico || item.EsVenta) {
-            const montoEcoStr = item.EcoIngreso > 0 ? `+ S/. ${item.EcoIngreso.toFixed(2)}` : `- S/. ${item.EcoEgreso.toFixed(2)}`;
-            const colorMonto = item.EcoIngreso > 0 ? '#1b5e20' : '#b71c1c';
+        if (movEco) {
+            const num = String(i + 1).padStart(2, '0');
+            const horaStr = movEco.Hora.substring(0, 5);
+            const clienteStr = movEco.Cliente;
+            const totalEcoStr = `S/. ${Number(movEco.SaldoEco).toFixed(2)}`;
 
-            dibujarCelda(xPos, currentY, scaledWidths[0], rowHeight, num, { bgColor: claseLadoEco, fontSize: 7 });
+            // Descripción de tipo
+            let tipoDescripcion = "-";
+            if (movEco.EsEmpresarial) {
+                if (movEco.TipoEmpresarial === "Capital") tipoDescripcion = "MOV. EMPRESARIAL ECONÓMICO";
+            }
+            else if (movEco.EsVenta) {
+                if (movEco.TipoOriginal.toLowerCase() === "venta") tipoDescripcion = "VENTA DE ORO";
+                else if (movEco.TipoOriginal.toLowerCase() === "compra") tipoDescripcion = "COMPRA DE ORO";
+                else tipoDescripcion = "VENTA OCASIONAL";
+            }
+            else {
+                if (movEco.Registro === "Economico") tipoDescripcion = "MOVIMIENTO ECONÓMICO";
+            }
+
+            // Color
+            let bgColor = colores.sinMov;
+            if (movEco.EsEmpresarial && movEco.TipoEmpresarial === "Capital") bgColor = colores.empresaEco;
+            else if (movEco.EsVenta) bgColor = colores.venta;
+            else if (movEco.Registro === "Economico") bgColor = colores.clienteEco;
+
+            // Monto
+            const montoEcoStr = movEco.EcoIngreso > 0 ? `+ S/. ${movEco.EcoIngreso.toFixed(2)}` : `- S/. ${movEco.EcoEgreso.toFixed(2)}`;
+            const colorMonto = movEco.EcoIngreso > 0 ? '#1b5e20' : '#b71c1c';
+
+            dibujarCelda(xPos, currentY, scaledWidths[0], rowHeight, num, { bgColor, fontSize: 7 });
             xPos += scaledWidths[0];
-            dibujarCelda(xPos, currentY, scaledWidths[1], rowHeight, horaStr, { bgColor: claseLadoEco, fontSize: 7 });
+            dibujarCelda(xPos, currentY, scaledWidths[1], rowHeight, horaStr, { bgColor, fontSize: 7 });
             xPos += scaledWidths[1];
-            dibujarCelda(xPos, currentY, scaledWidths[2], rowHeight, tipoDescripcion, { bgColor: claseLadoEco, fontSize: 6 });
+            dibujarCelda(xPos, currentY, scaledWidths[2], rowHeight, tipoDescripcion, { bgColor, fontSize: 6 });
             xPos += scaledWidths[2];
-            dibujarCelda(xPos, currentY, scaledWidths[3], rowHeight, clienteStr, { bgColor: claseLadoEco, fontSize: 7, align: 'left' });
+            dibujarCelda(xPos, currentY, scaledWidths[3], rowHeight, clienteStr, { bgColor, fontSize: 7, align: 'left' });
             xPos += scaledWidths[3];
-            dibujarCelda(xPos, currentY, scaledWidths[4], rowHeight, montoEcoStr, { bgColor: claseLadoEco, fontSize: 7, textColor: colorMonto, align: 'right' });
+            dibujarCelda(xPos, currentY, scaledWidths[4], rowHeight, montoEcoStr, { bgColor, fontSize: 7, textColor: colorMonto, align: 'right' });
             xPos += scaledWidths[4];
-            dibujarCelda(xPos, currentY, scaledWidths[5], rowHeight, totalEcoStr, { bgColor: claseLadoEco, fontSize: 7, bold: true, align: 'right' });
+            dibujarCelda(xPos, currentY, scaledWidths[5], rowHeight, totalEcoStr, { bgColor, fontSize: 7, bold: true, align: 'right' });
             xPos += scaledWidths[5];
         } else {
-            for (let i = 0; i < 5; i++) {
-                dibujarCelda(xPos, currentY, scaledWidths[i], rowHeight, '-', { bgColor: claseLadoEco, fontSize: 7, textColor: '#757575' });
-                xPos += scaledWidths[i];
+            // Celda vacía
+            for (let j = 0; j < 6; j++) {
+                dibujarCelda(xPos, currentY, scaledWidths[j], rowHeight, '', { bgColor: colores.sinMov, fontSize: 7 });
+                xPos += scaledWidths[j];
             }
-            dibujarCelda(xPos, currentY, scaledWidths[5], rowHeight, totalEcoStr, { bgColor: claseLadoEco, fontSize: 7, textColor: '#757575', align: 'right' });
-            xPos += scaledWidths[5];
         }
 
         // LADO MATERIAL
-        if (tieneMovMaterial || item.EsVenta) {
-            const montoMatStr = item.MatIngreso > 0 ? `+ ${item.MatIngreso} g` : `- ${item.MatEgreso} g`;
-            const colorMonto = item.MatIngreso > 0 ? '#1b5e20' : '#b71c1c';
+        if (movMat) {
+            const num = String(i + 1).padStart(2, '0');
+            const horaStr = movMat.Hora.substring(0, 5);
+            const clienteStr = movMat.Cliente;
+            const totalMatStr = `${Number(movMat.SaldoMat).toFixed(0)} g`;
 
-            dibujarCelda(xPos, currentY, scaledWidths[0], rowHeight, num, { bgColor: claseLadoMat, fontSize: 7 });
-            xPos += scaledWidths[0];
-            dibujarCelda(xPos, currentY, scaledWidths[1], rowHeight, horaStr, { bgColor: claseLadoMat, fontSize: 7 });
-            xPos += scaledWidths[1];
-            dibujarCelda(xPos, currentY, scaledWidths[2], rowHeight, tipoDescripcion, { bgColor: claseLadoMat, fontSize: 6 });
-            xPos += scaledWidths[2];
-            dibujarCelda(xPos, currentY, scaledWidths[3], rowHeight, clienteStr, { bgColor: claseLadoMat, fontSize: 7, align: 'left' });
-            xPos += scaledWidths[3];
-            dibujarCelda(xPos, currentY, scaledWidths[4], rowHeight, montoMatStr, { bgColor: claseLadoMat, fontSize: 7, textColor: colorMonto, align: 'right' });
-            xPos += scaledWidths[4];
-            dibujarCelda(xPos, currentY, scaledWidths[5], rowHeight, totalMatStr, { bgColor: claseLadoMat, fontSize: 7, bold: true, align: 'right' });
-        } else {
-            for (let i = 0; i < 5; i++) {
-                dibujarCelda(xPos, currentY, scaledWidths[i], rowHeight, '-', { bgColor: claseLadoMat, fontSize: 7, textColor: '#757575' });
-                xPos += scaledWidths[i];
+            // Descripción de tipo
+            let tipoDescripcion = "-";
+            if (movMat.EsEmpresarial) {
+                if (movMat.TipoEmpresarial === "Material") tipoDescripcion = "MOV. EMPRESARIAL MATERIAL";
             }
-            dibujarCelda(xPos, currentY, scaledWidths[5], rowHeight, totalMatStr, { bgColor: claseLadoMat, fontSize: 7, textColor: '#757575', align: 'right' });
+            else if (movMat.EsVenta) {
+                if (movMat.TipoOriginal.toLowerCase() === "venta") tipoDescripcion = "VENTA DE ORO";
+                else if (movMat.TipoOriginal.toLowerCase() === "compra") tipoDescripcion = "COMPRA DE ORO";
+                else tipoDescripcion = "VENTA OCASIONAL";
+            }
+            else {
+                if (movMat.Registro === "Material") tipoDescripcion = "MOVIMIENTO MATERIAL";
+            }
+
+            // Color
+            let bgColor = colores.sinMov;
+            if (movMat.EsEmpresarial && movMat.TipoEmpresarial === "Material") bgColor = colores.empresaMat;
+            else if (movMat.EsVenta) bgColor = colores.venta;
+            else if (movMat.Registro === "Material") bgColor = colores.clienteMat;
+
+            // Monto
+            const montoMatStr = movMat.MatIngreso > 0 ? `+ ${movMat.MatIngreso} g` : `- ${movMat.MatEgreso} g`;
+            const colorMonto = movMat.MatIngreso > 0 ? '#1b5e20' : '#b71c1c';
+
+            dibujarCelda(xPos, currentY, scaledWidths[0], rowHeight, num, { bgColor, fontSize: 7 });
+            xPos += scaledWidths[0];
+            dibujarCelda(xPos, currentY, scaledWidths[1], rowHeight, horaStr, { bgColor, fontSize: 7 });
+            xPos += scaledWidths[1];
+            dibujarCelda(xPos, currentY, scaledWidths[2], rowHeight, tipoDescripcion, { bgColor, fontSize: 6 });
+            xPos += scaledWidths[2];
+            dibujarCelda(xPos, currentY, scaledWidths[3], rowHeight, clienteStr, { bgColor, fontSize: 7, align: 'left' });
+            xPos += scaledWidths[3];
+            dibujarCelda(xPos, currentY, scaledWidths[4], rowHeight, montoMatStr, { bgColor, fontSize: 7, textColor: colorMonto, align: 'right' });
+            xPos += scaledWidths[4];
+            dibujarCelda(xPos, currentY, scaledWidths[5], rowHeight, totalMatStr, { bgColor, fontSize: 7, bold: true, align: 'right' });
+        } else {
+            // Celda vacía
+            for (let j = 0; j < 6; j++) {
+                dibujarCelda(xPos, currentY, scaledWidths[j], rowHeight, '', { bgColor: colores.sinMov, fontSize: 7 });
+                xPos += scaledWidths[j];
+            }
         }
 
         currentY += rowHeight;
-    });
+    }
 
     // FOOTER - Totales finales
     currentY += 5;
@@ -742,8 +770,8 @@ function ExportarDetallesDiaPDF(datos) {
     const footerColSpan = scaledWidths[0] + scaledWidths[1] + scaledWidths[2] + scaledWidths[3];
     const footerValueSpan = scaledWidths[4] + scaledWidths[5];
 
-    const saldoEcoFinal = lista.length > 0 ? lista[lista.length - 1].SaldoEco : saldoEcoInicial;
-    const saldoMatFinal = lista.length > 0 ? lista[lista.length - 1].SaldoMat : saldoMatInicial;
+    const saldoEcoFinal = movimientosEconomicos.length > 0 ? movimientosEconomicos[movimientosEconomicos.length - 1].SaldoEco : saldoEcoInicial;
+    const saldoMatFinal = movimientosMateriales.length > 0 ? movimientosMateriales[movimientosMateriales.length - 1].SaldoMat : saldoMatInicial;
 
     // Total Económico
     dibujarCelda(xPos, currentY, footerColSpan, footerHeight, 'TOTAL ECONÓMICO:',
