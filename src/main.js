@@ -2452,3 +2452,13 @@ ipcMain.on("EExportarDetallesDia", (event, datos) => {
     }
 });
 
+// Evento -> Exportar detalles del día a PDF
+ipcMain.on("EExportarDetallesDiaPDF", (event, datos) => {
+    console.log("Main: Exportando detalles del día a PDF...");
+
+    try {
+        Impresora.ExportarDetallesDiaPDF(datos);
+    } catch (error) {
+        console.error("Main: Error al exportar a PDF:", error);
+    }
+});
