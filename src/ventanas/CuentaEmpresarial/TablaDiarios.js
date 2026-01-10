@@ -57,7 +57,7 @@ function GenerarCodigo(datosFiltrados, fechaSeleccionada, CapitalEconomicoEmpres
                 <td>${dato.CapitalMaterialInicial} g.</td>
                 <td>${totalMaterial} g.</td>
                 <td>${siguienteCapitalMaterial}</td>
-                <td><button class="BotonVerAzul" IDMovimiento="${dato.IDMovimiento}" Tipo="${dato.Tipo}" title="Ver"><i class="bi bi-eye"></i></button></td>
+                <td><button class="BotonVerAzul" IDMovimiento="${dato.IDMovimiento}" Tipo="${dato.Tipo}" CapitalEconomicoInicial="${dato.CapitalEconomicoInicial}" CapitalMaterialInicial="${dato.CapitalMaterialInicial}">Ver</button></td>
             </tr>
         `;
     }).join("");
@@ -125,8 +125,18 @@ function CargarTablaDiarios(datos, fecha, CapitalEconomicoEmpresarial, CapitalMa
 
                 console.log(`TablaDiarios: Click en botón Ver para fecha: ${fecha}`);
 
-                // Enviar evento al main.js para obtener los detalles del día
-                ipcRenderer.send('EQuiereVerDetallesDia', { fecha });
+                // Obtener datos iniciales de los atributos del botón
+                const capitalEconomicoInicial = e.target.getAttribute('CapitalEconomicoInicial');
+                const capitalMaterialInicial = e.target.getAttribute('CapitalMaterialInicial');
+
+                console.log(`TablaDiarios: Click en botón Ver para fecha: ${fecha}, CEIni: ${capitalEconomicoInicial}, CMIni: ${capitalMaterialInicial}`);
+
+                // Enviar evento al main.js para obtener los detalles del día con los saldos iniciales
+                ipcRenderer.send('EQuiereVerDetallesDia', {
+                    fecha,
+                    capitalEconomicoInicial: parseFloat(capitalEconomicoInicial || 0),
+                    capitalMaterialInicial: parseFloat(capitalMaterialInicial || 0)
+                });
             });
         });
 

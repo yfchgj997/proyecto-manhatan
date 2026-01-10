@@ -2302,7 +2302,9 @@ ipcMain.on('EQuiereVerDetallesDia', (event, datos) => {
         let datosDetalles = {
             fecha: datos.fecha,
             movimientos: Respuesta.ListaCombinadaResultante || [],
-            movimientosEmpresariales: movimientosEmpresarialesFiltrados || []
+            movimientosEmpresariales: movimientosEmpresarialesFiltrados || [],
+            capitalEconomicoInicial: datos.capitalEconomicoInicial || 0,
+            capitalMaterialInicial: datos.capitalMaterialInicial || 0
         };
         console.log('Main: Se encontraron ' + datosDetalles.movimientos.length + ' movimientos generales');
         console.log('Main: Se encontraron ' + datosDetalles.movimientosEmpresariales.length + ' movimientos empresariales');
@@ -2312,7 +2314,9 @@ ipcMain.on('EQuiereVerDetallesDia', (event, datos) => {
         event.sender.send('EMostrarDetallesDia', {
             fecha: datos.fecha,
             movimientos: [],
-            movimientosEmpresariales: []
+            movimientosEmpresariales: [],
+            capitalEconomicoInicial: datos.capitalEconomicoInicial || 0,
+            capitalMaterialInicial: datos.capitalMaterialInicial || 0
         });
     }
 });

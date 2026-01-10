@@ -3,185 +3,514 @@ const { ipcRenderer } = require("electron");
 // Variables
 let DatosActuales = null;
 
-// Función -> generar HTML para movimientos económicos
-function GenerarTablaMovimientosEconomicos(movimientos) {
-    if (!movimientos || movimientos.length === 0) {
-        return '<p class="MensajeVacio">No hay movimientos económicos para esta fecha</p>';
-    }
+// ==========================================
+// LÓGICA DE PROCESAMIENTO DE DATOS
+// ==========================================
 
-    let filas = movimientos.map(mov => {
-        const tipoUpper = (mov.Tipo || '').toUpperCase();
-        const badgeClass = tipoUpper === 'INGRESO' ? 'ingreso' : 'egreso';
-        return `
-            <tr>
-                <td>${mov.Fecha}</td>
-                <td>${mov.Hora || 'N/A'}</td>
-                <td><span class="BadgeTipo ${badgeClass}">${mov.Tipo}</span></td>
-                <td>${mov.ClienteN || mov.ClienteNombres || 'N/A'}</td>
-                <td>S/. ${mov.Importe || '0.00'}</td>
-                <td>${mov.Observacion || ''}</td>
-            </tr>
-        `;
-    }).join('');
+function ProcesarMovimientos(datos) {
+    const movimientos = datos.movimientos || []; // Clientes, Ventas
+    const movEmpresariales = datos.movimientosEmpresariales || []; // Empresariales
 
+    let listaUnificada = [];
+
+    // 1. Unificar Movimientos de Clientes y Ventas
+    movimientos.forEach(m => {
+        let item = {
+            Fecha: m.Fecha,
+            Hora: m.Hora || "00:00:00",
+            TipoOriginal: m.Tipo, // Ingreso, Retiro, Compra, Venta
+            Registro: m.Registro, // Economico, Material, VentaOcasional
+            Cliente: m.ClienteN || m.ClienteNombres || m.Cliente || "Desconocido",
+            Observacion: m.Observacion || "",
+
+            // Valores Económicos
+            EcoIngreso: 0,
+            EcoEgreso: 0,
+
+            // Valores Materiales
+            MatIngreso: 0,
+            MatEgreso: 0,
+
+            EsVenta: false,
+            EsEmpresarial: false
+        };
+
+        // NORMALIZACIÓN DE VALORES
+
+        let importeOperacion = 0;
+        let pesoOperacion = 0;
+
+        if (m.Registro === "Economico") {
+            importeOperacion = parseFloat(m.Importe || 0);
+            if (m.Tipo === "Ingreso") item.EcoIngreso = importeOperacion;
+            else if (m.Tipo === "Retiro") item.EcoEgreso = importeOperacion;
+        }
+        else if (m.Registro === "Material") {
+            // EN MATERIAL: La propiedad 'Importe' guarda el PESO
+            pesoOperacion = parseFloat(m.Importe || 0);
+
+            if (m.Tipo === "Ingreso") item.MatIngreso = pesoOperacion;
+            else if (m.Tipo === "Retiro") item.MatEgreso = pesoOperacion;
+        }
+        else if (m.Registro === "VentaOcasional") {
+            item.EsVenta = true;
+            // VENTAS/COMPRAS: Usan MontoEconomico y MontoMaterial
+            importeOperacion = parseFloat(m.MontoEconomico || m.Importe || 0);
+            pesoOperacion = parseFloat(m.MontoMaterial || m.Peso || 0);
+
+            // Compra: Entra material, sale dinero
+            if (m.Tipo === "compra" || m.Tipo === "Compra") {
+                item.MatIngreso = pesoOperacion;
+                item.EcoEgreso = importeOperacion;
+            }
+            // Venta: Entra dinero, sale material
+            else if (m.Tipo === "venta" || m.Tipo === "Venta") {
+                item.EcoIngreso = importeOperacion;
+                item.MatEgreso = pesoOperacion;
+            }
+        }
+
+        listaUnificada.push(item);
+    });
+
+    // 2. Unificar Movimientos Empresariales
+    movEmpresariales.forEach(m => {
+        let item = {
+            Fecha: m.Fecha,
+            Hora: m.Hora || "00:00:00",
+            TipoOriginal: m.Operacion, // Aumentar, Disminuir
+            Registro: "Empresarial",
+            Cliente: "EMPRESA", // O el usuario
+            Observacion: m.Detalle || "",
+
+            EcoIngreso: 0,
+            EcoEgreso: 0,
+            MatIngreso: 0,
+            MatEgreso: 0,
+
+            EsVenta: false,
+            EsEmpresarial: true,
+            TipoEmpresarial: m.Tipo // Capital, Material
+        };
+
+        const importe = parseFloat(m.Importe || 0);
+
+        if (m.Tipo === "Capital") {
+            if (m.Operacion === "Aumentar") item.EcoIngreso = importe;
+            else if (m.Operacion === "Disminuir") item.EcoEgreso = importe;
+        }
+        else if (m.Tipo === "Material") {
+            if (m.Operacion === "Aumentar") item.MatIngreso = importe;
+            else if (m.Operacion === "Disminuir") item.MatEgreso = importe;
+        }
+
+        listaUnificada.push(item);
+    });
+
+    // 3. Ordenar por Hora
+    listaUnificada.sort((a, b) => {
+        if (a.Hora < b.Hora) return -1;
+        if (a.Hora > b.Hora) return 1;
+        return 0;
+    });
+
+    // 4. Calcular Saldos Acumulados
+    // Iniciamos con los saldos que vienen de main (que son los iniciales del día)
+    let saldoEco = parseFloat(datos.capitalEconomicoInicial || 0);
+    let saldoMat = parseFloat(datos.capitalMaterialInicial || 0);
+
+    listaUnificada.forEach(item => {
+        // Actualizar saldo paso a paso
+        saldoEco = saldoEco + item.EcoIngreso - item.EcoEgreso;
+        saldoMat = saldoMat + item.MatIngreso - item.MatEgreso;
+
+        // Asignar el saldo resultante A ESTA FILA
+        item.SaldoEco = saldoEco;
+        item.SaldoMat = saldoMat;
+    });
+
+    return listaUnificada;
+}
+
+// ==========================================
+// GENERACIÓN DE HTML
+// ==========================================
+
+function GenerarLeyenda() {
     return `
-        <table>
-            <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Tipo</th>
-                    <th>Cliente</th>
-                    <th>Importe</th>
-                    <th>Observación</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${filas}
-            </tbody>
-        </table>
+        <div class="ContenedorLeyenda">
+            <div class="ItemLeyenda">
+                <span class="CuadroColor color-empresa-eco"></span> Movimiento Empresarial (S/)
+            </div>
+            <div class="ItemLeyenda">
+                <span class="CuadroColor color-empresa-mat"></span> Movimiento Empresarial (g)
+            </div>
+            <div class="ItemLeyenda">
+                <span class="CuadroColor color-cliente-eco"></span> Movimiento Cliente (S/)
+            </div>
+            <div class="ItemLeyenda">
+                <span class="CuadroColor color-cliente-mat"></span> Movimiento Cliente (g)
+            </div>
+            <div class="ItemLeyenda">
+                <span class="CuadroColor color-venta"></span> Compra / Venta
+            </div>
+        </div>
     `;
 }
 
-// Función -> generar HTML para movimientos materiales
-function GenerarTablaMovimientosMateriales(movimientos) {
-    if (!movimientos || movimientos.length === 0) {
-        return '<p class="MensajeVacio">No hay movimientos materiales para esta fecha</p>';
+function GenerarTablaUnificada(lista, saldoEcoInicial, saldoMatInicial) {
+    let htmlFilas = "";
+
+    if (lista.length === 0) {
+        return '<p class="MensajeVacio">No hay movimientos registrados para esta fecha.</p>';
     }
 
-    let filas = movimientos.map(mov => {
-        const tipoUpper = (mov.Tipo || '').toUpperCase();
-        const badgeClass = tipoUpper === 'INGRESO' ? 'ingreso' : 'egreso';
-        return `
-            <tr>
-                <td>${mov.Fecha}</td>
-                <td>${mov.Hora || 'N/A'}</td>
-                <td><span class="BadgeTipo ${badgeClass}">${mov.Tipo}</span></td>
-                <td>${mov.ClienteN || mov.ClienteNombres || 'N/A'}</td>
-                <td>${mov.Peso || '0'} g.</td>
-                <td>${mov.Observacion || ''}</td>
+    lista.forEach((item, index) => {
+        const num = String(index + 1).padStart(2, '0');
+
+        // 1. Determinar existencia de movimiento
+        const tieneMovEconomico = item.EcoIngreso !== 0 || item.EcoEgreso !== 0;
+        const tieneMovMaterial = item.MatIngreso !== 0 || item.MatEgreso !== 0;
+
+        // 2. Asignar clases de color SEGÚN TIPO
+        let claseLadoEco = "";
+        let claseLadoMat = "";
+
+        // --- LÓGICA DE COLORES ---
+        if (item.EsEmpresarial) {
+            if (item.TipoEmpresarial === "Capital") claseLadoEco = "celda-empresa-eco";
+            if (item.TipoEmpresarial === "Material") claseLadoMat = "celda-empresa-mat";
+        }
+        else if (item.EsVenta) {
+            claseLadoEco = "celda-venta";
+            claseLadoMat = "celda-venta";
+        }
+        else {
+            // Cliente normal
+            if (item.Registro === "Economico") claseLadoEco = "celda-cliente-eco";
+            if (item.Registro === "Material") claseLadoMat = "celda-cliente-mat";
+        }
+
+        // Si no hay movimiento, color "sin movimiento" (blanco/transparente)
+        if (!tieneMovEconomico) claseLadoEco = "celda-sin-movimiento";
+        if (!tieneMovMaterial) claseLadoMat = "celda-sin-movimiento";
+
+        // 3. Preparar Contenido (LÓGICA ZIPPER: Ocultar datos redundantes + Celdas Vacías con "-")
+
+        const totalEcoStr = `S/. ${Number(item.SaldoEco).toFixed(2)}`;
+        const totalMatStr = `${Number(item.SaldoMat).toFixed(0)} g`;
+        const horaStr = item.Hora.substring(0, 5);
+        const clienteStr = item.Cliente;
+
+        // --- CONTENIDO LADO ECONÓMICO ---
+        let htmlEco = "";
+        if (tieneMovEconomico || item.EsVenta) {
+            // Si hay movimiento, mostramos TODO
+            let montoEcoStr = item.EcoIngreso > 0 ? `+ S/. ${item.EcoIngreso.toFixed(2)}` : `- S/. ${item.EcoEgreso.toFixed(2)}`;
+            let classMonto = item.EcoIngreso > 0 ? 'texto-verde' : 'texto-rojo';
+
+            htmlEco = `
+                <td class="${claseLadoEco} celda-centrada">${num}</td>
+                <td class="${claseLadoEco} celda-centrada">${horaStr}</td>
+                <td class="${claseLadoEco} celda-izquierda" title="${item.Observacion}">${clienteStr}</td>
+                <td class="${claseLadoEco} celda-derecha ${classMonto}">${montoEcoStr}</td>
+                <td class="${claseLadoEco} celda-derecha texto-negrita">${totalEcoStr}</td>
+            `;
+        } else {
+            // Si NO hay movimiento, mostramos "-" en los datos
+            // Pero mantenemos el Total visibles (o no? El usuario dijo "que se muestre en la celda que corresponde...")
+            // Pero "a las celdas vacías ponle como contenido el caracter '-'"
+            // El total siempre debe estar para control, pero el resto "-"
+            htmlEco = `
+                <td class="${claseLadoEco} celda-centrada texto-gris">-</td>
+                <td class="${claseLadoEco} celda-centrada texto-gris">-</td>
+                <td class="${claseLadoEco} celda-centrada texto-gris">-</td>
+                <td class="${claseLadoEco} celda-centrada texto-gris">-</td>
+                <td class="${claseLadoEco} celda-derecha texto-gris" style="font-size: 11px;">${totalEcoStr}</td>
+            `;
+        }
+
+        // --- CONTENIDO LADO MATERIAL ---
+        let htmlMat = "";
+        if (tieneMovMaterial || item.EsVenta) {
+            let montoMatStr = item.MatIngreso > 0 ? `+ ${item.MatIngreso} g` : `- ${item.MatEgreso} g`;
+            let classMonto = item.MatIngreso > 0 ? 'texto-verde' : 'texto-rojo';
+
+            htmlMat = `
+                <td class="${claseLadoMat} celda-centrada">${num}</td>
+                <td class="${claseLadoMat} celda-centrada">${horaStr}</td>
+                <td class="${claseLadoMat} celda-izquierda">${clienteStr}</td>
+                <td class="${claseLadoMat} celda-derecha ${classMonto}">${montoMatStr}</td>
+                <td class="${claseLadoMat} celda-derecha texto-negrita">${totalMatStr}</td>
+            `;
+        } else {
+            // Solo saldo, guiones en el resto
+            htmlMat = `
+                <td class="${claseLadoMat} celda-centrada texto-gris">-</td>
+                <td class="${claseLadoMat} celda-centrada texto-gris">-</td>
+                <td class="${claseLadoMat} celda-centrada texto-gris">-</td>
+                <td class="${claseLadoMat} celda-centrada texto-gris">-</td>
+                <td class="${claseLadoMat} celda-derecha texto-gris" style="font-size: 11px;">${totalMatStr}</td>
+            `;
+        }
+
+        htmlFilas += `
+            <tr class="fila-dato">
+                ${htmlEco}
+                ${htmlMat}
             </tr>
         `;
-    }).join('');
+    });
+
+    // FILA FINAL (Totales)
+    const saldoEcoFinal = lista.length > 0 ? lista[lista.length - 1].SaldoEco : saldoEcoInicial;
+    const saldoMatFinal = lista.length > 0 ? lista[lista.length - 1].SaldoMat : saldoMatInicial;
+
+    htmlFilas += `
+        <tr class="fila-final">
+            <!-- LADO ECONOMICO -->
+            <td colspan="3" class="celda-final-titulo">TOTAL ECONÓMICO:</td>
+            <td colspan="2" class="celda-final-monto">S/. ${Number(saldoEcoFinal).toFixed(2)}</td>
+
+            <!-- LADO MATERIAL -->
+            <td colspan="3" class="celda-final-titulo">TOTAL MATERIAL:</td>
+            <td colspan="2" class="celda-final-monto">${Number(saldoMatFinal).toFixed(0)} g</td>
+        </tr>
+    `;
 
     return `
-        <table>
-            <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Tipo</th>
-                    <th>Cliente</th>
-                    <th>Peso</th>
-                    <th>Observación</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${filas}
-            </tbody>
-        </table>
+        ${GenerarLeyenda()}
+        <div class="ContenedorTablaUnificada">
+            <table class="TablaUnificada">
+                <thead>
+                    <!-- Primera fila: Cabeceras Grandes con SALDO INICIAL -->
+                    <tr>
+                        <th colspan="5" class="header-grande header-eco">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span><span style="margin-right: 10px;">💵</span> CAPITAL ECONÓMICO (S/)</span>
+                                <span class="saldo-inicial-header">INICIO: S/. ${Number(saldoEcoInicial).toFixed(2)}</span>
+                            </div>
+                        </th>
+                        <th colspan="5" class="header-grande header-mat">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span><span style="margin-right: 10px;">🪙</span> CAPITAL MATERIAL (g)</span>
+                                <span class="saldo-inicial-header">INICIO: ${Number(saldoMatInicial).toFixed(2)} g</span>
+                            </div>
+                        </th>
+                    </tr>
+                    <!-- Segunda fila: Subcabeceras Idénticas -->
+                    <tr>
+                        <!-- Lado Eco -->
+                        <th class="sub-header">#</th>
+                        <th class="sub-header">Hora</th>
+                        <th class="sub-header">Cliente</th>
+                        <th class="sub-header">Monto</th>
+                        <th class="sub-header">Total Capital</th>
+
+                        <!-- Lado Mat -->
+                        <th class="sub-header">#</th>
+                        <th class="sub-header">Hora</th>
+                        <th class="sub-header">Cliente</th>
+                        <th class="sub-header">Monto</th>
+                        <th class="sub-header">Total Capital</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${htmlFilas}
+                </tbody>
+            </table>
+        </div>
     `;
 }
 
-// Función -> generar HTML para ventas ocasionales
-function GenerarTablaVentasOcasionales(ventas) {
-    if (!ventas || ventas.length === 0) {
-        return '<p class="MensajeVacio">No hay ventas ocasionales para esta fecha</p>';
-    }
-
-    let filas = ventas.map(venta => {
-        const tipoUpper = (venta.Tipo || '').toUpperCase();
-        const badgeClass = (tipoUpper === 'COMPRA' || tipoUpper === 'INGRESO') ? 'ingreso' : 'egreso';
-        return `
-            <tr>
-                <td>${venta.Fecha}</td>
-                <td>${venta.Hora || 'N/A'}</td>
-                <td><span class="BadgeTipo ${badgeClass}">${venta.Tipo}</span></td>
-                <td>${venta.ClienteN || venta.ClienteNombres || venta.Cliente || 'N/A'}</td>
-                <td>${venta.Peso || '0'} g.</td>
-                <td>S/. ${venta.Importe || '0.00'}</td>
-            </tr>
-        `;
-    }).join('');
-
+function GenerarEstilos() {
     return `
-        <table>
-            <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Tipo</th>
-                    <th>Cliente</th>
-                    <th>Peso</th>
-                    <th>Importe</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${filas}
-            </tbody>
-        </table>
+        <style>
+            /* Layout General */
+            .DetallesDiaContenedor {
+                width: 95% !important;
+                max-width: 1400px !important; /* Más ancho para 10 columnas */
+                height: 90vh;
+                display: flex;
+                flex-direction: column;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                overflow: hidden;
+            }
+
+            .DetallesDiaBody {
+                flex: 1;
+                overflow-y: auto;
+                padding: 40px; /* MARGEN MÁS GRANDE */
+                background-color: #f8f9fa; /* Fondo muy suave */
+            }
+
+            /* Leyenda */
+            .ContenedorLeyenda {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                margin-bottom: 15px;
+                padding: 15px;
+                background-color: white;
+                border-radius: 8px;
+                justify-content: center; /* Centrado */
+                box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Sombra muy sutil */
+                border: 1px solid #eee;
+            }
+            .ItemLeyenda {
+                display: flex;
+                align-items: center;
+                font-size: 13px; /* Texto un poco más grande y legible */
+                color: #555;
+                font-weight: 500;
+            }
+            .CuadroColor {
+                width: 18px;
+                height: 18px;
+                border-radius: 4px;
+                margin-right: 8px;
+                border: 1px solid #e0e0e0;
+            }
+
+             /* Colores Leyenda - COLORES MÁS DEFINIDOS (PROFESIONALES) */
+            .color-empresa-eco { background-color: #c5e1a5; border-color: #aed581; } /* Light Green 200 */
+            .color-empresa-mat { background-color: #e1bee7; border-color: #ce93d8; } /* Purple 200 */
+            .color-cliente-eco { background-color: #fff59d; border-color: #fff176; } /* Yellow 200 */
+            .color-cliente-mat { background-color: #eeeeee; border-color: #e0e0e0; } /* Grey 200 */
+            .color-venta { background-color: #bbdefb; border-color: #90caf9; } /* Blue 200 */
+
+            /* Tabla Unificada */
+            .ContenedorTablaUnificada {
+                background: white;
+                width: 100%;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.08); 
+                border-radius: 8px; 
+                overflow: hidden; 
+                border: 1px solid #ddd;
+            }
+
+            .TablaUnificada {
+                width: 100%;
+                border-collapse: collapse;
+                font-family: 'Segoe UI', system-ui, sans-serif;
+                font-size: 13px; /* Recuperamos un poco de tamaño para legibilidad */
+                table-layout: fixed; 
+            }
+
+            .TablaUnificada th, .TablaUnificada td {
+                border: 1px solid #d0d0d0; /* BORDES MÁS VISIBLES */
+                padding: 8px 10px; 
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                height: 38px;
+            }
+
+            /* Cabeceras Superiores */
+            .header-grande {
+                text-align: left;
+                padding: 12px 15px;
+                font-size: 14px;
+                font-weight: bold;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                border-bottom: none;
+            }
+            .header-eco { 
+                background-color: #f1f8e9; /* Fondo suave cabecera */
+                color: #2e7d32; 
+                border-top: 4px solid #388e3c; 
+            } 
+            .header-mat { 
+                background-color: #f3e5f5; /* Fondo suave cabecera */
+                color: #7b1fa2;
+                border-top: 4px solid #8e24aa; 
+                border-left: 1px solid #d0d0d0; 
+            }
+            
+            .saldo-inicial-header {
+                font-size: 12px;
+                background: #ffffff;
+                color: #333;
+                padding: 4px 8px;
+                border-radius: 6px;
+                font-weight: 700;
+                text-transform: none; 
+                border: 1px solid #ccc;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            }
+
+            /* Subcabeceras */
+            .sub-header {
+                background-color: #eeeeee; /* Gris más sólido */
+                color: #444;
+                font-weight: 700;
+                text-align: center;
+                font-size: 12px;
+                padding: 10px 5px;
+                border-bottom: 2px solid #ccc;
+            }
+
+            /* Clases de Celdas */
+            .celda-centrada { text-align: center; }
+            .celda-izquierda { text-align: left; padding-left: 12px; }
+            .celda-derecha { text-align: right; padding-right: 12px; }
+            .texto-negrita { font-weight: 700; color: #222; }
+            
+            .texto-verde { color: #1b5e20; font-weight: 700; } /* Verde más oscuro */
+            .texto-rojo { color: #b71c1c; font-weight: 700; } /* Rojo más oscuro */
+            .texto-gris { color: #757575; font-weight: 600; } /* GRIS OSCURO VISIBLE (para los guiones) */
+
+            /* COLORES DE FONDO SEGÚN TIPO (más saturados) */
+            
+            .celda-empresa-eco { background-color: #c5e1a5; color: #222; } /* Verde visible */
+            .celda-cliente-eco { background-color: #fff59d; color: #222; } /* Amarillo visible */
+            .celda-empresa-mat { background-color: #e1bee7; color: #222; } /* Morado visible */
+            .celda-cliente-mat { background-color: #eeeeee; color: #222; } /* Gris visible */
+            .celda-venta { background-color: #bbdefb; color: #222; } /* Azul visible */
+            .celda-sin-movimiento { background-color: #ffffff; color: #777; }
+
+            /* Fila Final (Totales) */
+            .fila-final {
+                background-color: #283593; /* Indigo oscuro */
+                color: white;
+            }
+            .celda-final-titulo {
+                text-align: right;
+                font-weight: normal;
+                padding-right: 15px;
+                font-size: 13px;
+                border-top: none;
+            }
+            .celda-final-monto {
+                text-align: right;
+                font-weight: bold;
+                font-size: 15px;
+                padding-right: 20px;
+                border-top: none;
+            }
+
+            /* Separador vertical central */
+            .TablaUnificada td:nth-child(5), 
+            .TablaUnificada th:nth-child(5) {
+                border-right: 2px solid #bdbdbd; /* Separador más notorio */
+            }
+
+        </style>
     `;
 }
 
-// Función -> generar HTML para movimientos empresariales
-function GenerarTablaMovimientosEmpresariales(movimientos) {
-    if (!movimientos || movimientos.length === 0) {
-        return '<p class="MensajeVacio">No hay movimientos empresariales para esta fecha</p>';
-    }
-
-    let filas = movimientos.map(mov => {
-        return `
-            <tr>
-                <td>${mov.ID}</td>
-                <td>${mov.Fecha}</td>
-                <td>${mov.Hora}</td>
-                <td>${mov.Usuario}</td>
-                <td>${mov.Tipo}</td>
-                <td>${mov.Operacion || ""}</td>
-                <td>${mov.Importe}</td>
-                <td>${mov.Detalle || ""}</td>
-                <td>${mov.CapturaSaldo}</td>
-            </tr>
-        `;
-    }).join('');
-
-    return `
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Usuario</th>
-                    <th>Tipo</th>
-                    <th>Operación</th>
-                    <th>Importe</th>
-                    <th>Detalle</th>
-                    <th>Saldo</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${filas}
-            </tbody>
-        </table>
-    `;
-}
-
-// Función -> generar HTML completo de la ventana modal
 function GenerarVentanaDetalles(datos) {
-    console.log("DetallesDia: Generando ventana de detalles con datos:", datos);
-
-    // Filtrar los movimientos por tipo
-    const movimientosEconomicos = datos.movimientos.filter(m => m.Registro === "Economico");
-    const movimientosMateriales = datos.movimientos.filter(m => m.Registro === "Material");
-    const ventasOcasionales = datos.movimientos.filter(m => m.Registro === "VentaOcasional");
-    const movimientosEmpresariales = datos.movimientosEmpresariales || [];
+    const movimientosProcesados = ProcesarMovimientos(datos);
 
     return `
+        ${GenerarEstilos()}
         <div class="DetallesDiaOverlay" id="DetallesDiaOverlay">
             <div class="DetallesDiaContenedor">
                 <div class="DetallesDiaHeader">
-                    <h2>Movimientos de ${datos.fecha}</h2>
+                    <h2>Reporte Diario: ${datos.fecha}</h2>
                     <div style="display: flex; gap: 10px;">
                         <button class="BotonDescargar" id="BotonDescargarExcel" title="Descargar Excel">
                             <i class="bi bi-download"></i>
@@ -190,22 +519,11 @@ function GenerarVentanaDetalles(datos) {
                     </div>
                 </div>
                 <div class="DetallesDiaBody">
-                    <div class="SeccionMovimientos">
-                        <h3> Movimientos Económicos</h3>
-                        ${GenerarTablaMovimientosEconomicos(movimientosEconomicos)}
-                    </div>
-                    <div class="SeccionMovimientos">
-                        <h3> Movimientos Materiales</h3>
-                        ${GenerarTablaMovimientosMateriales(movimientosMateriales)}
-                    </div>
-                    <div class="SeccionMovimientos">
-                        <h3> Ventas Ocasionales</h3>
-                        ${GenerarTablaVentasOcasionales(ventasOcasionales)}
-                    </div>
-                    <div class="SeccionMovimientos">
-                        <h3> Movimientos Empresariales</h3>
-                        ${GenerarTablaMovimientosEmpresariales(movimientosEmpresariales)}
-                    </div>
+                    ${GenerarTablaUnificada(
+        movimientosProcesados,
+        parseFloat(datos.capitalEconomicoInicial || 0),
+        parseFloat(datos.capitalMaterialInicial || 0)
+    )}
                 </div>
             </div>
         </div>
@@ -223,7 +541,7 @@ function CerrarVentanaDetalles() {
 
 // Función -> mostrar ventana de detalles
 function MostrarDetallesDia(datos) {
-    console.log("DetallesDia: Mostrando detalles del día");
+    console.log("DetallesDia: Mostrando detalles del día con diseño refinado");
 
     // Guardar datos actuales
     DatosActuales = datos;
@@ -265,11 +583,9 @@ function MostrarDetallesDia(datos) {
     }
 }
 
-// EVENTOS
-
 // Evento -> recibir datos de detalles del día
 ipcRenderer.on("EMostrarDetallesDia", (event, datos) => {
-    console.log("DetallesDia: Recibiendo datos de detalles del día:", datos);
+    console.log("DetallesDia: Recibiendo datos:", datos);
     MostrarDetallesDia(datos);
 });
 
