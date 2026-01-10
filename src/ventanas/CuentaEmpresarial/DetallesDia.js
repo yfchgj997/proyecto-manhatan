@@ -552,7 +552,10 @@ function GenerarVentanaDetalles(datos) {
                     <h2>Reporte Diario: ${datos.fecha}</h2>
                     <div style="display: flex; gap: 10px;">
                         <button class="BotonDescargar" id="BotonDescargarExcel">
-                            Descargar Excel
+                            📊 Descargar Excel
+                        </button>
+                        <button class="BotonDescargar" id="BotonDescargarPDF">
+                            📄 Exportar PDF
                         </button>
                         <button class="CerrarDetalles" id="CerrarDetalles">×</button>
                     </div>
@@ -609,6 +612,18 @@ function MostrarDetallesDia(datos) {
         botonDescargar.addEventListener('click', () => {
             console.log("Solicitando exportación de Excel...");
             ipcRenderer.send("EExportarDetallesDia", datos);
+        });
+    }
+
+    const botonDescargarPDF = document.getElementById("BotonDescargarPDF");
+    if (botonDescargarPDF) {
+        botonDescargarPDF.addEventListener('click', () => {
+            if (DatosActuales) {
+                console.log("DetallesDia: Solicitando exportación PDF...");
+                ipcRenderer.send("EExportarDetallesDiaPDF", DatosActuales); // Assuming a new IPC channel for PDF
+            } else {
+                console.error("DetallesDia: No hay datos para exportar a PDF");
+            }
         });
     }
 
