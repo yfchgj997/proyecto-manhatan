@@ -158,101 +158,141 @@ function GenerarLeyenda() {
     `;
 }
 
-function GenerarTablaUnificada(lista, saldoEcoInicial, saldoMatInicial) {
-    let htmlFilas = "";
 
+function GenerarTablaUnificada(lista, saldoEcoInicial, saldoMatInicial) {
     if (lista.length === 0) {
         return '<p class="MensajeVacio">No hay movimientos registrados para esta fecha.</p>';
     }
 
-    lista.forEach((item, index) => {
-        const num = String(index + 1).padStart(2, '0');
+    // SEPARAR MOVIMIENTOS EN DOS LISTAS INDEPENDIENTES
+    let movimientosEconomicos = [];
+    let movimientosMateriales = [];
 
-        // 1. Determinar existencia de movimiento
+    lista.forEach((item) => {
         const tieneMovEconomico = item.EcoIngreso !== 0 || item.EcoEgreso !== 0;
         const tieneMovMaterial = item.MatIngreso !== 0 || item.MatEgreso !== 0;
 
-        // 2. Asignar clases de color SEGÚN TIPO
-        let claseLadoEco = "";
-        let claseLadoMat = "";
-
-        // --- LÓGICA DE COLORES ---
-        if (item.EsEmpresarial) {
-            if (item.TipoEmpresarial === "Capital") claseLadoEco = "celda-empresa-eco";
-            if (item.TipoEmpresarial === "Material") claseLadoMat = "celda-empresa-mat";
-        }
-        else if (item.EsVenta) {
-            claseLadoEco = "celda-venta";
-            claseLadoMat = "celda-venta";
-        }
-        else {
-            // Cliente normal
-            if (item.Registro === "Economico") claseLadoEco = "celda-cliente-eco";
-            if (item.Registro === "Material") claseLadoMat = "celda-cliente-mat";
-        }
-
-        // Si no hay movimiento, color "sin movimiento" (blanco/transparente)
-        if (!tieneMovEconomico) claseLadoEco = "celda-sin-movimiento";
-        if (!tieneMovMaterial) claseLadoMat = "celda-sin-movimiento";
-
-        // 3. Preparar Contenido (LÓGICA ZIPPER: Ocultar datos redundantes + Celdas Vacías con "-")
-
-        const totalEcoStr = `S/. ${Number(item.SaldoEco).toFixed(2)}`;
-        const totalMatStr = `${Number(item.SaldoMat).toFixed(0)} g`;
-        const horaStr = item.Hora.substring(0, 5);
-        const clienteStr = item.Cliente;
-
-        // --- LÓGICA DE DESCRIPCIÓN DE TIPO (Solicitado por Usuario) ---
-        let tipoDescripcion = "-";
-
-        if (item.EsEmpresarial) {
-            if (item.TipoEmpresarial === "Capital") tipoDescripcion = "Mov. Empresarial Económico";
-            if (item.TipoEmpresarial === "Material") tipoDescripcion = "Mov. Empresarial Material";
-        }
-        else if (item.EsVenta) {
-            // Venta Ocasional
-            if (item.TipoOriginal.toLowerCase() === "venta") tipoDescripcion = "Venta de Oro";
-            else if (item.TipoOriginal.toLowerCase() === "compra") tipoDescripcion = "Compra de Oro";
-            else tipoDescripcion = "Venta Ocasional";
-        }
-        else {
-            // Cliente - Movimiento normal
-            if (item.Registro === "Economico") tipoDescripcion = "Movimiento Económico";
-            if (item.Registro === "Material") tipoDescripcion = "Movimiento Material";
-        }
-
-        // --- CONTENIDO LADO ECONÓMICO ---
-        let htmlEco = "";
         if (tieneMovEconomico || item.EsVenta) {
-            // Si hay movimiento, mostramos TODO
-            let montoEcoStr = item.EcoIngreso > 0 ? `+ S/. ${item.EcoIngreso.toFixed(2)}` : `- S/. ${item.EcoEgreso.toFixed(2)}`;
-            let classMonto = item.EcoIngreso > 0 ? 'texto-verde' : 'texto-rojo';
+            movimientosEconomicos.push({
+                ...item,
+                esEconomico: true
+            });
+        }
+
+        if (tieneMovMaterial || item.EsVenta) {
+            movimientosMateriales.push({
+                ...item,
+                esMaterial: true
+            });
+        }
+    });
+
+    // Determinar número máximo de filas
+    const maxFilas = Math.max(movimientosEconomicos.length, movimientosMateriales.length);
+
+    let htmlFilas = "";
+
+    // GENERAR FILAS INDEPENDIENTES
+    for (let i = 0; i < maxFilas; i++) {
+        const movEco = movimientosEconomicos[i];
+        const movMat = movimientosMateriales[i];
+
+        let htmlEco = "";
+        let htmlMat = "";
+
+        // --- LADO ECONÓMICO ---
+        if (movEco) {
+            const num = String(i + 1).padStart(2, '0');
+            const horaStr = movEco.Hora.substring(0, 5);
+            const clienteStr = movEco.Cliente;
+            const totalEcoStr = `S/. ${Number(movEco.SaldoEco).toFixed(2)}`;
+
+            // Determinar tipo de descripción
+            let tipoDescripcion = "-";
+            if (movEco.EsEmpresarial) {
+                if (movEco.TipoEmpresarial === "Capital") tipoDescripcion = "Mov. Empresarial Económico";
+            }
+            else if (movEco.EsVenta) {
+                if (movEco.TipoOriginal.toLowerCase() === "venta") tipoDescripcion = "Venta de Oro";
+                else if (movEco.TipoOriginal.toLowerCase() === "compra") tipoDescripcion = "Compra de Oro";
+                else tipoDescripcion = "Venta Ocasional";
+            }
+            else {
+                if (movEco.Registro === "Economico") tipoDescripcion = "Movimiento Económico";
+            }
+
+            // Determinar clase de color
+            let claseLadoEco = "";
+            if (movEco.EsEmpresarial && movEco.TipoEmpresarial === "Capital") {
+                claseLadoEco = "celda-empresa-eco";
+            }
+            else if (movEco.EsVenta) {
+                claseLadoEco = "celda-venta";
+            }
+            else if (movEco.Registro === "Economico") {
+                claseLadoEco = "celda-cliente-eco";
+            }
+
+            // Monto
+            let montoEcoStr = movEco.EcoIngreso > 0 ? `+ S/. ${movEco.EcoIngreso.toFixed(2)}` : `- S/. ${movEco.EcoEgreso.toFixed(2)}`;
+            let classMonto = movEco.EcoIngreso > 0 ? 'texto-verde' : 'texto-rojo';
 
             htmlEco = `
                 <td class="${claseLadoEco} celda-centrada col-num">${num}</td>
                 <td class="${claseLadoEco} celda-centrada">${horaStr}</td>
                 <td class="${claseLadoEco} celda-centrada col-tipo" style="font-size: 11px;">${tipoDescripcion.toUpperCase()}</td>
-                <td class="${claseLadoEco} celda-izquierda" title="${item.Observacion}">${clienteStr}</td>
+                <td class="${claseLadoEco} celda-izquierda" title="${movEco.Observacion}">${clienteStr}</td>
                 <td class="${claseLadoEco} celda-derecha ${classMonto}">${montoEcoStr}</td>
                 <td class="${claseLadoEco} celda-derecha texto-negrita">${totalEcoStr}</td>
             `;
         } else {
-            // Si NO hay movimiento, mostramos "-"
+            // Celda vacía
             htmlEco = `
-                <td class="${claseLadoEco} celda-centrada texto-gris col-num">-</td>
-                <td class="${claseLadoEco} celda-centrada texto-gris">-</td>
-                <td class="${claseLadoEco} celda-centrada texto-gris">-</td>
-                <td class="${claseLadoEco} celda-centrada texto-gris">-</td>
-                <td class="${claseLadoEco} celda-derecha texto-gris">-</td>
-                <td class="${claseLadoEco} celda-derecha texto-negrita">${totalEcoStr}</td>
+                <td class="celda-sin-movimiento celda-centrada col-num"></td>
+                <td class="celda-sin-movimiento celda-centrada"></td>
+                <td class="celda-sin-movimiento celda-centrada"></td>
+                <td class="celda-sin-movimiento celda-centrada"></td>
+                <td class="celda-sin-movimiento celda-centrada"></td>
+                <td class="celda-sin-movimiento celda-centrada"></td>
             `;
         }
 
-        // --- CONTENIDO LADO MATERIAL ---
-        let htmlMat = "";
-        if (tieneMovMaterial || item.EsVenta) {
-            let montoMatStr = item.MatIngreso > 0 ? `+ ${item.MatIngreso} g` : `- ${item.MatEgreso} g`;
-            let classMonto = item.MatIngreso > 0 ? 'texto-verde' : 'texto-rojo';
+        // --- LADO MATERIAL ---
+        if (movMat) {
+            const num = String(i + 1).padStart(2, '0');
+            const horaStr = movMat.Hora.substring(0, 5);
+            const clienteStr = movMat.Cliente;
+            const totalMatStr = `${Number(movMat.SaldoMat).toFixed(0)} g`;
+
+            // Determinar tipo de descripción
+            let tipoDescripcion = "-";
+            if (movMat.EsEmpresarial) {
+                if (movMat.TipoEmpresarial === "Material") tipoDescripcion = "Mov. Empresarial Material";
+            }
+            else if (movMat.EsVenta) {
+                if (movMat.TipoOriginal.toLowerCase() === "venta") tipoDescripcion = "Venta de Oro";
+                else if (movMat.TipoOriginal.toLowerCase() === "compra") tipoDescripcion = "Compra de Oro";
+                else tipoDescripcion = "Venta Ocasional";
+            }
+            else {
+                if (movMat.Registro === "Material") tipoDescripcion = "Movimiento Material";
+            }
+
+            // Determinar clase de color
+            let claseLadoMat = "";
+            if (movMat.EsEmpresarial && movMat.TipoEmpresarial === "Material") {
+                claseLadoMat = "celda-empresa-mat";
+            }
+            else if (movMat.EsVenta) {
+                claseLadoMat = "celda-venta";
+            }
+            else if (movMat.Registro === "Material") {
+                claseLadoMat = "celda-cliente-mat";
+            }
+
+            // Monto
+            let montoMatStr = movMat.MatIngreso > 0 ? `+ ${movMat.MatIngreso} g` : `- ${movMat.MatEgreso} g`;
+            let classMonto = movMat.MatIngreso > 0 ? 'texto-verde' : 'texto-rojo';
 
             htmlMat = `
                 <td class="${claseLadoMat} celda-centrada col-num">${num}</td>
@@ -263,14 +303,14 @@ function GenerarTablaUnificada(lista, saldoEcoInicial, saldoMatInicial) {
                 <td class="${claseLadoMat} celda-derecha texto-negrita">${totalMatStr}</td>
             `;
         } else {
-            // Solo saldo, guiones en el resto
+            // Celda vacía
             htmlMat = `
-                <td class="${claseLadoMat} celda-centrada texto-gris col-num">-</td>
-                <td class="${claseLadoMat} celda-centrada texto-gris">-</td>
-                <td class="${claseLadoMat} celda-centrada texto-gris">-</td>
-                <td class="${claseLadoMat} celda-centrada texto-gris">-</td>
-                <td class="${claseLadoMat} celda-centrada texto-gris">-</td>
-                <td class="${claseLadoMat} celda-derecha texto-negrita">${totalMatStr}</td>
+                <td class="celda-sin-movimiento celda-centrada col-num"></td>
+                <td class="celda-sin-movimiento celda-centrada"></td>
+                <td class="celda-sin-movimiento celda-centrada"></td>
+                <td class="celda-sin-movimiento celda-centrada"></td>
+                <td class="celda-sin-movimiento celda-centrada"></td>
+                <td class="celda-sin-movimiento celda-centrada"></td>
             `;
         }
 
@@ -280,11 +320,16 @@ function GenerarTablaUnificada(lista, saldoEcoInicial, saldoMatInicial) {
                 ${htmlMat}
             </tr>
         `;
-    });
+    }
 
-    // FILA FINAL (Totales)
-    const saldoEcoFinal = lista.length > 0 ? lista[lista.length - 1].SaldoEco : saldoEcoInicial;
-    const saldoMatFinal = lista.length > 0 ? lista[lista.length - 1].SaldoMat : saldoMatInicial;
+    // CALCULAR TOTALES FINALES
+    const saldoEcoFinal = movimientosEconomicos.length > 0
+        ? movimientosEconomicos[movimientosEconomicos.length - 1].SaldoEco
+        : saldoEcoInicial;
+    const saldoMatFinal = movimientosMateriales.length > 0
+        ? movimientosMateriales[movimientosMateriales.length - 1].SaldoMat
+        : saldoMatInicial;
+
 
     htmlFilas += `
         <tr class="fila-final">
@@ -551,9 +596,6 @@ function GenerarVentanaDetalles(datos) {
                 <div class="DetallesDiaHeader">
                     <h2>Reporte Diario: ${datos.fecha}</h2>
                     <div style="display: flex; gap: 10px;">
-                        <button class="BotonDescargar" id="BotonDescargarExcel">
-                            📊 Descargar Excel
-                        </button>
                         <button class="BotonDescargar" id="BotonDescargarPDF">
                             📄 Exportar PDF
                         </button>
@@ -607,20 +649,12 @@ function MostrarDetallesDia(datos) {
         botonCerrar.addEventListener('click', CerrarVentanaDetalles);
     }
 
-    const botonDescargar = document.getElementById("BotonDescargarExcel");
-    if (botonDescargar) {
-        botonDescargar.addEventListener('click', () => {
-            console.log("Solicitando exportación de Excel...");
-            ipcRenderer.send("EExportarDetallesDia", datos);
-        });
-    }
-
     const botonDescargarPDF = document.getElementById("BotonDescargarPDF");
     if (botonDescargarPDF) {
         botonDescargarPDF.addEventListener('click', () => {
             if (DatosActuales) {
                 console.log("DetallesDia: Solicitando exportación PDF...");
-                ipcRenderer.send("EExportarDetallesDiaPDF", DatosActuales); // Assuming a new IPC channel for PDF
+                ipcRenderer.send("EExportarDetallesDiaPDF", DatosActuales);
             } else {
                 console.error("DetallesDia: No hay datos para exportar a PDF");
             }
