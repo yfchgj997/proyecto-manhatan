@@ -1,5 +1,5 @@
 {
-    "Contador": 33,
+    "Contador": 34,
     "Elementos": [
         {
             "Tipo": "venta",
@@ -228,6 +228,18 @@
             "PrecioCambio": 2000,
             "Hora": "01:16:59",
             "ID": 33
+        },
+        {
+            "Tipo": "venta",
+            "Fecha": "2026-01-09",
+            "EmpleadoNombre": "BERNING",
+            "EmpleadoID": 25,
+            "Cliente": "JLNLJNL",
+            "MontoMaterial": 20,
+            "MontoEconomico": 400,
+            "PrecioCambio": 20,
+            "Hora": "23:56:16",
+            "ID": 34
         }
     ]
 }
