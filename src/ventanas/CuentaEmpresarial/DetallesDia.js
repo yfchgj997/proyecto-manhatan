@@ -140,19 +140,19 @@ function GenerarLeyenda() {
     return `
         <div class="ContenedorLeyenda">
             <div class="ItemLeyenda">
-                <span class="CuadroColor color-empresa-eco"></span> Movimiento Empresarial (S/)
+                <span class="CuadroColor color-empresa-eco"></span> Movimiento Empresarial Económico (S/)
             </div>
             <div class="ItemLeyenda">
-                <span class="CuadroColor color-empresa-mat"></span> Movimiento Empresarial (g)
+                <span class="CuadroColor color-empresa-mat"></span> Movimiento Empresarial Material (g)
             </div>
             <div class="ItemLeyenda">
-                <span class="CuadroColor color-cliente-eco"></span> Movimiento Cliente (S/)
+                <span class="CuadroColor color-cliente-eco"></span> Movimiento Económico (S/)
             </div>
             <div class="ItemLeyenda">
-                <span class="CuadroColor color-cliente-mat"></span> Movimiento Cliente (g)
+                <span class="CuadroColor color-cliente-mat"></span> Movimiento Material (g)
             </div>
             <div class="ItemLeyenda">
-                <span class="CuadroColor color-venta"></span> Compra / Venta
+                <span class="CuadroColor color-venta"></span> Compra / Venta de oro
             </div>
         </div>
     `;
@@ -202,6 +202,25 @@ function GenerarTablaUnificada(lista, saldoEcoInicial, saldoMatInicial) {
         const horaStr = item.Hora.substring(0, 5);
         const clienteStr = item.Cliente;
 
+        // --- LÓGICA DE DESCRIPCIÓN DE TIPO (Solicitado por Usuario) ---
+        let tipoDescripcion = "-";
+
+        if (item.EsEmpresarial) {
+            if (item.TipoEmpresarial === "Capital") tipoDescripcion = "Mov. Empresarial Económico";
+            if (item.TipoEmpresarial === "Material") tipoDescripcion = "Mov. Empresarial Material";
+        }
+        else if (item.EsVenta) {
+            // Venta Ocasional
+            if (item.TipoOriginal.toLowerCase() === "venta") tipoDescripcion = "Venta de Oro";
+            else if (item.TipoOriginal.toLowerCase() === "compra") tipoDescripcion = "Compra de Oro";
+            else tipoDescripcion = "Venta Ocasional";
+        }
+        else {
+            // Cliente - Movimiento normal
+            if (item.Registro === "Economico") tipoDescripcion = "Movimiento Económico";
+            if (item.Registro === "Material") tipoDescripcion = "Movimiento Material";
+        }
+
         // --- CONTENIDO LADO ECONÓMICO ---
         let htmlEco = "";
         if (tieneMovEconomico || item.EsVenta) {
@@ -210,23 +229,22 @@ function GenerarTablaUnificada(lista, saldoEcoInicial, saldoMatInicial) {
             let classMonto = item.EcoIngreso > 0 ? 'texto-verde' : 'texto-rojo';
 
             htmlEco = `
-                <td class="${claseLadoEco} celda-centrada">${num}</td>
+                <td class="${claseLadoEco} celda-centrada col-num">${num}</td>
                 <td class="${claseLadoEco} celda-centrada">${horaStr}</td>
+                <td class="${claseLadoEco} celda-centrada col-tipo" style="font-size: 11px;">${tipoDescripcion.toUpperCase()}</td>
                 <td class="${claseLadoEco} celda-izquierda" title="${item.Observacion}">${clienteStr}</td>
                 <td class="${claseLadoEco} celda-derecha ${classMonto}">${montoEcoStr}</td>
                 <td class="${claseLadoEco} celda-derecha texto-negrita">${totalEcoStr}</td>
             `;
         } else {
-            // Si NO hay movimiento, mostramos "-" en los datos
-            // Pero mantenemos el Total visibles (o no? El usuario dijo "que se muestre en la celda que corresponde...")
-            // Pero "a las celdas vacías ponle como contenido el caracter '-'"
-            // El total siempre debe estar para control, pero el resto "-"
+            // Si NO hay movimiento, mostramos "-"
             htmlEco = `
+                <td class="${claseLadoEco} celda-centrada texto-gris col-num">-</td>
                 <td class="${claseLadoEco} celda-centrada texto-gris">-</td>
                 <td class="${claseLadoEco} celda-centrada texto-gris">-</td>
                 <td class="${claseLadoEco} celda-centrada texto-gris">-</td>
-                <td class="${claseLadoEco} celda-centrada texto-gris">-</td>
-                <td class="${claseLadoEco} celda-derecha texto-gris" style="font-size: 11px;">${totalEcoStr}</td>
+                <td class="${claseLadoEco} celda-derecha texto-gris">-</td>
+                <td class="${claseLadoEco} celda-derecha texto-negrita">${totalEcoStr}</td>
             `;
         }
 
@@ -237,8 +255,9 @@ function GenerarTablaUnificada(lista, saldoEcoInicial, saldoMatInicial) {
             let classMonto = item.MatIngreso > 0 ? 'texto-verde' : 'texto-rojo';
 
             htmlMat = `
-                <td class="${claseLadoMat} celda-centrada">${num}</td>
+                <td class="${claseLadoMat} celda-centrada col-num">${num}</td>
                 <td class="${claseLadoMat} celda-centrada">${horaStr}</td>
+                <td class="${claseLadoMat} celda-centrada col-tipo" style="font-size: 11px;">${tipoDescripcion.toUpperCase()}</td>
                 <td class="${claseLadoMat} celda-izquierda">${clienteStr}</td>
                 <td class="${claseLadoMat} celda-derecha ${classMonto}">${montoMatStr}</td>
                 <td class="${claseLadoMat} celda-derecha texto-negrita">${totalMatStr}</td>
@@ -246,11 +265,12 @@ function GenerarTablaUnificada(lista, saldoEcoInicial, saldoMatInicial) {
         } else {
             // Solo saldo, guiones en el resto
             htmlMat = `
+                <td class="${claseLadoMat} celda-centrada texto-gris col-num">-</td>
                 <td class="${claseLadoMat} celda-centrada texto-gris">-</td>
                 <td class="${claseLadoMat} celda-centrada texto-gris">-</td>
                 <td class="${claseLadoMat} celda-centrada texto-gris">-</td>
                 <td class="${claseLadoMat} celda-centrada texto-gris">-</td>
-                <td class="${claseLadoMat} celda-derecha texto-gris" style="font-size: 11px;">${totalMatStr}</td>
+                <td class="${claseLadoMat} celda-derecha texto-negrita">${totalMatStr}</td>
             `;
         }
 
@@ -269,11 +289,11 @@ function GenerarTablaUnificada(lista, saldoEcoInicial, saldoMatInicial) {
     htmlFilas += `
         <tr class="fila-final">
             <!-- LADO ECONOMICO -->
-            <td colspan="3" class="celda-final-titulo">TOTAL ECONÓMICO:</td>
+            <td colspan="4" class="celda-final-titulo">TOTAL ECONÓMICO:</td>
             <td colspan="2" class="celda-final-monto">S/. ${Number(saldoEcoFinal).toFixed(2)}</td>
 
             <!-- LADO MATERIAL -->
-            <td colspan="3" class="celda-final-titulo">TOTAL MATERIAL:</td>
+            <td colspan="4" class="celda-final-titulo">TOTAL MATERIAL:</td>
             <td colspan="2" class="celda-final-monto">${Number(saldoMatFinal).toFixed(0)} g</td>
         </tr>
     `;
@@ -285,13 +305,13 @@ function GenerarTablaUnificada(lista, saldoEcoInicial, saldoMatInicial) {
                 <thead>
                     <!-- Primera fila: Cabeceras Grandes con SALDO INICIAL -->
                     <tr>
-                        <th colspan="5" class="header-grande header-eco">
+                        <th colspan="6" class="header-grande header-eco">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <span><span style="margin-right: 10px;">💵</span> CAPITAL ECONÓMICO (S/)</span>
                                 <span class="saldo-inicial-header">INICIO: S/. ${Number(saldoEcoInicial).toFixed(2)}</span>
                             </div>
                         </th>
-                        <th colspan="5" class="header-grande header-mat">
+                        <th colspan="6" class="header-grande header-mat">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <span><span style="margin-right: 10px;">🪙</span> CAPITAL MATERIAL (g)</span>
                                 <span class="saldo-inicial-header">INICIO: ${Number(saldoMatInicial).toFixed(2)} g</span>
@@ -301,15 +321,17 @@ function GenerarTablaUnificada(lista, saldoEcoInicial, saldoMatInicial) {
                     <!-- Segunda fila: Subcabeceras Idénticas -->
                     <tr>
                         <!-- Lado Eco -->
-                        <th class="sub-header">#</th>
+                        <th class="sub-header col-num">#</th>
                         <th class="sub-header">Hora</th>
+                        <th class="sub-header col-tipo">Tipo</th>
                         <th class="sub-header">Cliente</th>
                         <th class="sub-header">Monto</th>
                         <th class="sub-header">Total Capital</th>
 
                         <!-- Lado Mat -->
-                        <th class="sub-header">#</th>
+                        <th class="sub-header col-num">#</th>
                         <th class="sub-header">Hora</th>
+                        <th class="sub-header col-tipo">Tipo</th>
                         <th class="sub-header">Cliente</th>
                         <th class="sub-header">Monto</th>
                         <th class="sub-header">Total Capital</th>
@@ -328,8 +350,8 @@ function GenerarEstilos() {
         <style>
             /* Layout General */
             .DetallesDiaContenedor {
-                width: 95% !important;
-                max-width: 1400px !important; /* Más ancho para 10 columnas */
+                width: 90% !important; /* REDUCIDO DE 98% a 90% */
+                max-width: 1350px !important; /* REDUCIDO DE 1600px */
                 height: 90vh;
                 display: flex;
                 flex-direction: column;
@@ -342,8 +364,24 @@ function GenerarEstilos() {
             .DetallesDiaBody {
                 flex: 1;
                 overflow-y: auto;
-                padding: 40px; /* MARGEN MÁS GRANDE */
-                background-color: #f8f9fa; /* Fondo muy suave */
+                padding: 30px; 
+                background-color: #f8f9fa; 
+            }
+
+            /* Columma Numeración Más Pequeña */
+            .col-num {
+                width: 25px !important;
+                text-align: center;
+                min-width: 25px;
+                max-width: 25px;
+            }
+            
+            /* Columna Tipo - Permitir salto de línea */
+            .col-tipo {
+                white-space: normal !important;
+                word-wrap: break-word;
+                line-height: 1.3;
+                vertical-align: middle;
             }
 
             /* Leyenda */
@@ -355,14 +393,14 @@ function GenerarEstilos() {
                 padding: 15px;
                 background-color: white;
                 border-radius: 8px;
-                justify-content: center; /* Centrado */
-                box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Sombra muy sutil */
+                justify-content: center; 
+                box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
                 border: 1px solid #eee;
             }
             .ItemLeyenda {
                 display: flex;
                 align-items: center;
-                font-size: 13px; /* Texto un poco más grande y legible */
+                font-size: 13px; 
                 color: #555;
                 font-weight: 500;
             }
@@ -395,12 +433,12 @@ function GenerarEstilos() {
                 width: 100%;
                 border-collapse: collapse;
                 font-family: 'Segoe UI', system-ui, sans-serif;
-                font-size: 13px; /* Recuperamos un poco de tamaño para legibilidad */
+                font-size: 13px; 
                 table-layout: fixed; 
             }
 
             .TablaUnificada th, .TablaUnificada td {
-                border: 1px solid #d0d0d0; /* BORDES MÁS VISIBLES */
+                border: 1px solid #d0d0d0; 
                 padding: 8px 10px; 
                 white-space: nowrap;
                 overflow: hidden;
@@ -419,12 +457,12 @@ function GenerarEstilos() {
                 border-bottom: none;
             }
             .header-eco { 
-                background-color: #f1f8e9; /* Fondo suave cabecera */
+                background-color: #f1f8e9; 
                 color: #2e7d32; 
                 border-top: 4px solid #388e3c; 
             } 
             .header-mat { 
-                background-color: #f3e5f5; /* Fondo suave cabecera */
+                background-color: #f3e5f5; 
                 color: #7b1fa2;
                 border-top: 4px solid #8e24aa; 
                 border-left: 1px solid #d0d0d0; 
@@ -444,7 +482,7 @@ function GenerarEstilos() {
 
             /* Subcabeceras */
             .sub-header {
-                background-color: #eeeeee; /* Gris más sólido */
+                background-color: #eeeeee; 
                 color: #444;
                 font-weight: 700;
                 text-align: center;
@@ -459,22 +497,22 @@ function GenerarEstilos() {
             .celda-derecha { text-align: right; padding-right: 12px; }
             .texto-negrita { font-weight: 700; color: #222; }
             
-            .texto-verde { color: #1b5e20; font-weight: 700; } /* Verde más oscuro */
-            .texto-rojo { color: #b71c1c; font-weight: 700; } /* Rojo más oscuro */
-            .texto-gris { color: #757575; font-weight: 600; } /* GRIS OSCURO VISIBLE (para los guiones) */
+            .texto-verde { color: #1b5e20; font-weight: 700; } 
+            .texto-rojo { color: #b71c1c; font-weight: 700; } 
+            .texto-gris { color: #757575; font-weight: 600; } 
 
-            /* COLORES DE FONDO SEGÚN TIPO (más saturados) */
+            /* COLORES DE FONDO SEGÚN TIPO */
             
-            .celda-empresa-eco { background-color: #c5e1a5; color: #222; } /* Verde visible */
-            .celda-cliente-eco { background-color: #fff59d; color: #222; } /* Amarillo visible */
-            .celda-empresa-mat { background-color: #e1bee7; color: #222; } /* Morado visible */
-            .celda-cliente-mat { background-color: #eeeeee; color: #222; } /* Gris visible */
-            .celda-venta { background-color: #bbdefb; color: #222; } /* Azul visible */
+            .celda-empresa-eco { background-color: #c5e1a5; color: #222; } 
+            .celda-cliente-eco { background-color: #fff59d; color: #222; } 
+            .celda-empresa-mat { background-color: #e1bee7; color: #222; } 
+            .celda-cliente-mat { background-color: #eeeeee; color: #222; } 
+            .celda-venta { background-color: #bbdefb; color: #222; } 
             .celda-sin-movimiento { background-color: #ffffff; color: #777; }
 
             /* Fila Final (Totales) */
             .fila-final {
-                background-color: #283593; /* Indigo oscuro */
+                background-color: #6930A4; 
                 color: white;
             }
             .celda-final-titulo {
@@ -493,9 +531,10 @@ function GenerarEstilos() {
             }
 
             /* Separador vertical central */
-            .TablaUnificada td:nth-child(5), 
-            .TablaUnificada th:nth-child(5) {
-                border-right: 2px solid #bdbdbd; /* Separador más notorio */
+            /* Ahora la columna central es la 6 (porque son 6+6) */
+            .TablaUnificada td:nth-child(6), 
+            .TablaUnificada th:nth-child(6) {
+                border-right: 2px solid #bdbdbd; 
             }
 
         </style>
