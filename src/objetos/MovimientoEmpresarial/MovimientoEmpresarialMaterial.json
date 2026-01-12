@@ -1,9 +1,13 @@
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     "Contador": 29,
 =======
     "Contador": 15,
 >>>>>>> f440ad7 ([FIX][BP] nuevo diseño de la tabla de resumen de registros de un fecha en específico)
+=======
+    "Contador": 16,
+>>>>>>> 66ee08b ([FIX][BP] diseño de tabla de resumen de movimientos diarios y exportar a pdf)
     "Elementos": [
         {
             "Tipo": "Material",
@@ -276,7 +280,21 @@
             "Hora": "19:55:19",
             "CapturaSaldo": "5000.00",
             "ID": 15
+<<<<<<< HEAD
 >>>>>>> f440ad7 ([FIX][BP] nuevo diseño de la tabla de resumen de registros de un fecha en específico)
+=======
+        },
+        {
+            "Tipo": "Material",
+            "Operacion": "Aumentar",
+            "Fecha": "2026-01-12",
+            "Usuario": "BERNING",
+            "Importe": "34.00",
+            "Detalle": "",
+            "Hora": "02:47:41",
+            "CapturaSaldo": "3014.00",
+            "ID": 16
+>>>>>>> 66ee08b ([FIX][BP] diseño de tabla de resumen de movimientos diarios y exportar a pdf)
         }
     ]
 }

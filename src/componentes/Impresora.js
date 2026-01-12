@@ -524,10 +524,19 @@ function ExportarDetallesDiaPDF(datos) {
         margins: { top: 30, left: 30, right: 30, bottom: 30 }
     });
 
-    // Nombre del archivo
+    // Nombre del archivo con timestamp único
     const fecha = datos.fecha || 'sin-fecha';
-    NombreDocumento = `Reporte_Diario_${fecha.replace(/\//g, '-')}.pdf`;
-    const stream = fs.createWriteStream(NombreDocumento);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_').substring(0, 19);
+    const nombreArchivo = `Reporte_Diario_${fecha.replace(/\//g, '-')}_${timestamp}.pdf`;
+
+    // Obtener ruta de Descargas
+    const os = require('os');
+    const path = require('path');
+    const rutaDescargas = path.join(os.homedir(), 'Downloads');
+    const rutaCompleta = path.join(rutaDescargas, nombreArchivo);
+
+    NombreDocumento = rutaCompleta;
+    const stream = fs.createWriteStream(rutaCompleta);
     DocumentoPDF.pipe(stream);
 
     // Colores (IGUALES A LA UI)
@@ -550,11 +559,51 @@ function ExportarDetallesDiaPDF(datos) {
         .fontSize(9)
         .font('Helvetica')
         .text(`Fecha: ${fecha}`, { align: 'center' })
-        .moveDown(0.5);
+        .moveDown(0.3);
 
-    // Configuración de tabla
+    DocumentoPDF.moveDown(0.5);
+
+    // Configuración de tabla (Movido al inicio para uso en leyenda)
     const pageWidth = 842;
     const margin = 30;
+
+    // LEYENDA EN UNA SOLA LÍNEA
+    const leyendaY = DocumentoPDF.y;
+    // Items exactos de la imagen proporcionada
+    const leyendaItems = [
+        { color: colores.empresaEco, texto: 'Movimiento Empresarial Económico (S/)' },
+        { color: colores.empresaMat, texto: 'Movimiento Empresarial Material (g)' },
+        { color: colores.clienteEco, texto: 'Movimiento Económico (S/)' },
+        { color: colores.clienteMat, texto: 'Movimiento Material (g)' },
+        { color: colores.venta, texto: 'Compra / Venta de oro' }
+    ];
+
+    // Ajustar posición X inicial para centrar mejor o alinear a la izquierda con margen
+    let xLeyenda = margin + 10;
+    const cuadroSize = 10;
+
+    // Dibujar items
+    leyendaItems.forEach((item) => {
+        DocumentoPDF.save();
+        DocumentoPDF
+            .rect(xLeyenda, leyendaY, cuadroSize, cuadroSize)
+            .fillAndStroke(item.color, '#d0d0d0');
+        DocumentoPDF.restore();
+
+        DocumentoPDF.save();
+        DocumentoPDF
+            .fillColor('#555555')
+            .fontSize(8)
+            .font('Helvetica')
+            .text(item.texto, xLeyenda + cuadroSize + 5, leyendaY + 1, { continued: false });
+        DocumentoPDF.restore();
+
+        xLeyenda += 164;
+    });
+
+    DocumentoPDF.moveDown(1.5);
+
+    // Configuración de tabla
     const tableWidth = pageWidth - (margin * 2);
     const colWidths = [25, 50, 90, 110, 80, 80]; // #, Hora, Tipo, Cliente, Monto, Total
     const totalCols = colWidths.reduce((a, b) => a + b, 0);
@@ -567,10 +616,15 @@ function ExportarDetallesDiaPDF(datos) {
     function dibujarCelda(x, y, width, height, text, options = {}) {
         const { bgColor = '#ffffff', textColor = '#000000', fontSize = 8, align = 'center', bold = false } = options;
 
-        // Fondo
-        DocumentoPDF.rect(x, y, width, height).fillAndStroke(bgColor, '#d0d0d0');
+        // 1. Dibujar Fondo (Estado aislado)
+        DocumentoPDF.save();
+        DocumentoPDF
+            .rect(x, y, width, height)
+            .fillAndStroke(bgColor, '#d0d0d0');
+        DocumentoPDF.restore();
 
-        // Texto
+        // 2. Dibujar Texto (Nuevo estado)
+        DocumentoPDF.save();
         DocumentoPDF
             .fillColor(textColor)
             .fontSize(fontSize)
@@ -581,10 +635,12 @@ function ExportarDetallesDiaPDF(datos) {
             width: width - 4,
             align: align,
             lineBreak: true,
-            height: height - 4
+            height: height - 4,
+            continued: false
         };
 
         DocumentoPDF.text(text, x + 2, textY, textOptions);
+        DocumentoPDF.restore();
     }
 
     // CABECERA DE TABLA
@@ -702,11 +758,21 @@ function ExportarDetallesDiaPDF(datos) {
             dibujarCelda(xPos, currentY, scaledWidths[5], rowHeight, totalEcoStr, { bgColor, fontSize: 7, bold: true, align: 'right' });
             xPos += scaledWidths[5];
         } else {
-            // Celda vacía
-            for (let j = 0; j < 6; j++) {
+            // Celda vacía - MOSTRAR TOTAL CAPITAL
+            let ultimoSaldoEco = saldoEcoInicial;
+            for (let j = 0; j < i; j++) {
+                if (j < movimientosEconomicos.length) {
+                    ultimoSaldoEco = movimientosEconomicos[j].SaldoEco;
+                }
+            }
+            const totalEcoStr = `S/. ${Number(ultimoSaldoEco).toFixed(2)}`;
+
+            for (let j = 0; j < 5; j++) {
                 dibujarCelda(xPos, currentY, scaledWidths[j], rowHeight, '', { bgColor: colores.sinMov, fontSize: 7 });
                 xPos += scaledWidths[j];
             }
+            dibujarCelda(xPos, currentY, scaledWidths[5], rowHeight, totalEcoStr, { bgColor: colores.sinMov, fontSize: 7, bold: true, align: 'right' });
+            xPos += scaledWidths[5];
         }
 
         // LADO MATERIAL
@@ -752,11 +818,20 @@ function ExportarDetallesDiaPDF(datos) {
             xPos += scaledWidths[4];
             dibujarCelda(xPos, currentY, scaledWidths[5], rowHeight, totalMatStr, { bgColor, fontSize: 7, bold: true, align: 'right' });
         } else {
-            // Celda vacía
-            for (let j = 0; j < 6; j++) {
+            // Celda vacía - MOSTRAR TOTAL CAPITAL
+            let ultimoSaldoMat = saldoMatInicial;
+            for (let j = 0; j < i; j++) {
+                if (j < movimientosMateriales.length) {
+                    ultimoSaldoMat = movimientosMateriales[j].SaldoMat;
+                }
+            }
+            const totalMatStr = `${Number(ultimoSaldoMat).toFixed(0)} g`;
+
+            for (let j = 0; j < 5; j++) {
                 dibujarCelda(xPos, currentY, scaledWidths[j], rowHeight, '', { bgColor: colores.sinMov, fontSize: 7 });
                 xPos += scaledWidths[j];
             }
+            dibujarCelda(xPos, currentY, scaledWidths[5], rowHeight, totalMatStr, { bgColor: colores.sinMov, fontSize: 7, bold: true, align: 'right' });
         }
 
         currentY += rowHeight;
@@ -792,11 +867,11 @@ function ExportarDetallesDiaPDF(datos) {
 
     // Guardar y abrir
     stream.on('finish', () => {
-        console.log(`Impresora: PDF generado con éxito - ${NombreDocumento}`);
+        console.log(`Impresora: PDF generado con éxito en: ${rutaCompleta}`);
 
-        const command = process.platform === 'win32' ? `start "" "${NombreDocumento}"` :
-            process.platform === 'darwin' ? `open "${NombreDocumento}"` :
-                `xdg-open "${NombreDocumento}"`;
+        const command = process.platform === 'win32' ? `start "" "${rutaCompleta}"` :
+            process.platform === 'darwin' ? `open "${rutaCompleta}"` :
+                `xdg-open "${rutaCompleta}"`;
         exec(command, (err) => {
             if (err) {
                 console.log("Impresora: Error al abrir el PDF");
