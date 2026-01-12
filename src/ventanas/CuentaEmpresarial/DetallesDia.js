@@ -246,14 +246,23 @@ function GenerarTablaUnificada(lista, saldoEcoInicial, saldoMatInicial) {
                 <td class="${claseLadoEco} celda-derecha texto-negrita">${totalEcoStr}</td>
             `;
         } else {
-            // Celda vacía
+            // Celda vacía - MOSTRAR TOTAL CAPITAL
+            // Calcular el último saldo económico conocido hasta esta fila
+            let ultimoSaldoEco = saldoEcoInicial;
+            for (let j = 0; j < i; j++) {
+                if (j < movimientosEconomicos.length) {
+                    ultimoSaldoEco = movimientosEconomicos[j].SaldoEco;
+                }
+            }
+            const totalEcoStr = `S/. ${Number(ultimoSaldoEco).toFixed(2)}`;
+
             htmlEco = `
                 <td class="celda-sin-movimiento celda-centrada col-num"></td>
                 <td class="celda-sin-movimiento celda-centrada"></td>
                 <td class="celda-sin-movimiento celda-centrada"></td>
                 <td class="celda-sin-movimiento celda-centrada"></td>
                 <td class="celda-sin-movimiento celda-centrada"></td>
-                <td class="celda-sin-movimiento celda-centrada"></td>
+                <td class="celda-sin-movimiento celda-derecha texto-negrita">${totalEcoStr}</td>
             `;
         }
 
@@ -303,14 +312,23 @@ function GenerarTablaUnificada(lista, saldoEcoInicial, saldoMatInicial) {
                 <td class="${claseLadoMat} celda-derecha texto-negrita">${totalMatStr}</td>
             `;
         } else {
-            // Celda vacía
+            // Celda vacía - MOSTRAR TOTAL CAPITAL
+            // Calcular el último saldo material conocido hasta esta fila
+            let ultimoSaldoMat = saldoMatInicial;
+            for (let j = 0; j < i; j++) {
+                if (j < movimientosMateriales.length) {
+                    ultimoSaldoMat = movimientosMateriales[j].SaldoMat;
+                }
+            }
+            const totalMatStr = `${Number(ultimoSaldoMat).toFixed(0)} g`;
+
             htmlMat = `
                 <td class="celda-sin-movimiento celda-centrada col-num"></td>
                 <td class="celda-sin-movimiento celda-centrada"></td>
                 <td class="celda-sin-movimiento celda-centrada"></td>
                 <td class="celda-sin-movimiento celda-centrada"></td>
                 <td class="celda-sin-movimiento celda-centrada"></td>
-                <td class="celda-sin-movimiento celda-centrada"></td>
+                <td class="celda-sin-movimiento celda-derecha texto-negrita">${totalMatStr}</td>
             `;
         }
 
@@ -542,8 +560,6 @@ function GenerarEstilos() {
             .celda-derecha { text-align: right; padding-right: 12px; }
             .texto-negrita { font-weight: 700; color: #222; }
             
-            .texto-verde { color: #1b5e20; font-weight: 700; } 
-            .texto-rojo { color: #b71c1c; font-weight: 700; } 
             .texto-gris { color: #757575; font-weight: 600; } 
 
             /* COLORES DE FONDO SEGÚN TIPO */
@@ -553,7 +569,12 @@ function GenerarEstilos() {
             .celda-empresa-mat { background-color: #e1bee7; color: #222; } 
             .celda-cliente-mat { background-color: #eeeeee; color: #222; } 
             .celda-venta { background-color: #bbdefb; color: #222; } 
+            .celda-venta { background-color: #bbdefb; color: #222; } 
             .celda-sin-movimiento { background-color: #ffffff; color: #777; }
+
+            /* TEXT COLORS (MUST BE AFTER BACKGROUNDS) */
+            .texto-verde { color: #1b5e20 !important; font-weight: 700; } 
+            .texto-rojo { color: #b71c1c !important; font-weight: 700; }
 
             /* Fila Final (Totales) */
             .fila-final {
