@@ -1,5 +1,5 @@
 {
-    "Contador": 12,
+    "Contador": 22,
     "Elementos": [
         {
             "Nombres": "ASD",
@@ -30,31 +30,184 @@
             "ID": 3
         },
         {
-            "Nombres": "U",
-            "Apellidos": "",
+            "Nombres": "SADF",
+            "Apellidos": "ASDF",
             "DNI": "",
-            "SaldoEconomico": "0.00",
+            "SaldoEconomico": 0,
             "SaldoMaterial": 0,
-            "FechaIngreso": "2025-12-02",
-            "ID": 4
+            "FechaIngreso": "2026-01-11",
+            "ID": 3
         },
         {
-            "Nombres": "JHER",
+            "Nombres": "A",
             "Apellidos": "",
             "DNI": "",
             "SaldoEconomico": 0,
-            "SaldoMaterial": "0.00",
-            "FechaIngreso": "2025-12-28",
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
+            "ID": 4
+        },
+        {
+            "Nombres": "B",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
+            "ID": 5
+        },
+        {
+            "Nombres": "C",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
+            "ID": 6
+        },
+        {
+            "Nombres": "D",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
+            "ID": 7
+        },
+        {
+            "Nombres": "E",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
+            "ID": 8
+        },
+        {
+            "Nombres": "F",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
+            "ID": 9
+        },
+        {
+            "Nombres": "G",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
             "ID": 10
         },
         {
-            "Nombres": "GGG",
+            "Nombres": "H",
             "Apellidos": "",
             "DNI": "",
-            "SaldoEconomico": "0.00",
+            "SaldoEconomico": 0,
             "SaldoMaterial": 0,
-            "FechaIngreso": "2025-12-28",
+            "FechaIngreso": "2026-01-11",
+            "ID": 11
+        },
+        {
+            "Nombres": "G",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
             "ID": 12
+        },
+        {
+            "Nombres": "G",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
+            "ID": 13
+        },
+        {
+            "Nombres": "G",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
+            "ID": 14
+        },
+        {
+            "Nombres": "G",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
+            "ID": 15
+        },
+        {
+            "Nombres": "G",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
+            "ID": 16
+        },
+        {
+            "Nombres": "G",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
+            "ID": 17
+        },
+        {
+            "Nombres": "G",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
+            "ID": 18
+        },
+        {
+            "Nombres": "G",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
+            "ID": 19
+        },
+        {
+            "Nombres": "G",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
+            "ID": 20
+        },
+        {
+            "Nombres": "G",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
+            "ID": 21
+        },
+        {
+            "Nombres": "G",
+            "Apellidos": "",
+            "DNI": "",
+            "SaldoEconomico": 0,
+            "SaldoMaterial": 0,
+            "FechaIngreso": "2026-01-11",
+            "ID": 22
         }
     ]
 }

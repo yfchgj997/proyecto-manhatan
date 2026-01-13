@@ -18,7 +18,6 @@ ipcRenderer.on("EInicializarSelectUserWindow", (event, clientes) => {
         // Renderizar Estructura Base (Header + Buscador + Tabla Container + Notification Area)
         let estructuraHTML = `
             <div class="header">
-                <img src="../imagenes/LogoRedSur.png" alt="Logo" class="header-logo"> 
                 <div class="header-title">Seleccionar Cliente</div>
             </div>
 
@@ -60,11 +59,11 @@ ipcRenderer.on("EInicializarSelectUserWindow", (event, clientes) => {
             if (listaClientes.length === 0) {
                 tablaHTML += `
                      <tr>
-                        <td colspan="4" class="empty-state">
+                        <td class="empty-state">
                             <div class="empty-state-icon">
                                  <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-frown"><circle cx="12" cy="12" r="10"></circle><path d="M16 16s-1.5-2-4-2-4 2-4 2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
                             </div>
-                            <div><strong>Error!</strong><br>No se pudo obtener la lista de clientes</div>
+                            <div>Error!<br>No se pudo obtener la lista de clientes</div>
                         </td>
                     </tr>
                  `;
