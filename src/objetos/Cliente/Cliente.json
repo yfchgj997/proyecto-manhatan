@@ -52,7 +52,6 @@
             "Nombres": "B",
             "Apellidos": "",
             "DNI": "",
-<<<<<<< HEAD
             "SaldoEconomico": 0,
             "SaldoMaterial": 0,
             "FechaIngreso": "2026-01-11",
@@ -101,11 +100,6 @@
             "SaldoEconomico": 0,
             "SaldoMaterial": 0,
             "FechaIngreso": "2026-01-11",
-=======
-            "SaldoEconomico": "600.00",
-            "SaldoMaterial": "0.00",
-            "FechaIngreso": "2025-12-28",
->>>>>>> cb395b3 ([FIX][BP] eliminar exportar a excel y mejorar tabla de registro de mivimientos del día)
             "ID": 10
         },
         {
