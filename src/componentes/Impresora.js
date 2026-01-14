@@ -553,7 +553,7 @@ function ExportarDetallesDiaPDF(datos) {
     DocumentoPDF
         .fontSize(14)
         .font('Helvetica-Bold')
-        .text('INVERSIONES DUBAI', { align: 'center' })
+        .text('INVERSIONES REDSUR', { align: 'center' })
         .fontSize(12)
         .text('RESUMEN DE MOVIMIENTOS DIARIOS', { align: 'center' })
         .fontSize(9)
@@ -654,7 +654,7 @@ function ExportarDetallesDiaPDF(datos) {
     dibujarCelda(xPos, currentY, halfWidth, headerHeight, ` CAPITAL ECONÓMICO (S/) - INICIO: S/. ${saldoEcoInicial.toFixed(2)}`,
         { bgColor: '#f1f8e9', textColor: '#2e7d32', fontSize: 9, bold: true });
     dibujarCelda(xPos + halfWidth, currentY, halfWidth, headerHeight, ` CAPITAL MATERIAL (g) - INICIO: ${saldoMatInicial.toFixed(0)} g`,
-        { bgColor: '#f3e5f5', textColor: '#7b1fa2', fontSize: 9, bold: true });
+        { bgColor: '#f7f1c1ff', textColor: '#edd921ff', fontSize: 9, bold: true });
 
     currentY += headerHeight;
 
@@ -692,7 +692,7 @@ function ExportarDetallesDiaPDF(datos) {
             dibujarCelda(xPos, currentY, halfWidth, headerHeight, ` CAPITAL ECONÓMICO (S/)`,
                 { bgColor: '#f1f8e9', textColor: '#2e7d32', fontSize: 9, bold: true });
             dibujarCelda(xPos + halfWidth, currentY, halfWidth, headerHeight, ` CAPITAL MATERIAL (g)`,
-                { bgColor: '#f3e5f5', textColor: '#7b1fa2', fontSize: 9, bold: true });
+                { bgColor: '#f7f1c1ff', textColor: '#edd921ff', fontSize: 9, bold: true });
             currentY += headerHeight;
 
             xPos = margin;
@@ -850,18 +850,18 @@ function ExportarDetallesDiaPDF(datos) {
 
     // Total Económico
     dibujarCelda(xPos, currentY, footerColSpan, footerHeight, 'TOTAL ECONÓMICO:',
-        { bgColor: '#6930A4', textColor: '#ffffff', fontSize: 10, align: 'right', bold: true });
+        { bgColor: '#0039b0', textColor: '#ffffff', fontSize: 10, align: 'right', bold: true });
     xPos += footerColSpan;
     dibujarCelda(xPos, currentY, footerValueSpan, footerHeight, `S/. ${saldoEcoFinal.toFixed(2)}`,
-        { bgColor: '#6930A4', textColor: '#ffffff', fontSize: 11, bold: true, align: 'right' });
+        { bgColor: '#0039b0', textColor: '#ffffff', fontSize: 11, bold: true, align: 'right' });
     xPos += footerValueSpan;
 
     // Total Material
     dibujarCelda(xPos, currentY, footerColSpan, footerHeight, 'TOTAL MATERIAL:',
-        { bgColor: '#6930A4', textColor: '#ffffff', fontSize: 10, align: 'right', bold: true });
+        { bgColor: '#0039b0', textColor: '#ffffff', fontSize: 10, align: 'right', bold: true });
     xPos += footerColSpan;
     dibujarCelda(xPos, currentY, footerValueSpan, footerHeight, `${saldoMatFinal.toFixed(0)} g`,
-        { bgColor: '#6930A4', textColor: '#ffffff', fontSize: 11, bold: true, align: 'right' });
+        { bgColor: '#0039b0', textColor: '#ffffff', fontSize: 11, bold: true, align: 'right' });
 
     DocumentoPDF.end();
 

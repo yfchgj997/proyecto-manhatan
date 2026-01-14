@@ -368,13 +368,13 @@ function GenerarTablaUnificada(lista, saldoEcoInicial, saldoMatInicial) {
                 <thead>
                     <!-- Primera fila: Cabeceras Grandes con SALDO INICIAL -->
                     <tr>
-                        <th colspan="6" class="header-grande header-eco">
+                        <th colspan="6" class="header-grande " id="header-eco">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <span><span style="margin-right: 10px;">💵</span> CAPITAL ECONÓMICO (S/)</span>
                                 <span class="saldo-inicial-header">INICIO: S/. ${Number(saldoEcoInicial).toFixed(2)}</span>
                             </div>
                         </th>
-                        <th colspan="6" class="header-grande header-mat">
+                        <th colspan="6" class="header-grande " id="header-mat">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <span><span style="margin-right: 10px;">🪙</span> CAPITAL MATERIAL (g)</span>
                                 <span class="saldo-inicial-header">INICIO: ${Number(saldoMatInicial).toFixed(2)} g</span>
@@ -519,18 +519,6 @@ function GenerarEstilos() {
                 text-transform: uppercase;
                 border-bottom: none;
             }
-            .header-eco { 
-                background-color: #f1f8e9; 
-                color: #2e7d32; 
-                border-top: 4px solid #388e3c; 
-            } 
-            .header-mat { 
-                background-color: #f3e5f5; 
-                color: #7b1fa2;
-                border-top: 4px solid #8e24aa; 
-                border-left: 1px solid #d0d0d0; 
-            }
-            
             .saldo-inicial-header {
                 font-size: 12px;
                 background: #ffffff;
@@ -541,17 +529,6 @@ function GenerarEstilos() {
                 text-transform: none; 
                 border: 1px solid #ccc;
                 box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            }
-
-            /* Subcabeceras */
-            .sub-header {
-                background-color: #eeeeee; 
-                color: #444;
-                font-weight: 700;
-                text-align: center;
-                font-size: 12px;
-                padding: 10px 5px;
-                border-bottom: 2px solid #ccc;
             }
 
             /* Clases de Celdas */
@@ -578,7 +555,7 @@ function GenerarEstilos() {
 
             /* Fila Final (Totales) */
             .fila-final {
-                background-color: #6930A4; 
+                background-color: #0039b0; 
                 color: white;
             }
             .celda-final-titulo {
